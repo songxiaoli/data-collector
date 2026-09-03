@@ -1,126 +1,129 @@
-# EQ Children — Data Collector
+# EQ Children — SEL Resource Database
 
-儿童情绪智力（EQ）资源数据采集项目，为推荐系统提供数据基础。
+A curated database of Social-Emotional Learning (SEL) resources for children, including YouTube videos and picture books, designed to power a recommendation system for parents and educators.
 
-收集了两类资源：**儿童 SEL 书籍** 和 **YouTube SEL 视频**，均按 CASEL 五大核心能力分类，支持按年龄、受众、情绪标签过滤。
+## What's in the database
 
----
+| Resource type | Count | Table |
+|---|---|---|
+| YouTube videos | 2,427 | `videos` |
+| Picture books | 365 | `books` |
 
-## 数据概览
+## Classification system
 
-| 数据集 | 记录数 | 存储位置 |
-|--------|--------|----------|
-| 儿童 SEL 书籍 | 365 条 | Supabase `books` 表 |
-| YouTube SEL 视频 | 2,427 条 | Supabase `videos` 表 |
+**Category** (4 types):
+- `children_video` — SEL animations and stories for children to watch directly
+- `read_aloud` — Picture book read-aloud videos
+- `sel_course` — Classroom curriculum, TEDx talks, educator resources
+- `parent_guide` — Parenting advice and strategies for adults
 
----
+**CASEL domains** (5):
+- Self-Awareness
+- Self-Management
+- Social-Awareness
+- Relationship-Skills
+- Responsible-Decision-Making
 
-## 项目结构
+**Problem tags** — ~70 emotion/topic tags (e.g. `anger`, `anxiety`, `friendship`, `growth-mindset`)
+
+**Age range** — `age_min` / `age_max` (years, typically 2–14)
+
+**Audience** — `children`, `parents`, `educators`
+
+## Repository structure
 
 ```
 data-collector/
 ├── data/
-│   └── raw/
-│       ├── eq_children_books_v2.csv      # 书籍原始数据（365条）
-│       ├── eq_children_books_v3.csv      # 书籍 + Goodreads 评分
-│       ├── eq_children_youtube_v2.csv    # YouTube 视频原始数据（2427条）
-│       ├── fetch_youtube_sel.py          # YouTube API 采集脚本
-│       ├── enrich_books.py               # 书籍数据丰富化（Google Books）
-│       ├── enrich_goodreads.py           # 书籍 Goodreads 评分抓取
-│       └── import_videos_to_supabase.py  # 视频导入 Supabase
-├── notebooks/                            # 分析笔记本
-├── reports/                              # 报告输出
-└── requirements.txt
+│   ├── scripts/
+│   │   ├── fetch_youtube_sel.py      # YouTube Data API v3 collector (55 queries × 50 results)
+│   │   ├── retag.py                  # Rule-based re-tagger (keyword regex)
+│   │   ├── retag_llm.py              # LLM re-tagger (Claude Haiku, batches of 20)
+│   │   └── import_videos_v3.py       # Supabase upsert importer
+│   └── sql/
+│       ├── schema_videos.sql          # Full table schema with GIN indexes and RLS
+│       └── add_low_quality_flag.sql   # Migration: adds low_quality_flag boolean column
+├── docs/
+│   └── process-guide.html            # Full process documentation (bilingual)
+├── .gitignore                         # Excludes *.csv and *.json data files
+└── README.md
 ```
 
----
+## Data pipeline
 
-## 数据字段
-
-### 书籍（books 表）
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| title | text | 书名 |
-| author | text | 作者 |
-| age_min / age_max | int | 适读年龄范围 |
-| book_type | text | children_fiction / children_nonfiction / parenting |
-| audience | text[] | children / educators / parents |
-| casel_domain | text | CASEL 五大核心能力之一 |
-| problem_tags | text[] | 情绪/问题标签，用于推荐匹配 |
-| google_rating | numeric | Google Books 评分 |
-| goodreads_rating | numeric | Goodreads 评分 |
-| cover_url | text | 封面图 URL |
-| amazon_url | text | Amazon 购买链接 |
-
-### 视频（videos 表）
-
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| title | text | 视频标题 |
-| channel_name | text | 频道名 |
-| youtube_url | text | YouTube 链接 |
-| video_id | text | YouTube 视频 ID（唯一键） |
-| category | text | children_video / read_aloud / sel_course / parent_guide |
-| casel_domain | text | CASEL 五大核心能力之一 |
-| problem_tags | text[] | 情绪/问题标签 |
-| age_min / age_max | int | 适合年龄范围 |
-| audience | text[] | children / educators / parents |
-| view_count | bigint | 播放量 |
-| like_count | bigint | 点赞数 |
-| duration | text | 时长（如 "3:25"） |
-| thumbnail_url | text | 缩略图 URL |
-| low_quality_flag | bool | 发布>1年且播放<500且0点赞，标记为低质量 |
-
----
-
-## CASEL 五大核心能力
-
-- **Self-Awareness**（自我认知）：情绪识别、自信、身份认同
-- **Self-Management**（自我管理）：情绪调节、正念、坚韧
-- **Social-Awareness**（社会认知）：共情、多样性、包容
-- **Relationship-Skills**（关系技能）：友谊、冲突解决、团队合作
-- **Responsible-Decision-Making**（负责任决策）：后果意识、数字公民素养
-
----
-
-## 复现步骤
-
-### 1. 采集 YouTube 视频
-
-```bash
-# 需要 YouTube Data API v3 密钥
-YOUTUBE_API_KEY=your_key python3 data/raw/fetch_youtube_sel.py
-# 输出: data/raw/eq_children_youtube_v2.csv
-# 配额消耗: ~5,858 / 10,000 units（55 个查询 × 101 units）
+```
+YouTube API → v2.csv (raw) → retag.py → v3.csv → Supabase (videos table)
+                                      → retag_llm.py → v4.csv (in progress)
 ```
 
-### 2. 导入 Supabase
+## How to run
+
+### 1. Collect YouTube videos (run locally on Mac — not in cloud containers)
 
 ```bash
-# 先在 Supabase SQL Editor 运行 schema 文件建表
-# 再运行导入脚本
-SUPABASE_URL=https://xxxx.supabase.co \
+YOUTUBE_API_KEY=your_key python3 data/scripts/fetch_youtube_sel.py
+# Output: eq_children_youtube_v2.csv (~2,400 videos, ~5,800 API quota units)
+```
+
+### 2. Rule-based re-tagging
+
+```bash
+python3 data/scripts/retag.py
+# Input:  eq_children_youtube_v2.csv
+# Output: eq_children_youtube_v3.csv
+```
+
+### 3. LLM re-tagging (optional, higher accuracy)
+
+```bash
+# Run inside a Claude session — uses the `claude` CLI
+python3 data/scripts/retag_llm.py
+# Resumes automatically from retag_llm_progress.json if interrupted
+# Input:  eq_children_youtube_v2.csv → Output: eq_children_youtube_v4.csv
+```
+
+### 4. Import to Supabase
+
+```bash
+SUPABASE_URL=https://your-project.supabase.co \
 SUPABASE_KEY=your_service_role_key \
-python3 data/raw/import_videos_to_supabase.py
+CSV_PATH=eq_children_youtube_v3.csv \
+python3 data/scripts/import_videos_v3.py
+# Uses upsert on_conflict=video_id — safe to re-run
 ```
 
-### 3. 环境变量
+## Supabase schema highlights
 
-```bash
-cp .env.example .env
-# 填写:
-# YOUTUBE_API_KEY=
-# SUPABASE_URL=
-# SUPABASE_KEY=
+- `problem_tags text[]` — GIN index for fast array containment queries (`@>`, `&&`)
+- `audience text[]` — GIN index
+- `low_quality_flag boolean` — marks videos older than 1 year with <500 views and 0 likes
+- Row Level Security: public SELECT, service_role full access
+
+### Example query — recommend videos by emotion tag + age
+
+```sql
+SELECT title, youtube_url, casel_domain, view_count
+FROM videos
+WHERE problem_tags @> ARRAY['anxiety']
+  AND age_min <= 7 AND age_max >= 5
+  AND low_quality_flag = false
+ORDER BY view_count DESC
+LIMIT 10;
 ```
 
----
+## YouTube API quota
 
-## 数据质量说明
+Each full run of `fetch_youtube_sel.py` uses approximately **5,858 / 10,000** daily quota units (resets at midnight Pacific time).
 
-- YouTube 视频来自 55 个 SEL 相关搜索词，已去重
-- 标签（problem_tags / casel_domain）由规则匹配 + LLM 辅助标注
-- `low_quality_flag=true` 的视频仍保留在库中，前端可选择是否展示
-- 视频覆盖英语为主，含少量西班牙语内容（标有 `spanish` tag）
+## Data quality
 
+Videos are flagged (not deleted) as low quality when all three conditions are met:
+- Published more than 1 year ago
+- `view_count < 500`
+- `like_count = 0`
+
+Filter them out in queries with `WHERE low_quality_flag = false`.
+
+## Full process documentation
+
+See [`docs/process-guide.html`](docs/process-guide.html) for the complete bilingual (Chinese/English) guide covering every step, schema details, query examples, and instructions for adding new resources.

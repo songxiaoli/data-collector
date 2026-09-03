@@ -1,8 +1,7 @@
-<title>SEL 资源数据库 · 工作手册</title>
+<title>SEL Resource Database · Process Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 
 <style>
-  /* ── Tokens ─────────────────────────────────────────── */
   :root {
     --bg:        #f5f7f5;
     --surface:   #ffffff;
@@ -66,7 +65,6 @@
     --tag-text:  #74c69d;
   }
 
-  /* ── Reset & Base ────────────────────────────────────── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
@@ -79,7 +77,6 @@
     min-height: 100vh;
   }
 
-  /* ── Sidebar Nav ─────────────────────────────────────── */
   nav {
     width: 240px;
     min-width: 240px;
@@ -92,243 +89,47 @@
     overflow-y: auto;
     flex-shrink: 0;
   }
-  .nav-brand {
-    padding: 0 20px 20px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 16px;
-  }
-  .nav-brand .leaf {
-    font-size: 24px;
-    margin-bottom: 4px;
-  }
-  .nav-brand h2 {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--accent);
-    line-height: 1.4;
-  }
-  .nav-brand p {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 2px;
-  }
-  nav a {
-    display: block;
-    padding: 6px 20px 6px 16px;
-    font-size: 13px;
-    color: var(--text2);
-    text-decoration: none;
-    border-left: 3px solid transparent;
-    transition: color 0.15s, background 0.15s, border-color 0.15s;
-  }
-  nav a:hover {
-    color: var(--accent);
-    background: var(--accent-bg);
-    border-left-color: var(--accent2);
-  }
-  nav .nav-section {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text3);
-    padding: 14px 20px 4px;
-  }
+  .nav-brand { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .nav-brand .leaf { font-size: 24px; margin-bottom: 4px; }
+  .nav-brand h2 { font-family: 'Lora', Georgia, serif; font-size: 13px; font-weight: 600; color: var(--accent); line-height: 1.4; }
+  .nav-brand p { font-size: 11px; color: var(--text3); margin-top: 2px; }
+  nav a { display: block; padding: 6px 20px 6px 16px; font-size: 13px; color: var(--text2); text-decoration: none; border-left: 3px solid transparent; transition: color .15s, background .15s, border-color .15s; }
+  nav a:hover { color: var(--accent); background: var(--accent-bg); border-left-color: var(--accent2); }
+  nav .nav-section { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); padding: 14px 20px 4px; }
 
-  /* ── Main Content ────────────────────────────────────── */
-  main {
-    flex: 1;
-    max-width: 860px;
-    padding: 48px 52px 80px;
-    min-width: 0;
-  }
+  main { flex: 1; max-width: 860px; padding: 48px 52px 80px; min-width: 0; }
 
-  /* ── Page header ─────────────────────────────────────── */
-  .page-header {
-    margin-bottom: 48px;
-    padding-bottom: 28px;
-    border-bottom: 2px solid var(--border);
-  }
-  .page-header .eyebrow {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent2);
-    margin-bottom: 8px;
-  }
-  .page-header h1 {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--text);
-    text-wrap: balance;
-    line-height: 1.25;
-    margin-bottom: 10px;
-  }
-  .page-header .subtitle {
-    font-size: 15px;
-    color: var(--text2);
-    max-width: 600px;
-  }
-  .page-header .meta {
-    margin-top: 16px;
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .meta-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    background: var(--tag-bg);
-    color: var(--tag-text);
-    font-size: 12px;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
+  .page-header { margin-bottom: 48px; padding-bottom: 28px; border-bottom: 2px solid var(--border); }
+  .page-header .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent2); margin-bottom: 8px; }
+  .page-header h1 { font-family: 'Lora', Georgia, serif; font-size: 32px; font-weight: 700; color: var(--text); text-wrap: balance; line-height: 1.25; margin-bottom: 10px; }
+  .page-header .subtitle { font-size: 15px; color: var(--text2); max-width: 600px; }
+  .page-header .meta { margin-top: 16px; display: flex; gap: 16px; flex-wrap: wrap; }
+  .meta-chip { display: inline-flex; align-items: center; gap: 5px; background: var(--tag-bg); color: var(--tag-text); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; }
 
-  /* ── Section ─────────────────────────────────────────── */
-  section {
-    margin-bottom: 52px;
-    scroll-margin-top: 24px;
-  }
-  section h2 {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  section h2 .icon {
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-  section h3 {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--accent);
-    margin: 24px 0 10px;
-  }
+  section { margin-bottom: 52px; scroll-margin-top: 24px; }
+  section h2 { font-family: 'Lora', Georgia, serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  section h2 .icon { font-size: 20px; flex-shrink: 0; }
+  section h3 { font-family: 'Lora', Georgia, serif; font-size: 16px; font-weight: 600; color: var(--accent); margin: 24px 0 10px; }
   p { margin-bottom: 12px; color: var(--text); }
   p:last-child { margin-bottom: 0; }
 
-  /* ── Stats row ───────────────────────────────────────── */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 14px;
-    margin: 20px 0;
-  }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    text-align: center;
-  }
-  .stat-card .num {
-    font-family: 'Lora', Georgia, serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--accent);
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
-  }
-  .stat-card .label {
-    font-size: 12px;
-    color: var(--text3);
-    margin-top: 4px;
-  }
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin: 20px 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-card .num { font-family: 'Lora', Georgia, serif; font-size: 28px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1; }
+  .stat-card .label { font-size: 12px; color: var(--text3); margin-top: 4px; }
 
-  /* ── Step cards ──────────────────────────────────────── */
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin: 16px 0;
-  }
-  .step {
-    display: grid;
-    grid-template-columns: 36px 1fr;
-    gap: 14px;
-    align-items: start;
-  }
-  .step-num {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    font-weight: 700;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-  .step-body h4 {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--text);
-    margin-bottom: 4px;
-  }
-  .step-body p {
-    font-size: 13.5px;
-    color: var(--text2);
-    margin: 0;
-  }
+  .steps { display: flex; flex-direction: column; gap: 16px; margin: 16px 0; }
+  .step { display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .step-body h4 { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 4px; }
+  .step-body p { font-size: 13.5px; color: var(--text2); margin: 0; }
 
-  /* ── Code blocks ─────────────────────────────────────── */
-  pre {
-    background: var(--code-bg);
-    color: var(--code-text);
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: 12.5px;
-    line-height: 1.7;
-    padding: 16px 20px;
-    border-radius: 8px;
-    overflow-x: auto;
-    margin: 12px 0 16px;
-  }
-  code {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: 12.5px;
-    background: var(--surface2);
-    color: var(--accent);
-    padding: 2px 6px;
-    border-radius: 4px;
-  }
-  pre code {
-    background: none;
-    color: inherit;
-    padding: 0;
-    border-radius: 0;
-    font-size: inherit;
-  }
-  .comment { color: #527d61; }
-  .kw { color: #74c69d; }
-  .str { color: #b7e4c7; }
+  pre { background: var(--code-bg); color: var(--code-text); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.7; padding: 16px 20px; border-radius: 8px; overflow-x: auto; margin: 12px 0 16px; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; background: var(--surface2); color: var(--accent); padding: 2px 6px; border-radius: 4px; }
+  pre code { background: none; color: inherit; padding: 0; border-radius: 0; }
+  .cm { color: #527d61; }
 
-  /* ── Callout boxes ───────────────────────────────────── */
-  .callout {
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin: 16px 0;
-    font-size: 13.5px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
+  .callout { border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: 13.5px; display: flex; gap: 10px; align-items: flex-start; }
   .callout .icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
   .callout p { margin: 0; }
   .callout-warn { background: var(--warn-bg); color: var(--warn); border-left: 3px solid var(--warn); }
@@ -338,89 +139,24 @@
   .callout-tip  { background: var(--accent-bg); color: var(--accent); border-left: 3px solid var(--accent2); }
   .callout-tip p { color: var(--accent); }
 
-  /* ── Tables ──────────────────────────────────────────── */
   .table-wrap { overflow-x: auto; margin: 16px 0; }
   table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
-  th {
-    background: var(--surface2);
-    color: var(--text2);
-    font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
-  }
+  th { background: var(--surface2); color: var(--text2); font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; padding: 8px 14px; text-align: left; border-bottom: 2px solid var(--border); }
   td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--surface2); }
-  td code { font-size: 12px; }
 
-  /* ── Tags ────────────────────────────────────────────── */
-  .tag {
-    display: inline-block;
-    background: var(--tag-bg);
-    color: var(--tag-text);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 12px;
-    margin: 2px 2px 2px 0;
-  }
+  .tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 12px; margin: 2px 2px 2px 0; }
 
-  /* ── Pipeline diagram ────────────────────────────────── */
-  .pipeline {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    flex-wrap: wrap;
-    margin: 20px 0;
-    row-gap: 12px;
-  }
-  .pipe-node {
-    background: var(--surface);
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    text-align: center;
-    min-width: 110px;
-  }
-  .pipe-node .pipe-sub {
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--text3);
-    margin-top: 2px;
-  }
-  .pipe-arrow {
-    color: var(--accent2);
-    font-size: 20px;
-    padding: 0 6px;
-    flex-shrink: 0;
-  }
-  .pipe-node.done {
-    background: var(--accent-bg);
-    border-color: var(--accent2);
-    color: var(--accent);
-  }
-  .pipe-node.pending {
-    opacity: 0.55;
-    border-style: dashed;
-  }
+  .pipeline { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 20px 0; row-gap: 12px; }
+  .pipe-node { background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--text); text-align: center; min-width: 110px; }
+  .pipe-node .pipe-sub { font-size: 11px; font-weight: 400; color: var(--text3); margin-top: 2px; }
+  .pipe-arrow { color: var(--accent2); font-size: 20px; padding: 0 6px; flex-shrink: 0; }
+  .pipe-node.done { background: var(--accent-bg); border-color: var(--accent2); color: var(--accent); }
+  .pipe-node.pending { opacity: .55; border-style: dashed; }
 
-  /* ── Checklist ───────────────────────────────────────── */
   .checklist { list-style: none; margin: 12px 0; }
-  .checklist li {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    padding: 6px 0;
-    font-size: 13.5px;
-    border-bottom: 1px solid var(--border);
-  }
+  .checklist li { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 13.5px; border-bottom: 1px solid var(--border); }
   .checklist li:last-child { border-bottom: none; }
   .checklist .check { flex-shrink: 0; margin-top: 2px; }
   .done-icon { color: var(--accent2); }
@@ -428,7 +164,6 @@
   .checklist .text { color: var(--text); }
   .checklist .text .note { font-size: 12px; color: var(--text3); display: block; }
 
-  /* ── Responsive ──────────────────────────────────────── */
   @media (max-width: 768px) {
     nav { display: none; }
     main { padding: 28px 20px 60px; }
@@ -438,620 +173,429 @@
   }
 </style>
 
-<!-- Sidebar -->
 <nav>
   <div class="nav-brand">
     <div class="leaf">🌱</div>
-    <h2>SEL 资源数据库<br>工作手册</h2>
-    <p>最后更新：2026-09</p>
+    <h2>SEL Resource Database<br>Process Guide</h2>
+    <p>Last updated: Sep 2026</p>
   </div>
-
-  <div class="nav-section">概览</div>
-  <a href="#overview">项目全貌</a>
-  <a href="#pipeline">数据流程图</a>
-  <a href="#status">当前状态</a>
-
-  <div class="nav-section">数据采集</div>
-  <a href="#youtube">YouTube 视频</a>
-  <a href="#books">图书数据</a>
-
-  <div class="nav-section">数据处理</div>
-  <a href="#retag-rules">规则重标注</a>
-  <a href="#retag-llm">LLM 重标注</a>
-  <a href="#quality">质量过滤</a>
-
-  <div class="nav-section">数据库</div>
+  <div class="nav-section">Overview</div>
+  <a href="#overview">Project Overview</a>
+  <a href="#pipeline">Data Pipeline</a>
+  <a href="#status">Current Status</a>
+  <div class="nav-section">Data Collection</div>
+  <a href="#youtube">YouTube Videos</a>
+  <a href="#books">Books</a>
+  <div class="nav-section">Data Processing</div>
+  <a href="#retag-rules">Rule-based Re-tagging</a>
+  <a href="#retag-llm">LLM Re-tagging</a>
+  <a href="#quality">Quality Filtering</a>
+  <div class="nav-section">Database</div>
   <a href="#schema">Supabase Schema</a>
-  <a href="#import">导入脚本</a>
-  <a href="#api">查询示例</a>
-
-  <div class="nav-section">维护</div>
-  <a href="#add-more">如何继续添加</a>
-  <a href="#keys">密钥管理</a>
-  <a href="#git">Git 仓库</a>
-  <a href="#todo">待办事项</a>
+  <a href="#import">Import Script</a>
+  <a href="#api">Query Examples</a>
+  <div class="nav-section">Maintenance</div>
+  <a href="#add-more">Adding More Resources</a>
+  <a href="#keys">API Key Management</a>
+  <a href="#git">Git Repository</a>
+  <a href="#todo">Next Steps</a>
 </nav>
 
-<!-- Main content -->
 <main>
 
-  <!-- Page header -->
   <div class="page-header">
-    <p class="eyebrow">工作手册 · Process Guide</p>
-    <h1>SEL 儿童资源数据库<br>完整操作文档</h1>
-    <p class="subtitle">记录 YouTube 视频与儿童图书数据的采集、清洗、标注、入库全流程，以及未来如何持续补充资源。</p>
+    <p class="eyebrow">Process Guide · v1.0</p>
+    <h1>SEL Children Resource Database<br>Complete Operations Manual</h1>
+    <p class="subtitle">Documents the full pipeline for collecting, cleaning, tagging, and importing YouTube videos and children's books into Supabase — and how to continue expanding the dataset.</p>
     <div class="meta">
-      <span class="meta-chip">🎬 2,427 YouTube 视频</span>
-      <span class="meta-chip">📚 365 本图书</span>
+      <span class="meta-chip">🎬 2,427 YouTube videos</span>
+      <span class="meta-chip">📚 365 books</span>
       <span class="meta-chip">🗄️ Supabase PostgreSQL</span>
       <span class="meta-chip">🌿 GitHub: songxiaoli/data-collector</span>
     </div>
   </div>
 
-  <!-- Section 1: Overview -->
   <section id="overview">
-    <h2><span class="icon">🌱</span> 项目全貌</h2>
-    <p>这个项目的目标是构建一个<strong>儿童社会情感学习（SEL）资源库</strong>，汇聚 YouTube 视频和儿童图书，未来可接入家长/教师推荐系统，按孩子的情绪问题、年龄、CASEL 领域推荐合适内容。</p>
-
+    <h2><span class="icon">🌱</span> Project Overview</h2>
+    <p>The goal is a curated <strong>children's Social-Emotional Learning (SEL) resource library</strong> — YouTube videos and picture books — that powers a recommendation system for parents and educators, matching content to a child's emotional challenges, age range, and CASEL domain.</p>
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="num">2,427</div>
-        <div class="label">YouTube 视频</div>
-      </div>
-      <div class="stat-card">
-        <div class="num">55</div>
-        <div class="label">搜索查询条</div>
-      </div>
-      <div class="stat-card">
-        <div class="num">365</div>
-        <div class="label">图书记录</div>
-      </div>
-      <div class="stat-card">
-        <div class="num">5</div>
-        <div class="label">CASEL 领域</div>
-      </div>
+      <div class="stat-card"><div class="num">2,427</div><div class="label">YouTube videos</div></div>
+      <div class="stat-card"><div class="num">55</div><div class="label">Search queries</div></div>
+      <div class="stat-card"><div class="num">365</div><div class="label">Book records</div></div>
+      <div class="stat-card"><div class="num">5</div><div class="label">CASEL domains</div></div>
     </div>
 
-    <h3>资源分类系统</h3>
-    <p><strong>category（视频类别）</strong>共 4 种：</p>
+    <h3>Classification System</h3>
+    <p><strong>category</strong> — 4 values:</p>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>category</th><th>含义</th><th>目标受众</th></tr></thead>
+        <thead><tr><th>Value</th><th>Meaning</th><th>Audience</th></tr></thead>
         <tbody>
-          <tr><td><code>children_video</code></td><td>给孩子直接观看的 SEL 动画/故事</td><td>儿童</td></tr>
-          <tr><td><code>read_aloud</code></td><td>绘本朗读视频</td><td>儿童/家长</td></tr>
-          <tr><td><code>sel_course</code></td><td>教师课程、TEDx、教室工具</td><td>教育者</td></tr>
-          <tr><td><code>parent_guide</code></td><td>给家长的养育建议/策略</td><td>家长</td></tr>
+          <tr><td><code>children_video</code></td><td>SEL animations and stories for children to watch directly</td><td>Children</td></tr>
+          <tr><td><code>read_aloud</code></td><td>Picture book read-aloud videos</td><td>Children / parents</td></tr>
+          <tr><td><code>sel_course</code></td><td>Classroom curriculum, TEDx talks, educator tools</td><td>Educators</td></tr>
+          <tr><td><code>parent_guide</code></td><td>Parenting advice and strategies for adults</td><td>Parents</td></tr>
         </tbody>
       </table>
     </div>
 
-    <p><strong>casel_domain（CASEL 领域）</strong>共 5 个：</p>
+    <p><strong>casel_domain</strong> — 5 CASEL competencies:</p>
     <div>
-      <span class="tag">Self-Awareness 自我认知</span>
-      <span class="tag">Self-Management 自我管理</span>
-      <span class="tag">Social-Awareness 社会认知</span>
-      <span class="tag">Relationship-Skills 人际关系</span>
-      <span class="tag">Responsible-Decision-Making 负责任决策</span>
+      <span class="tag">Self-Awareness</span>
+      <span class="tag">Self-Management</span>
+      <span class="tag">Social-Awareness</span>
+      <span class="tag">Relationship-Skills</span>
+      <span class="tag">Responsible-Decision-Making</span>
     </div>
+    <p style="margin-top:12px"><strong>problem_tags</strong> — ~70 emotion/topic tags (e.g. <code>anger</code>, <code>anxiety</code>, <code>friendship</code>, <code>growth-mindset</code>) stored as a PostgreSQL <code>text[]</code> array, enabling fast GIN-indexed containment queries.</p>
   </section>
 
-  <!-- Section 2: Pipeline -->
   <section id="pipeline">
-    <h2><span class="icon">🔄</span> 数据流程图</h2>
+    <h2><span class="icon">🔄</span> Data Pipeline</h2>
     <div class="pipeline">
-      <div class="pipe-node done">
-        YouTube API
-        <div class="pipe-sub">55 查询 × 50 条</div>
-      </div>
+      <div class="pipe-node done">YouTube API<div class="pipe-sub">55 queries × 50</div></div>
       <div class="pipe-arrow">→</div>
-      <div class="pipe-node done">
-        v2.csv
-        <div class="pipe-sub">2,427 视频原始</div>
-      </div>
+      <div class="pipe-node done">v2.csv<div class="pipe-sub">2,427 raw videos</div></div>
       <div class="pipe-arrow">→</div>
-      <div class="pipe-node done">
-        规则重标注
-        <div class="pipe-sub">retag.py → v3</div>
-      </div>
+      <div class="pipe-node done">Rule retag<div class="pipe-sub">retag.py → v3</div></div>
       <div class="pipe-arrow">→</div>
-      <div class="pipe-node pending">
-        LLM 重标注
-        <div class="pipe-sub">retag_llm.py → v4</div>
-      </div>
+      <div class="pipe-node pending">LLM retag<div class="pipe-sub">retag_llm.py → v4</div></div>
       <div class="pipe-arrow">→</div>
-      <div class="pipe-node done">
-        Supabase
-        <div class="pipe-sub">videos 表</div>
-      </div>
+      <div class="pipe-node done">Supabase<div class="pipe-sub">videos table</div></div>
     </div>
-    <p style="font-size:12.5px; color:var(--text3);">✅ 深色边框 = 已完成；虚线 = 进行中（LLM 标注 160/2427 完成，需继续运行）</p>
+    <p style="font-size:12.5px;color:var(--text3)">✅ Solid border = complete &nbsp;·&nbsp; Dashed = in progress (LLM tagging 160/2,427 done, resumes automatically)</p>
   </section>
 
-  <!-- Section 3: Current Status -->
   <section id="status">
-    <h2><span class="icon">📋</span> 当前状态</h2>
+    <h2><span class="icon">📋</span> Current Status</h2>
     <ul class="checklist">
-      <li>
-        <span class="check done-icon">✅</span>
-        <span class="text">YouTube 视频采集（2,427 条，55 个查询）
-          <span class="note">文件：<code>/home/claude/supabase/eq_children_youtube_v2.csv</code></span>
-        </span>
-      </li>
-      <li>
-        <span class="check done-icon">✅</span>
-        <span class="text">规则重标注完成（v3）
-          <span class="note">568 类别更改，482 CASEL 更改，2,232 标签更改，72 低质量标注</span>
-        </span>
-      </li>
-      <li>
-        <span class="check done-icon">✅</span>
-        <span class="text">Supabase schema 建立 + 2,427 视频导入
-          <span class="note">表：<code>videos</code>，含 GIN 索引、RLS、low_quality_flag 列</span>
-        </span>
-      </li>
-      <li>
-        <span class="check done-icon">✅</span>
-        <span class="text">图书数据（365 本）导入 Supabase <code>books</code> 表</span>
-      </li>
-      <li>
-        <span class="check done-icon">✅</span>
-        <span class="text">Git 初始提交（26 个文件）
-          <span class="note">仓库：github.com/songxiaoli/data-collector</span>
-        </span>
-      </li>
-      <li>
-        <span class="check todo-icon">⏳</span>
-        <span class="text">LLM 重标注（160/2,427 完成，需继续运行）
-          <span class="note">运行 <code>python3 /home/claude/youtube/retag_llm.py</code>；进度自动保存，可随时中断/恢复</span>
-        </span>
-      </li>
-      <li>
-        <span class="check todo-icon">⏳</span>
-        <span class="text">GitHub push（SSH 已配置，执行推送命令）
-          <span class="note"><code>git -C ~/Projects/data-collector push -u origin main</code></span>
-        </span>
-      </li>
-      <li>
-        <span class="check todo-icon">⏳</span>
-        <span class="text">LLM 标注完成后重新导入 v4 数据到 Supabase</span>
-      </li>
+      <li><span class="check done-icon">✅</span><span class="text">YouTube video collection (2,427 videos, 55 queries)<span class="note">File: <code>data/raw/eq_children_youtube_v2.csv</code></span></span></li>
+      <li><span class="check done-icon">✅</span><span class="text">Rule-based re-tagging complete (v3)<span class="note">568 category changes · 482 CASEL changes · 2,232 tag changes · 72 low-quality flags</span></span></li>
+      <li><span class="check done-icon">✅</span><span class="text">Supabase schema created + 2,427 videos imported<span class="note">Table: <code>videos</code> — GIN indexes, RLS, <code>low_quality_flag</code> column</span></span></li>
+      <li><span class="check done-icon">✅</span><span class="text">365 books imported into Supabase <code>books</code> table</span></li>
+      <li><span class="check done-icon">✅</span><span class="text">Initial git commit (26 files)<span class="note">Repo: github.com/songxiaoli/data-collector</span></span></li>
+      <li><span class="check todo-icon">⏳</span><span class="text">LLM re-tagging (160/2,427 done — resume anytime)<span class="note">Run <code>python3 data/scripts/retag_llm.py</code> — progress auto-saved, safe to interrupt</span></span></li>
+      <li><span class="check todo-icon">⏳</span><span class="text">Push to GitHub (SSH configured)<span class="note"><code>git remote set-url origin git@github.com:songxiaoli/data-collector.git &amp;&amp; git push -u origin main</code></span></span></li>
+      <li><span class="check todo-icon">⏳</span><span class="text">Re-import v4 CSV to Supabase once LLM tagging completes</span></li>
     </ul>
   </section>
 
-  <!-- Section 4: YouTube -->
   <section id="youtube">
-    <h2><span class="icon">🎬</span> YouTube 视频采集</h2>
-    <p>使用 YouTube Data API v3，通过关键词搜索批量抓取 SEL 相关视频。</p>
+    <h2><span class="icon">🎬</span> YouTube Video Collection</h2>
+    <p>Uses the YouTube Data API v3 to bulk-fetch SEL-related videos via keyword search.</p>
 
-    <h3>文件位置</h3>
+    <h3>Files</h3>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>文件</th><th>说明</th></tr></thead>
+        <thead><tr><th>File</th><th>Purpose</th></tr></thead>
         <tbody>
-          <tr><td><code>/home/claude/youtube/fetch_youtube_sel.py</code></td><td>采集脚本（在 Mac 本地运行）</td></tr>
-          <tr><td><code>/home/claude/supabase/eq_children_youtube_v2.csv</code></td><td>原始输出（2,427 行）</td></tr>
+          <tr><td><code>data/scripts/fetch_youtube_sel.py</code></td><td>Collector script (run on your Mac — not in cloud containers)</td></tr>
+          <tr><td><code>data/raw/eq_children_youtube_v2.csv</code></td><td>Raw output — 2,427 rows, 18 columns</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3>前提条件</h3>
+    <h3>Prerequisites</h3>
     <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h4>启用 YouTube Data API v3</h4>
-          <p>进入 <a href="https://console.cloud.google.com/" style="color:var(--accent)">Google Cloud Console</a> → APIs & Services → 搜索 "YouTube Data API v3" → Enable</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>创建 API Key</h4>
-          <p>Credentials → Create Credentials → API key。建议不加 IP 限制（否则在本地运行时可能被拒）。</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h4>安装依赖</h4>
-          <p><code>pip3 install google-api-python-client</code>（脚本也会自动尝试安装）</p>
-        </div>
-      </div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Enable YouTube Data API v3</h4><p>Go to <a href="https://console.cloud.google.com/" style="color:var(--accent)">Google Cloud Console</a> → APIs &amp; Services → search "YouTube Data API v3" → Enable.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Create an API Key</h4><p>Credentials → Create Credentials → API key. Leave IP restrictions off, otherwise local runs may be blocked.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Install the client library</h4><p><code>pip3 install google-api-python-client</code> (the script also auto-installs it on first run).</p></div></div>
     </div>
 
     <div class="callout callout-warn">
       <span class="icon">⚠️</span>
-      <p><strong>注意：</strong>YouTube API 必须在 Mac 本地运行，不能在 Claude 的云容器中运行（容器 IP 被 Google 封锁）。</p>
+      <p><strong>Important:</strong> The YouTube API must be called from your Mac. Cloud container IPs are blocked by Google.</p>
     </div>
 
-    <h3>运行方式</h3>
-    <pre><span class="comment"># 在 Mac 终端运行</span>
-<span class="kw">cd</span> ~/Projects/data-collector
-YOUTUBE_API_KEY=<span class="str">你的API密钥</span> python3 data/scripts/fetch_youtube_sel.py</pre>
+    <h3>Run</h3>
+    <pre><span class="cm"># Run in your Mac terminal</span>
+cd ~/Projects/data-collector
+YOUTUBE_API_KEY=your_key python3 data/scripts/fetch_youtube_sel.py</pre>
 
-    <h3>配额说明</h3>
+    <h3>API Quota</h3>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>操作</th><th>每次消耗</th><th>当前 55 查询总计</th></tr></thead>
+        <thead><tr><th>Operation</th><th>Cost per call</th><th>55-query total</th></tr></thead>
         <tbody>
-          <tr><td>search.list</td><td>100 单位/次</td><td>5,500 单位</td></tr>
-          <tr><td>videos.list（详情）</td><td>~1 单位/次</td><td>~358 单位</td></tr>
-          <tr><td><strong>合计</strong></td><td></td><td><strong>~5,858 / 10,000</strong></td></tr>
+          <tr><td>search.list</td><td>100 units</td><td>5,500 units</td></tr>
+          <tr><td>videos.list (stats)</td><td>~1 unit</td><td>~358 units</td></tr>
+          <tr><td><strong>Total</strong></td><td></td><td><strong>~5,858 / 10,000</strong></td></tr>
         </tbody>
       </table>
     </div>
-    <p>每天重置，如果一天内需要运行多次，注意控制查询数量。</p>
+    <p>Quota resets daily at midnight Pacific time. If running multiple times in one day, watch the remaining budget.</p>
 
-    <h3>如何添加新查询</h3>
-    <p>在 <code>fetch_youtube_sel.py</code> 的 <code>QUERIES</code> 列表中添加一行元组：</p>
-    <pre><span class="comment"># 格式: (查询词, category, casel_domain, problem_tags, age_min, age_max, audience)</span>
-(<span class="str">"emotion regulation autism children video"</span>,
- <span class="str">"children_video"</span>, <span class="str">"Self-Management"</span>,
- <span class="str">"autism,self-regulation,emotions"</span>, 5, 12, <span class="str">"children,educators"</span>),</pre>
+    <h3>Adding New Queries</h3>
+    <p>Append a tuple to the <code>QUERIES</code> list in <code>fetch_youtube_sel.py</code>:</p>
+    <pre><span class="cm"># (search_query, category, casel_domain, problem_tags, age_min, age_max, audience)</span>
+("emotion regulation autism children video",
+ "children_video", "Self-Management",
+ "autism,self-regulation,emotions", 5, 12, "children,educators"),</pre>
   </section>
 
-  <!-- Section 5: Books -->
   <section id="books">
-    <h2><span class="icon">📚</span> 图书数据</h2>
-    <p>图书数据（365 本）已导入 Supabase <code>books</code> 表。图书的采集和清洗流程本次未修改，沿用原始数据。</p>
+    <h2><span class="icon">📚</span> Books</h2>
+    <p>365 picture books are imported into the Supabase <code>books</code> table. The collection and enrichment scripts (<code>enrich_books.py</code>, <code>enrich_goodreads.py</code>) live in <code>data/raw/</code> and were run during the initial build.</p>
     <div class="callout callout-info">
       <span class="icon">ℹ️</span>
-      <p>如需添加更多图书，可手工编辑 CSV 后重新 upsert，或通过 Supabase Table Editor 直接添加行。图书表结构参考 <code>/home/claude/supabase/schema_books.sql</code>（如有）。</p>
+      <p>To add more books: prepare a CSV matching the books schema and upsert it, or add rows directly in the Supabase Table Editor.</p>
     </div>
   </section>
 
-  <!-- Section 6: Rule-based retag -->
   <section id="retag-rules">
-    <h2><span class="icon">🏷️</span> 规则重标注（retag.py）</h2>
-    <p>基于关键词正则匹配，对 title + description 进行分类，速度快、可解释。已应用于 v3 数据。</p>
+    <h2><span class="icon">🏷️</span> Rule-based Re-tagging</h2>
+    <p>Keyword regex matching on <code>title + description</code> to fix category, CASEL domain, and problem tags. Fast and fully explainable. Already applied to produce v3.</p>
 
-    <h3>文件</h3>
-    <pre>/home/claude/youtube/retag.py
-输入: eq_children_youtube_v2.csv
-输出: eq_children_youtube_v3.csv</pre>
+    <h3>Files</h3>
+    <pre>data/scripts/retag.py
+Input:  data/raw/eq_children_youtube_v2.csv
+Output: data/raw/eq_children_youtube_v3.csv</pre>
 
-    <h3>运行</h3>
-    <pre>python3 /home/claude/youtube/retag.py</pre>
+    <h3>Run</h3>
+    <pre>python3 data/scripts/retag.py</pre>
 
-    <h3>分类逻辑</h3>
+    <h3>Logic Summary</h3>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>字段</th><th>逻辑</th></tr></thead>
+        <thead><tr><th>Field</th><th>Logic</th></tr></thead>
         <tbody>
-          <tr><td><code>category</code></td><td>检测 title 中的 "read aloud"/"storytime" → read_aloud；检测 "parenting"/"for parents" → parent_guide；检测 "lesson plan"/"classroom" → sel_course；其余默认 children_video</td></tr>
-          <tr><td><code>casel_domain</code></td><td>对 5 个领域的关键词列表打分，取最高分。无命中则保留原值</td></tr>
-          <tr><td><code>problem_tags</code></td><td>约 80 个标签，每个对应 2-5 个正则模式，命中则收录</td></tr>
-          <tr><td><code>low_quality_flag</code></td><td>发布 &gt;1 年 AND view_count &lt;500 AND like_count = 0 → 1</td></tr>
+          <tr><td><code>category</code></td><td>Checks title for "read aloud"/"storytime" → <code>read_aloud</code>; "parenting"/"for parents" → <code>parent_guide</code>; "lesson plan"/"classroom" → <code>sel_course</code>; default → <code>children_video</code></td></tr>
+          <tr><td><code>casel_domain</code></td><td>Scores each of the 5 domains against keyword lists; picks the highest scorer. Falls back to the original value if nothing matches.</td></tr>
+          <tr><td><code>problem_tags</code></td><td>~80 tags, each with 2–5 regex patterns. All matched tags are collected.</td></tr>
+          <tr><td><code>low_quality_flag</code></td><td>Published &gt;1 year ago AND view_count &lt;500 AND like_count = 0 → <code>1</code></td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3>如何调整规则</h3>
-    <p>直接编辑 <code>retag.py</code> 中的 <code>CASEL_RULES</code>、<code>TAG_RULES</code> 列表，添加/修改关键词，然后重新运行脚本生成新版本 CSV。</p>
+    <h3>Tuning the Rules</h3>
+    <p>Edit <code>CASEL_RULES</code> or <code>TAG_RULES</code> in <code>retag.py</code>, then re-run the script to generate a new versioned CSV.</p>
   </section>
 
-  <!-- Section 7: LLM retag -->
   <section id="retag-llm">
-    <h2><span class="icon">🤖</span> LLM 重标注（retag_llm.py）</h2>
-    <p>使用 <code>claude haiku-4-5</code> 模型批量理解视频语义，标注准确度更高，适合规则难以覆盖的边缘案例。</p>
+    <h2><span class="icon">🤖</span> LLM Re-tagging</h2>
+    <p>Uses <code>claude-haiku-4-5</code> to semantically understand each video and re-classify it. Higher accuracy than rules, especially for edge cases.</p>
 
     <div class="callout callout-info">
       <span class="icon">ℹ️</span>
-      <p>当前进度：<strong>160 / 2,427</strong> 完成。进度保存在 <code>/home/claude/youtube/retag_llm_progress.json</code>，随时可中断/恢复。</p>
+      <p>Current progress: <strong>160 / 2,427</strong> complete. Progress is saved to <code>data/scripts/retag_llm_progress.json</code> — safe to interrupt and resume at any time.</p>
     </div>
 
-    <h3>文件</h3>
-    <pre>/home/claude/youtube/retag_llm.py
-输入: eq_children_youtube_v2.csv  (原始)
-输出: eq_children_youtube_v4.csv  (LLM 重标注版本)</pre>
+    <h3>Files</h3>
+    <pre>data/scripts/retag_llm.py
+Input:  data/raw/eq_children_youtube_v2.csv  (original)
+Output: data/raw/eq_children_youtube_v4.csv  (LLM-tagged)</pre>
 
-    <h3>运行（在云容器 Claude 环境中）</h3>
-    <pre><span class="comment"># 这个脚本通过 claude CLI 调用模型，只能在 Claude 对话窗口内运行</span>
-<span class="comment"># 打开对话后，直接运行：</span>
-python3 /home/claude/youtube/retag_llm.py
+    <h3>Run (inside a Claude session)</h3>
+    <pre><span class="cm"># This script calls the claude CLI — run it inside a Claude conversation session</span>
+python3 data/scripts/retag_llm.py
+<span class="cm"># Automatically resumes from batch 8 (160/2,427 done)
+# Estimated remaining time: ~2.5 hours (113 batches × ~80 s/batch)</span></pre>
 
-<span class="comment"># 脚本会自动从上次断点继续（160/2427 已完成）</span>
-<span class="comment"># 预计还需 ~2.5 小时（约 113 批次 × 20秒/批）</span></pre>
+    <h3>How It Works</h3>
+    <p>Each batch of 20 videos is assembled into a prompt (title + first 200 chars of description) and sent to:</p>
+    <pre>claude --print --model claude-haiku-4-5 -p "SYSTEM_PROMPT" &lt;&lt;&lt; "batch content"</pre>
+    <p>The JSON response is parsed and <code>category</code>, <code>casel_domain</code>, <code>problem_tags</code> are written to the progress file, then merged into v4.csv at the end.</p>
 
-    <h3>运行机制</h3>
-    <p>每批 20 个视频，将 title + description(前200字) 拼成 prompt，调用：</p>
-    <pre>claude --print --model claude-haiku-4-5 -p "SYSTEM_PROMPT" &lt;&lt;&lt; "批次内容"</pre>
-    <p>返回 JSON 数组，提取 <code>category</code>、<code>casel_domain</code>、<code>problem_tags</code> 写入进度文件，最后合并输出 v4.csv。</p>
-
-    <h3>v4 完成后重新导入 Supabase</h3>
-    <pre><span class="comment"># 在云容器内：</span>
-SUPABASE_URL=<span class="str">https://nhdswigpkiwbgtxugtmw.supabase.co</span> \
-SUPABASE_KEY=<span class="str">你的service_role_key</span> \
-CSV_PATH=/home/claude/supabase/eq_children_youtube_v4.csv \
-python3 /home/claude/supabase/import_videos_v3.py</pre>
+    <h3>Re-import v4 to Supabase</h3>
+    <pre>SUPABASE_URL=https://nhdswigpkiwbgtxugtmw.supabase.co \
+SUPABASE_KEY=your_service_role_key \
+CSV_PATH=data/raw/eq_children_youtube_v4.csv \
+python3 data/scripts/import_videos_v3.py</pre>
     <div class="callout callout-tip">
       <span class="icon">💡</span>
-      <p>导入脚本使用 <code>upsert on_conflict=video_id</code>，所以安全重复运行，不会产生重复行。</p>
+      <p>The import script uses <code>upsert on_conflict=video_id</code> — safe to re-run; existing rows are updated, no duplicates created.</p>
     </div>
   </section>
 
-  <!-- Section 8: Quality -->
   <section id="quality">
-    <h2><span class="icon">📊</span> 数据质量管理</h2>
-    <h3>低质量标记逻辑</h3>
-    <p>不直接删除，用 <code>low_quality_flag</code> 列标记（值为 1 / true），由应用层决定是否显示：</p>
-    <pre><span class="comment"># 判断条件（三个同时成立）：</span>
-发布时间 > 1年前  AND  view_count < 500  AND  like_count = 0</pre>
-    <p>当前标记了 <strong>72</strong> 个视频。查询时可过滤：</p>
+    <h2><span class="icon">📊</span> Data Quality</h2>
+    <h3>Low-quality Flag</h3>
+    <p>Videos are flagged rather than deleted, giving the application layer the final say on whether to surface them:</p>
+    <pre><span class="cm"># Flagged when ALL three conditions are true:</span>
+published_at older than 1 year  AND  view_count &lt; 500  AND  like_count = 0</pre>
+    <p>72 videos are currently flagged. Filter them in queries:</p>
     <pre>SELECT * FROM videos WHERE low_quality_flag = false;</pre>
 
-    <h3>数据质量分布（基于 v2 原始数据）</h3>
+    <h3>Quality Benchmarks (v2 raw data)</h3>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>指标</th><th>数值</th></tr></thead>
+        <thead><tr><th>Metric</th><th>Value</th></tr></thead>
         <tbody>
-          <tr><td>中位数 view_count</td><td>~18,000</td></tr>
-          <tr><td>view_count &gt; 100万</td><td>~80 个视频</td></tr>
-          <tr><td>view_count &lt; 1,000</td><td>~300 个视频</td></tr>
-          <tr><td>无 like_count 数据</td><td>~600 个（YouTube 隐藏）</td></tr>
+          <tr><td>Median view_count</td><td>~18,000</td></tr>
+          <tr><td>Videos with &gt;1M views</td><td>~80</td></tr>
+          <tr><td>Videos with &lt;1,000 views</td><td>~300</td></tr>
+          <tr><td>Missing like_count (hidden by YouTube)</td><td>~600</td></tr>
         </tbody>
       </table>
     </div>
-
     <div class="callout callout-tip">
       <span class="icon">💡</span>
-      <p>推荐阈值：<code>view_count &gt; 2,000</code> 作为「基础质量线」筛选，保留主力高质量内容同时不过度删减。</p>
+      <p>Recommended threshold: <code>view_count &gt; 2,000</code> as a baseline quality filter — keeps a healthy high-quality pool without being overly aggressive.</p>
     </div>
   </section>
 
-  <!-- Section 9: Schema -->
   <section id="schema">
-    <h2><span class="icon">🗄️</span> Supabase 数据库结构</h2>
-    <h3>videos 表主要字段</h3>
+    <h2><span class="icon">🗄️</span> Supabase Schema</h2>
+    <h3>Key columns — videos table</h3>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>列名</th><th>类型</th><th>说明</th></tr></thead>
+        <thead><tr><th>Column</th><th>Type</th><th>Notes</th></tr></thead>
         <tbody>
-          <tr><td><code>video_id</code></td><td>text UNIQUE</td><td>YouTube ID，唯一标识符</td></tr>
-          <tr><td><code>title</code></td><td>text</td><td>视频标题</td></tr>
-          <tr><td><code>channel_name</code></td><td>text</td><td>频道名称</td></tr>
-          <tr><td><code>youtube_url</code></td><td>text</td><td>完整链接</td></tr>
+          <tr><td><code>video_id</code></td><td>text UNIQUE</td><td>YouTube video ID — primary deduplication key</td></tr>
+          <tr><td><code>title</code></td><td>text</td><td>Video title</td></tr>
           <tr><td><code>category</code></td><td>text CHECK</td><td>children_video / read_aloud / sel_course / parent_guide</td></tr>
-          <tr><td><code>casel_domain</code></td><td>text CHECK</td><td>5 个 CASEL 领域之一</td></tr>
-          <tr><td><code>problem_tags</code></td><td>text[]</td><td>情绪/问题标签数组，GIN 索引</td></tr>
-          <tr><td><code>age_min / age_max</code></td><td>integer</td><td>适合年龄范围</td></tr>
-          <tr><td><code>audience</code></td><td>text[]</td><td>children / parents / educators</td></tr>
-          <tr><td><code>view_count / like_count</code></td><td>bigint</td><td>YouTube 统计数据</td></tr>
-          <tr><td><code>low_quality_flag</code></td><td>boolean</td><td>低质量标记</td></tr>
-          <tr><td><code>thumbnail_url</code></td><td>text</td><td>缩略图</td></tr>
+          <tr><td><code>casel_domain</code></td><td>text CHECK</td><td>One of the 5 CASEL domains</td></tr>
+          <tr><td><code>problem_tags</code></td><td>text[]</td><td>Emotion/topic tag array — GIN indexed</td></tr>
+          <tr><td><code>age_min / age_max</code></td><td>integer</td><td>Recommended age range</td></tr>
+          <tr><td><code>audience</code></td><td>text[]</td><td>children / parents / educators — GIN indexed</td></tr>
+          <tr><td><code>view_count / like_count</code></td><td>bigint</td><td>YouTube stats at time of collection</td></tr>
+          <tr><td><code>low_quality_flag</code></td><td>boolean</td><td>See quality filter logic above</td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3>重建 Schema 步骤</h3>
-    <p>如需在新的 Supabase 项目中重建，在 SQL Editor 中依次运行：</p>
-    <pre><span class="comment">-- 1. 基础表结构</span>
-<span class="comment">-- 文件: /home/claude/supabase/schema_videos.sql</span>
+    <h3>Rebuilding the Schema</h3>
+    <p>Run these in the Supabase SQL Editor on a fresh project:</p>
+    <pre><span class="cm">-- 1. Full table + indexes + RLS</span>
+<span class="cm">-- File: data/sql/schema_videos.sql</span>
 
-<span class="comment">-- 2. 添加 low_quality_flag 列（如 schema 未包含）</span>
+<span class="cm">-- 2. Add low_quality_flag (if not already in schema)</span>
 ALTER TABLE videos ADD COLUMN IF NOT EXISTS low_quality_flag boolean DEFAULT false;
 
-<span class="comment">-- 3. （可选）启用 RLS</span>
+<span class="cm">-- 3. Enable public read access</span>
 ALTER TABLE videos ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read access" ON videos FOR SELECT USING (true);</pre>
   </section>
 
-  <!-- Section 10: Import -->
   <section id="import">
-    <h2><span class="icon">📥</span> 数据导入脚本</h2>
-    <h3>文件位置</h3>
-    <pre>/home/claude/supabase/import_videos_v3.py   <span class="comment"># 通用导入脚本</span></pre>
-
-    <h3>运行方式</h3>
+    <h2><span class="icon">📥</span> Import Script</h2>
+    <pre>data/scripts/import_videos_v3.py   <span class="cm"># generic importer, works for any versioned CSV</span></pre>
+    <h3>Run</h3>
     <pre>SUPABASE_URL=https://nhdswigpkiwbgtxugtmw.supabase.co \
-SUPABASE_KEY=<span class="str">your_service_role_key</span> \
-CSV_PATH=/home/claude/supabase/eq_children_youtube_v3.csv \
-python3 /home/claude/supabase/import_videos_v3.py</pre>
-
-    <div class="callout callout-tip">
-      <span class="icon">💡</span>
-      <p>脚本使用 <code>upsert(on_conflict="video_id")</code>，每次重新运行只会更新已有行，不会重复插入。</p>
-    </div>
-
-    <h3>脚本做了什么</h3>
-    <p>CSV 中的字符串字段会自动转换：<code>problem_tags</code> 和 <code>audience</code> 逗号分割为数组；<code>view_count</code>/<code>like_count</code> 解析为 bigint；<code>low_quality_flag</code> "1"/"0" 映射为 boolean；空字符串转为 NULL。</p>
+SUPABASE_KEY=your_service_role_key \
+CSV_PATH=data/raw/eq_children_youtube_v3.csv \
+python3 data/scripts/import_videos_v3.py</pre>
+    <h3>What It Does</h3>
+    <p>Reads the CSV and transforms each row: <code>problem_tags</code> and <code>audience</code> are split on commas into arrays; <code>view_count</code>/<code>like_count</code> are cast to bigint; <code>low_quality_flag</code> "1"/"0" is mapped to boolean; empty strings become NULL. Rows are upserted in batches of 50 on conflict <code>video_id</code>.</p>
   </section>
 
-  <!-- Section 11: API queries -->
   <section id="api">
-    <h2><span class="icon">🔍</span> 常用查询示例</h2>
+    <h2><span class="icon">🔍</span> Query Examples</h2>
 
-    <h3>按情绪标签推荐（含年龄过滤）</h3>
-    <pre><span class="kw">SELECT</span> title, youtube_url, category, casel_domain, view_count
-<span class="kw">FROM</span> videos
-<span class="kw">WHERE</span> problem_tags @> <span class="str">ARRAY['anger']</span>        <span class="comment">-- GIN 索引</span>
-  <span class="kw">AND</span> age_min <= 7 <span class="kw">AND</span> age_max >= 5
-  <span class="kw">AND</span> low_quality_flag = <span class="kw">false</span>
-<span class="kw">ORDER BY</span> view_count <span class="kw">DESC</span>
-<span class="kw">LIMIT</span> 10;</pre>
+    <h3>Recommend by emotion tag + age</h3>
+    <pre>SELECT title, youtube_url, category, casel_domain, view_count
+FROM videos
+WHERE problem_tags @> ARRAY['anger']        <span class="cm">-- GIN index</span>
+  AND age_min &lt;= 7 AND age_max >= 5
+  AND low_quality_flag = false
+ORDER BY view_count DESC
+LIMIT 10;</pre>
 
-    <h3>按 CASEL 领域 + 受众</h3>
-    <pre><span class="kw">SELECT</span> title, channel_name, youtube_url
-<span class="kw">FROM</span> videos
-<span class="kw">WHERE</span> casel_domain = <span class="str">'Self-Management'</span>
-  <span class="kw">AND</span> audience @> <span class="str">ARRAY['parents']</span>
-  <span class="kw">AND</span> category = <span class="str">'parent_guide'</span>
-<span class="kw">ORDER BY</span> view_count <span class="kw">DESC</span>;</pre>
+    <h3>Filter by CASEL domain + audience</h3>
+    <pre>SELECT title, channel_name, youtube_url
+FROM videos
+WHERE casel_domain = 'Self-Management'
+  AND audience @> ARRAY['parents']
+  AND category = 'parent_guide'
+ORDER BY view_count DESC;</pre>
 
-    <h3>标签多选（OR 逻辑）</h3>
-    <pre><span class="kw">SELECT</span> title, problem_tags, view_count
-<span class="kw">FROM</span> videos
-<span class="kw">WHERE</span> problem_tags && <span class="str">ARRAY['anxiety','worry','fear']</span>   <span class="comment">-- 有交集即命中</span>
-  <span class="kw">AND</span> low_quality_flag = <span class="kw">false</span>
-<span class="kw">ORDER BY</span> view_count <span class="kw">DESC</span> <span class="kw">LIMIT</span> 20;</pre>
+    <h3>Multi-tag OR match</h3>
+    <pre>SELECT title, problem_tags, view_count
+FROM videos
+WHERE problem_tags && ARRAY['anxiety','worry','fear']   <span class="cm">-- any overlap</span>
+  AND low_quality_flag = false
+ORDER BY view_count DESC LIMIT 20;</pre>
   </section>
 
-  <!-- Section 12: Add more -->
   <section id="add-more">
-    <h2><span class="icon">➕</span> 如何继续添加资源</h2>
+    <h2><span class="icon">➕</span> Adding More Resources</h2>
 
-    <h3>方案 A：添加新 YouTube 查询</h3>
+    <h3>Option A — Add new YouTube search queries</h3>
     <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h4>编辑查询列表</h4>
-          <p>打开 <code>fetch_youtube_sel.py</code>，在 <code>QUERIES</code> 列表末尾添加新的搜索词元组</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>在 Mac 本地运行</h4>
-          <p><code>YOUTUBE_API_KEY=xxx python3 fetch_youtube_sel.py</code> → 输出新版 v2.csv（自动去重）</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h4>重新标注</h4>
-          <p>运行 <code>retag.py</code> 生成 v3，或等 LLM retag 完成后跑 <code>retag_llm.py</code> 生成 v4</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h4>重新导入 Supabase</h4>
-          <p>运行 <code>import_videos_v3.py</code>（upsert 安全，不会重复）</p>
-        </div>
-      </div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Edit the query list</h4><p>Open <code>data/scripts/fetch_youtube_sel.py</code> and append new tuples to <code>QUERIES</code>.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Run on your Mac</h4><p><code>YOUTUBE_API_KEY=xxx python3 data/scripts/fetch_youtube_sel.py</code> → outputs a new v2.csv (auto-deduped).</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Re-tag</h4><p>Run <code>retag.py</code> for rules → v3, or wait for LLM tagging to finish and run <code>retag_llm.py</code> → v4.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Re-import to Supabase</h4><p>Run <code>import_videos_v3.py</code> — upsert is safe, no duplicates.</p></div></div>
     </div>
 
-    <h3>方案 B：添加新资源类型（如 App、播客）</h3>
-    <p>在 Supabase 中创建新表（如 <code>apps</code>），建议复用相同的字段结构：<code>category</code>、<code>casel_domain</code>、<code>problem_tags text[]</code>、<code>age_min/max</code>、<code>audience text[]</code>，方便统一推荐逻辑。</p>
+    <h3>Option B — Add a new resource type (apps, podcasts…)</h3>
+    <p>Create a new Supabase table (e.g. <code>apps</code>) mirroring the same key columns — <code>category</code>, <code>casel_domain</code>, <code>problem_tags text[]</code>, <code>age_min/max</code>, <code>audience text[]</code> — so the same recommendation query pattern applies.</p>
 
-    <h3>方案 C：手工批量添加</h3>
-    <p>准备一个符合 schema 的 CSV（含 <code>video_id</code> 列），直接通过 <code>import_videos_v3.py</code> 导入，或在 Supabase Table Editor 中粘贴。</p>
+    <h3>Option C — Manual batch import</h3>
+    <p>Prepare a CSV with a <code>video_id</code> column matching the schema and run it through <code>import_videos_v3.py</code>, or paste rows directly into the Supabase Table Editor.</p>
 
     <div class="callout callout-tip">
       <span class="icon">💡</span>
-      <p><strong>推荐频道白名单：</strong>Cosmic Kids Yoga、GoNoodle、Daniel Tiger's Neighborhood、Sesame Street、Jack Hartmann、The Learning Station、Ms. Rachel — 可针对这些频道搜索，质量更稳定。</p>
+      <p><strong>High-quality channel shortlist:</strong> Cosmic Kids Yoga, GoNoodle, Daniel Tiger's Neighborhood, Sesame Street, Jack Hartmann, The Learning Station, Ms. Rachel — searching within these channels yields consistently high-quality results.</p>
     </div>
   </section>
 
-  <!-- Section 13: Keys -->
   <section id="keys">
-    <h2><span class="icon">🔑</span> 密钥管理</h2>
+    <h2><span class="icon">🔑</span> API Key Management</h2>
     <div class="callout callout-warn">
       <span class="icon">⚠️</span>
-      <p><strong>重要：</strong>本次对话中使用过的 Google API Key 和 Supabase service_role key 已在对话记录中出现，建议立即轮换（Rotate）。</p>
+      <p><strong>Action required:</strong> The Google API Key and Supabase service_role key used during initial setup appeared in conversation history. Rotate both immediately.</p>
     </div>
-
     <div class="table-wrap">
       <table>
-        <thead><tr><th>密钥</th><th>用途</th><th>在哪里管理</th></tr></thead>
+        <thead><tr><th>Key</th><th>Used for</th><th>Where to rotate</th></tr></thead>
         <tbody>
-          <tr>
-            <td>Google API Key</td>
-            <td>YouTube Data API v3 调用</td>
-            <td><a href="https://console.cloud.google.com/apis/credentials" style="color:var(--accent)">Google Cloud → Credentials</a></td>
-          </tr>
-          <tr>
-            <td>Supabase URL</td>
-            <td>数据库连接</td>
-            <td>Supabase Dashboard → Settings → API</td>
-          </tr>
-          <tr>
-            <td>Supabase service_role key</td>
-            <td>写入权限（超级权限，不要泄漏）</td>
-            <td>Supabase Dashboard → Settings → API → service_role</td>
-          </tr>
-          <tr>
-            <td>Supabase anon key</td>
-            <td>前端只读查询（公开安全）</td>
-            <td>同上，anon/public key</td>
-          </tr>
+          <tr><td>Google API Key</td><td>YouTube Data API v3</td><td><a href="https://console.cloud.google.com/apis/credentials" style="color:var(--accent)">Cloud Console → Credentials</a></td></tr>
+          <tr><td>Supabase URL</td><td>Database connection string</td><td>Supabase → Settings → API</td></tr>
+          <tr><td>Supabase service_role key</td><td>Full write access (keep secret)</td><td>Supabase → Settings → API → service_role</td></tr>
+          <tr><td>Supabase anon key</td><td>Public read-only (safe to expose in frontend)</td><td>Same page, anon/public key</td></tr>
         </tbody>
       </table>
     </div>
-    <p>密钥不要硬编码在脚本里，通过环境变量传入：<code>SUPABASE_KEY=xxx python3 script.py</code></p>
+    <p>Always pass keys as environment variables — never hard-code them in scripts:</p>
+    <pre>SUPABASE_KEY=your_key python3 data/scripts/import_videos_v3.py</pre>
   </section>
 
-  <!-- Section 14: Git -->
   <section id="git">
-    <h2><span class="icon">🌿</span> Git 仓库</h2>
-    <p>仓库地址：<code>github.com/songxiaoli/data-collector</code></p>
-
-    <h3>目录结构</h3>
+    <h2><span class="icon">🌿</span> Git Repository</h2>
+    <p>Repo: <code>github.com/songxiaoli/data-collector</code></p>
+    <h3>Directory Layout</h3>
     <pre>data-collector/
 ├── data/
 │   ├── scripts/
-│   │   ├── fetch_youtube_sel.py    <span class="comment"># YouTube 采集</span>
-│   │   ├── retag.py               <span class="comment"># 规则重标注</span>
-│   │   ├── retag_llm.py           <span class="comment"># LLM 重标注</span>
-│   │   └── import_videos_v3.py    <span class="comment"># Supabase 导入</span>
+│   │   ├── fetch_youtube_sel.py    <span class="cm"># YouTube collector</span>
+│   │   ├── retag.py               <span class="cm"># Rule-based re-tagger</span>
+│   │   ├── retag_llm.py           <span class="cm"># LLM re-tagger</span>
+│   │   └── import_videos_v3.py    <span class="cm"># Supabase importer</span>
 │   └── sql/
 │       ├── schema_videos.sql
 │       └── add_low_quality_flag.sql
-├── .gitignore                      <span class="comment"># 忽略 *.csv, *.json</span>
-└── README.md                       <span class="comment"># 中文说明</span></pre>
+├── docs/
+│   └── process-guide.html         <span class="cm"># This document</span>
+├── src/                           <span class="cm"># Python package scaffold</span>
+├── tests/
+├── .gitignore                     <span class="cm"># Excludes *.csv and *.json</span>
+└── README.md</pre>
 
-    <h3>完成 GitHub Push</h3>
-    <pre><span class="comment"># 确认远程用 SSH（不是 HTTPS）</span>
-git -C ~/Projects/data-collector remote -v
-<span class="comment"># 如果显示 https:// 开头，切换为 SSH：</span>
-git -C ~/Projects/data-collector remote set-url origin git@github.com:songxiaoli/data-collector.git
+    <h3>Push to GitHub</h3>
+    <pre><span class="cm"># Switch to SSH if still on HTTPS</span>
+git remote set-url origin git@github.com:songxiaoli/data-collector.git
+git push -u origin main</pre>
 
-<span class="comment"># 推送</span>
-git -C ~/Projects/data-collector push -u origin main</pre>
-
-    <h3>日常提交流程</h3>
-    <pre><span class="comment"># 添加新脚本后：</span>
-git -C ~/Projects/data-collector add data/scripts/new_script.py
-git -C ~/Projects/data-collector commit -m "add: new resource fetching script"
-git -C ~/Projects/data-collector push</pre>
+    <h3>Routine Commit Workflow</h3>
+    <pre>git add data/scripts/new_script.py
+git commit -m "feat: add new resource collector script"
+git push</pre>
 
     <div class="callout callout-info">
       <span class="icon">ℹ️</span>
-      <p><code>.gitignore</code> 已配置忽略 <code>data/raw/*.csv</code> 和 <code>*.json</code>，CSV 数据文件不会上传到 GitHub（文件太大，且含原始数据）。</p>
+      <p><code>.gitignore</code> excludes <code>data/raw/*.csv</code> and <code>*.json</code> — raw data files are not pushed to GitHub (too large, contains raw scraped data).</p>
     </div>
   </section>
 
-  <!-- Section 15: Todo -->
   <section id="todo">
-    <h2><span class="icon">✅</span> 下一步待办</h2>
+    <h2><span class="icon">✅</span> Next Steps</h2>
     <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h4>完成 LLM 重标注</h4>
-          <p>在 Claude 对话中运行 <code>python3 /home/claude/youtube/retag_llm.py</code>，从 160/2427 继续。约需 2-3 小时。</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>将 v4.csv 导入 Supabase</h4>
-          <p>LLM 标注完成后，运行 import 脚本将 v4 upsert 到 videos 表，替换标注字段。</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h4>Push 到 GitHub</h4>
-          <p>切换 SSH remote URL 后执行 <code>git push -u origin main</code>。</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h4>轮换泄漏的 API 密钥</h4>
-          <p>重新生成 Google API Key 和 Supabase service_role key，旧密钥作废。</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">5</div>
-        <div class="step-body">
-          <h4>构建推荐接口（未来）</h4>
-          <p>基于 Supabase 的 GIN 索引，用 problem_tags 数组交集 + age 过滤 + view_count 排序实现推荐逻辑，接入家长/教师端界面。</p>
-        </div>
-      </div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Complete LLM re-tagging</h4><p>Run <code>python3 data/scripts/retag_llm.py</code> inside a Claude session — resumes from 160/2,427. Expect ~2–3 hours.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Import v4 to Supabase</h4><p>After LLM tagging finishes, upsert v4.csv to overwrite the tag fields in the <code>videos</code> table.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Push to GitHub</h4><p>Switch to SSH remote URL, then <code>git push -u origin main</code>.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Rotate leaked API keys</h4><p>Regenerate the Google API Key and Supabase service_role key — invalidate the old ones.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Build the recommendation interface (future)</h4><p>Use the GIN-indexed <code>problem_tags</code> array with age filter and <code>view_count</code> ranking as the recommendation backend, surfaced in a parent- or teacher-facing UI.</p></div></div>
     </div>
   </section>
 

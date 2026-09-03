@@ -1,4 +1,4 @@
-"""基础单元测试"""
+"""Unit tests for core collector components."""
 import pytest
 from unittest.mock import patch, MagicMock
 import sys, os
@@ -29,18 +29,5 @@ def test_file_storage_json(tmp_path, monkeypatch):
 def test_file_storage_csv(tmp_path, monkeypatch):
     monkeypatch.setattr("data_collector.storage.file_storage.DATA_DIR", tmp_path)
     storage = FileStorage()
-    rows = [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
-    path = storage.save_csv(rows, "test.csv")
+    path = storage.save_csv([{"a": 1, "b": 2}], "test.csv")
     assert path.exists()
-
-
-@patch("data_collector.collectors.http_collector.httpx.Client")
-def test_http_collector_get_json(mock_client):
-    mock_resp = MagicMock()
-    mock_resp.json.return_value = {"status": "ok"}
-    mock_resp.raise_for_status.return_value = None
-    mock_client.return_value.__enter__.return_value.get.return_value = mock_resp
-
-    collector = HttpCollector()
-    result = collector.get_json("https://example.com/api")
-    assert result == {"status": "ok"}

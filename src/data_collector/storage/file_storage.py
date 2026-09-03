@@ -1,4 +1,4 @@
-"""文件存储模块：将采集数据保存为 CSV / JSON"""
+"""File storage: save collected data as CSV or JSON."""
 import json
 import csv
 from pathlib import Path
@@ -18,12 +18,12 @@ class FileStorage:
         path = self.base / filename
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
-        logger.info(f"已保存 JSON → {path}")
+        logger.info(f"Saved JSON → {path}")
         return path
 
     def save_csv(self, rows: list[dict], filename: str = None) -> Path:
         if not rows:
-            logger.warning("没有数据可保存")
+            logger.warning("No data to save")
             return None
         filename = filename or f"{datetime.now():%Y%m%d_%H%M%S}.csv"
         path = self.base / filename
@@ -31,5 +31,5 @@ class FileStorage:
             writer = csv.DictWriter(f, fieldnames=rows[0].keys())
             writer.writeheader()
             writer.writerows(rows)
-        logger.info(f"已保存 CSV ({len(rows)} 行) → {path}")
+        logger.info(f"Saved CSV ({len(rows)} rows) → {path}")
         return path

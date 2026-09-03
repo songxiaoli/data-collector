@@ -1,4 +1,4 @@
-"""入口脚本：示例采集流程"""
+"""Entry point: example collection pipeline."""
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -8,15 +8,15 @@ from .utils.logger import logger
 
 
 def run():
-    logger.info("=== data-collector 启动 ===")
+    logger.info("=== data-collector starting ===")
     collector = HttpCollector()
     storage = FileStorage()
 
-    # 示例：采集公开 JSON API
+    # Example: fetch a public JSON API
     data = collector.get_json("https://jsonplaceholder.typicode.com/posts", params={"_limit": 10})
     storage.save_json(data, "sample_posts.json")
 
-    logger.info(f"采集完成，共 {len(data)} 条记录")
+    logger.info(f"Done — {len(data)} records collected")
 
 
 if __name__ == "__main__":

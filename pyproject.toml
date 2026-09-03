@@ -1,7 +1,7 @@
 [project]
 name = "data-collector"
 version = "0.1.0"
-description = "数据采集项目"
+description = "SEL children resource data collector"
 requires-python = ">=3.11"
 
 [tool.ruff]

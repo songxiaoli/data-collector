@@ -1,11 +1,11 @@
-"""HTML 页面解析器"""
+"""HTML page parser wrapping BeautifulSoup."""
 from bs4 import BeautifulSoup
 from typing import Optional
 from ..utils.logger import logger
 
 
 class HtmlParser:
-    """BeautifulSoup 封装的 HTML 解析器"""
+    """Thin BeautifulSoup wrapper for CSS-selector-based extraction."""
 
     def __init__(self, html: str, parser: str = "lxml"):
         self.soup = BeautifulSoup(html, parser)

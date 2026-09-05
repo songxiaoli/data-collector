@@ -683,10 +683,18 @@ async function runSearch() {
   }
 }
 
+function normTitle(title) {
+  return String(title||'').toLowerCase()
+    .replace(/[—–]/g,' ')         // em/en dash → space
+    .replace(/[.,!?;:'"……]/g,'')  // punctuation
+    .replace(/\.{2,}/g,'')         // ellipsis dots
+    .replace(/\s+/g,' ').trim();
+}
+
 function mergeAndScore(books, matchTags) {
   const map = new Map();
   for (const b of books) {
-    const k = b.title.toLowerCase().trim();
+    const k = normTitle(b.title) + '|' + String(b.author||'').toLowerCase().trim();
     if (map.has(k)) {
       map.get(k).score++;
     } else {

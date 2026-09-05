@@ -637,7 +637,7 @@ function extractTags(text) {
 // ── FETCH ─────────────────────────────────────────────────
 async function fetchTag(tag, limit=30) {
   const r = await fetch(
-    `${SB}/rest/v1/books?problem_tags=cs.${encodeURIComponent(`{${tag}}`)}&select=title,author,problem_tags,source&limit=${limit}`,
+    `${SB}/rest/v1/books?problem_tags=cs.${encodeURIComponent(`{${tag}}`)}&select=*&limit=${limit}`,
     { headers: H }
   );
   if (!r.ok) return [];
@@ -652,6 +652,7 @@ async function loadFeatured() {
       fetchTag('resilience', 12),
       fetchTag('friendship', 12),
     ]);
+    if (a[0]) console.log('📚 Book fields available:', Object.keys(a[0]));
     const merged = mergeAndScore([...a,...b,...c], []);
     document.getElementById('resultsLabel').textContent = 'Featured';
     document.getElementById('resultsCount').textContent = `${merged.slice(0,12).length} books`;

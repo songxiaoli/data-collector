@@ -689,15 +689,18 @@ async function fetchTag(tag, limit=30) {
   return r.json();
 }
 
+const FEATURED_BY_ROLE = {
+  parent:  [['belonging',25],['resilience',20],['friendship',20],['anxiety',15]],
+  teacher: [['resilience',25],['emotions',25],['social-skills',20],['responsibility',20],['empathy',20]],
+  student: [['friendship',25],['belonging',20],['anxiety',15],['resilience',15],['confidence',15]],
+};
+
 async function loadFeatured() {
   showSkeleton();
   try {
-    const [a,b,c] = await Promise.all([
-      fetchTag('belonging', 15),
-      fetchTag('resilience', 12),
-      fetchTag('friendship', 12),
-    ]);
-    const merged = filterByRole(mergeAndScore([...a,...b,...c], []));
+    const tagList = FEATURED_BY_ROLE[currentRole] || FEATURED_BY_ROLE.parent;
+    const results = await Promise.all(tagList.map(([tag, lim]) => fetchTag(tag, lim)));
+    const merged = filterByRole(mergeAndScore(results.flat(), []));
     document.getElementById('resultsLabel').textContent = 'Featured';
     document.getElementById('resultsCount').textContent = `${merged.slice(0,12).length} books`;
     renderCards(merged.slice(0,12), [], '');

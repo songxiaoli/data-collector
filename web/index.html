@@ -523,6 +523,80 @@ a{color:var(--primary);}
   .book-card{transition:none;}
   .skel{animation:none;}
 }
+
+/* ── THERAPIST TAB ────────────────────────────────────── */
+.therapist-filters{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  padding:12px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.filter-bar-label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);white-space:nowrap;
+}
+.filter-select{
+  padding:6px 12px;border-radius:var(--r-sm);
+  border:1px solid var(--border);background:var(--card);
+  color:var(--ink);font-family:inherit;font-size:13px;cursor:pointer;
+}
+.filter-select:focus{outline:2px solid var(--primary);}
+.online-toggle{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:500;color:var(--ink-2);cursor:pointer;
+  padding:6px 12px;border-radius:var(--r-sm);
+  border:1px solid var(--border);background:var(--card);
+  transition:background .12s,color .12s,border-color .12s;
+}
+.online-toggle.active{background:var(--tag-bg);color:var(--primary);border-color:var(--primary);}
+.online-dot{width:8px;height:8px;border-radius:50%;background:var(--ink-3);flex-shrink:0;}
+.online-toggle.active .online-dot{background:var(--primary);}
+
+.therapist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.therapist-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:22px;display:flex;flex-direction:column;gap:12px;
+  box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s;
+}
+.therapist-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hov);}
+.card-top{display:flex;gap:14px;align-items:flex-start;}
+.card-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--chip-bg);border:2px solid var(--border);}
+.card-photo-placeholder{width:64px;height:64px;border-radius:50%;background:var(--chip-bg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:24px;color:var(--ink-3);border:2px solid var(--border);}
+.card-identity{flex:1;min-width:0;}
+.card-name{font-family:'Playfair Display',Georgia,serif;font-weight:700;font-size:16px;line-height:1.3;color:var(--ink);}
+.card-creds{font-size:12.5px;color:var(--ink-2);margin-top:2px;line-height:1.4;}
+.card-location{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-3);margin-top:4px;}
+.card-badges{display:flex;flex-wrap:wrap;gap:5px;}
+.badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:var(--r-pill);background:var(--tag-bg);color:var(--tag-fg);}
+.badge-age{background:#FFF3E8;color:#9A4A00;}
+.badge-online{background:#EAF4EF;color:#1C6B44;}
+.badge-price{background:#FBF3E5;color:#7A5010;font-weight:600;}
+.badge-ins-name{background:#EDF5FF;color:#1D4E89;}
+.badge-no-ins{background:#F5F0FF;color:#5B2D8E;}
+.badge-sliding{background:#F0FAF4;color:#1A6B3A;}
+.badge-lang{background:#EDF0F8;color:#2E4A8A;}
+.card-info-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px;}
+.card-bio{font-size:13px;color:var(--ink-2);line-height:1.5;padding-top:8px;margin-top:4px;border-top:1px solid var(--border);}
+.bio-btn{padding:5px 12px;background:var(--chip-bg);color:var(--chip-fg);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px;font-weight:500;cursor:pointer;transition:background .12s,color .12s;}
+.bio-btn:hover{background:var(--tag-bg);color:var(--primary);}
+.card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.card-source{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);}
+.view-btn{padding:7px 16px;border-radius:var(--r-sm);background:var(--primary);color:#fff;border:none;font-size:13px;font-weight:600;text-decoration:none;transition:background .15s;white-space:nowrap;}
+.view-btn:hover{background:var(--accent);color:#fff;}
+.sk-photo{width:64px;height:64px;border-radius:50%;}
+.sk-name{height:18px;width:75%;}
+.sk-cred{height:13px;width:55%;margin-top:4px;}
+.sk-loc{height:12px;width:40%;margin-top:4px;}
+.sk-btn2{height:32px;width:90px;border-radius:var(--r-sm);}
+.cred-wrap{position:relative;display:inline-flex;align-items:baseline;gap:4px;}
+.cred-help{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--chip-bg);color:var(--ink-3);font-size:9px;font-weight:700;cursor:help;flex-shrink:0;border:1px solid var(--border);position:relative;top:-1px;}
+.cred-help:hover .cred-tip,.cred-help:focus .cred-tip{opacity:1;pointer-events:auto;transform:translateY(0);}
+.cred-tip{position:absolute;left:0;top:20px;z-index:20;background:var(--ink);color:var(--surface);font-size:11.5px;font-weight:400;line-height:1.5;padding:8px 12px;border-radius:var(--r-sm);width:220px;opacity:0;pointer-events:none;transform:translateY(-4px);transition:opacity .15s,transform .15s;box-shadow:0 4px 16px rgba(0,0,0,.25);}
+.cred-tip::before{content:'';position:absolute;top:-5px;left:10px;border:5px solid transparent;border-bottom-color:var(--ink);border-top:none;}
+
+.spec-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;}
+.spec-chip{padding:5px 14px;border-radius:var(--r-pill);background:var(--chip-bg);color:var(--chip-fg);border:1.5px solid transparent;font-size:13px;font-weight:500;transition:background .12s,color .12s,border-color .12s;}
+.spec-chip:hover{background:var(--primary);color:#fff;}
+.spec-chip.active{background:var(--primary);color:#fff;border-color:var(--primary-h);}
+
 </style>
 
 <header class="site-header">
@@ -533,6 +607,7 @@ a{color:var(--primary);}
   <nav class="site-nav">
     <a href="/" class="nav-link active">📚 Books</a>
     <a href="/therapists" class="nav-link">🧠 Therapists</a>
+    <a href="/assess" class="nav-link" style="background:var(--primary);color:#fff;padding:6px 16px;border-radius:999px;margin-left:4px;">✦ Assessment</a>
   </nav>
 </header>
 
@@ -549,6 +624,15 @@ a{color:var(--primary);}
       </div>
     </div>
 
+
+    <div style="max-width:580px;margin:0 auto 24px;background:linear-gradient(135deg,#2C5F45,#1B4030);border-radius:12px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(44,95,69,.25);">
+      <div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px;">New</div>
+        <div style="font-size:15px;font-weight:600;color:#fff;line-height:1.35;">Not sure where to start?</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.7);margin-top:3px;">Take our free 10-min child mental health assessment · Clinically validated</div>
+      </div>
+      <a href="/assess" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:#fff;color:#2C5F45;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;">Start Free →</a>
+    </div>
     <div class="search-wrap">
       <input type="text" class="search-input" id="searchInput"
         placeholder="My child is anxious about starting middle school…"
@@ -567,6 +651,7 @@ a{color:var(--primary);}
     <div class="tab-bar" role="tablist">
       <button class="tab-btn active" data-tab="books" role="tab" aria-selected="true">📚 Books</button>
       <button class="tab-btn" data-tab="videos" role="tab" aria-selected="false">▶ Videos</button>
+      <button class="tab-btn" data-tab="therapists" role="tab" aria-selected="false">🧠 Therapists</button>
     </div>
     <div id="booksPanel"><div class="book-grid" id="bookGrid"></div></div>
     <div id="videosPanel" hidden><div class="video-grid" id="videoGrid"></div></div>
@@ -741,12 +826,17 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       btn.setAttribute('aria-selected','true');
       currentTab = btn.dataset.tab;
-      document.getElementById('booksPanel').hidden  = (currentTab !== 'books');
-      document.getElementById('videosPanel').hidden = (currentTab !== 'videos');
+      document.getElementById('booksPanel').hidden      = (currentTab !== 'books');
+      document.getElementById('videosPanel').hidden     = (currentTab !== 'videos');
+      document.getElementById('therapistsPanel').hidden = (currentTab !== 'therapists');
+      // Show/hide search bar
+      document.querySelector('.search-wrap').style.display = currentTab === 'therapists' ? 'none' : '';
+      document.querySelector('.quick-topics').style.display = currentTab === 'therapists' ? 'none' : '';
       if (currentTab === 'videos') {
         const q = document.getElementById('searchInput').value.trim();
         if (q) runVideoSearch(q); else loadFeaturedVideos();
       }
+      if (currentTab === 'therapists') initTherapistsTab();
     });
   });
 
@@ -1219,4 +1309,209 @@ function esc(s) {
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
+// ══════════════════════════════════════════
+// THERAPISTS TAB
+// ══════════════════════════════════════════
+const SPECIALTIES_LIST = [
+  'Anxiety','Trauma and PTSD','ADHD','Depression','Autism',
+  'LGBTQ+','Family Conflict','Child','Parenting','Grief',
+  'Anger Management','Learning Differences',
+];
+const CRED_INFO = {
+  'LMFT':'Licensed Marriage & Family Therapist — Masters level, specializes in family & relationship dynamics.',
+  'AMFT':'Associate MFT — Completing supervised hours before full licensure.',
+  'LCSW':'Licensed Clinical Social Worker — Masters level, trained in therapy and social systems.',
+  'ACSW':'Associate CSW — Completing supervised hours before full licensure.',
+  'LPCC':'Licensed Professional Clinical Counselor — Masters level counselor.',
+  'APCC':'Associate PCC — Completing supervised hours before full licensure.',
+  'PsyD':'Doctor of Psychology — Clinical doctorate focused on therapy practice.',
+  'PhD':'Doctor of Philosophy in Psychology — Research + clinical doctorate.',
+  'Psychologist':'Doctoral-level (PhD or PsyD) — highest level of psychology licensure.',
+};
+const INS_NAMES = ['Aetna','Anthem','Blue Cross','Blue Shield','Cigna',
+  'UnitedHealthcare','Kaiser','Medi-Cal','Medicare','Optum',
+  'Health Net','Magellan','Molina','Tricare'];
+
+let ALL_T = [];
+let tLoaded = false;
+let activeSpec = '';
+let onlineOnly = false;
+let childFocusOnly = true;
+let ageFilter = '';
+
+async function initTherapistsTab() {
+  if (tLoaded) return;
+  showTherapistSkeleton();
+  const r = await fetch(
+    `${SB}/rest/v1/therapists?select=name,credentials,city,zip,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary,child_focus_score,client_age&order=child_focus_score.desc,name.asc&limit=500`,
+    { headers: H }
+  );
+  if (!r.ok) { showTherapistError(); return; }
+  ALL_T = await r.json();
+  tLoaded = true;
+  populateTFilters();
+  renderSpecChips();
+  wireTherapistControls();
+  applyTFilters();
+}
+
+function populateTFilters() {
+  const cities = [...new Set(ALL_T.map(t => extractCity(t.city)).filter(Boolean))].sort();
+  const cityEl = document.getElementById('cityFilter');
+  cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; cityEl.appendChild(o); });
+  const insEl = document.getElementById('insuranceFilter');
+  INS_NAMES.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; insEl.appendChild(o); });
+}
+
+function wireTherapistControls() {
+  document.getElementById('cityFilter').addEventListener('change', applyTFilters);
+  document.getElementById('insuranceFilter').addEventListener('change', applyTFilters);
+  document.getElementById('ageFilter').addEventListener('change', () => { ageFilter = document.getElementById('ageFilter').value; applyTFilters(); });
+  document.getElementById('onlineToggle').addEventListener('click', function() {
+    onlineOnly = !onlineOnly; this.classList.toggle('active', onlineOnly); this.setAttribute('aria-pressed', onlineOnly); applyTFilters();
+  });
+  document.getElementById('childFocusToggle').addEventListener('click', function() {
+    childFocusOnly = !childFocusOnly; this.classList.toggle('active', childFocusOnly); this.setAttribute('aria-pressed', childFocusOnly); applyTFilters();
+  });
+}
+
+function renderSpecChips() {
+  const el = document.getElementById('specChips');
+  el.innerHTML = SPECIALTIES_LIST.map(s => `<button class="spec-chip" data-spec="${esc(s)}">${esc(s)}</button>`).join('');
+  el.querySelectorAll('.spec-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const sp = chip.dataset.spec;
+      activeSpec = activeSpec === sp ? '' : sp;
+      el.querySelectorAll('.spec-chip').forEach(c => c.classList.toggle('active', c.dataset.spec === activeSpec));
+      applyTFilters();
+    });
+  });
+}
+
+function applyTFilters() {
+  const city = document.getElementById('cityFilter').value;
+  const ins  = document.getElementById('insuranceFilter').value;
+  let f = ALL_T;
+  if (activeSpec) f = f.filter(t => [t.top_specialties,t.expertise,t.therapy_types,t.bio,t.summary].join(' ').toLowerCase().includes(activeSpec.toLowerCase()));
+  if (city) f = f.filter(t => extractCity(t.city) === city);
+  if (ins)  f = f.filter(t => (t.insurance||'').toLowerCase().includes(ins.toLowerCase()));
+  if (onlineOnly) f = f.filter(t => t.online);
+  if (ageFilter)  f = f.filter(t => (t.client_age||'').includes(ageFilter));
+  if (childFocusOnly) f = f.filter(t => (t.child_focus_score||0) >= 5);
+  document.getElementById('resultsCount').textContent = f.length + ' therapists';
+  document.getElementById('resultsLabel').textContent = (city||ins||onlineOnly||activeSpec) ? 'Matching therapists' : 'Child-focused therapists';
+  renderTherapists(f);
+}
+
+function renderTherapists(list) {
+  const grid = document.getElementById('therapistGrid');
+  if (!list.length) { grid.innerHTML = '<div class="empty-state"><h3>No therapists match</h3><p>Try clearing some filters.</p></div>'; return; }
+  grid.innerHTML = list.map(tCardHTML).join('');
+}
+
+function showTherapistSkeleton() {
+  document.getElementById('therapistGrid').innerHTML = Array.from({length:6}, () => `
+    <div class="therapist-card" aria-hidden="true">
+      <div class="card-top">
+        <div class="skel sk-photo"></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px;padding-top:4px;">
+          <div class="skel sk-name"></div><div class="skel sk-cred"></div><div class="skel sk-loc"></div>
+        </div>
+      </div>
+      <div class="skel sk-tags"></div>
+      <div style="display:flex;justify-content:flex-end;"><div class="skel sk-btn2"></div></div>
+    </div>`).join('');
+}
+
+function showTherapistError() {
+  document.getElementById('therapistGrid').innerHTML = '<div class="empty-state"><h3>Couldn't load therapists</h3><p>Check your connection.</p></div>';
+}
+
+function credTooltip(credsStr) {
+  if (!credsStr) return '';
+  const matches = [];
+  for (const [abbr, desc] of Object.entries(CRED_INFO)) {
+    if (credsStr.includes(abbr) && !matches.find(m => m.abbr === abbr)) matches.push({abbr, desc});
+  }
+  if (!matches.length) return esc(credsStr);
+  const tipHtml = matches.map(m => `<b>${m.abbr}</b>: ${m.desc}`).join('<br>');
+  return `<span class="cred-wrap">${esc(credsStr)}<span class="cred-help" tabindex="0">?<span class="cred-tip">${tipHtml}</span></span></span>`;
+}
+
+function extractCity(raw) {
+  if (!raw) return '';
+  let s = raw.trim().replace(/^#\d+\s+/, '');
+  if (!/^\d/.test(s)) return s;
+  let clean = s.replace(/\([^)]*\)/g,'').replace(/\b(suite?|ste\.?|unit|apt\.?|#)\s*[\w-]+/gi,'').trim();
+  const m = clean.match(/\b(?:avenue|ave|boulevard|blvd|street|st|drive|dr|road|rd|way|lane|ln|court|ct|circle|place|pl|parkway|pkwy|row|route|hwy|highway)\b\.?\s+(.+)$/i);
+  if (m && m[1].trim()) return m[1].trim();
+  const words = clean.split(/\s+/).filter(w => /^[A-Z]/.test(w) && !/^\d/.test(w));
+  return words.slice(-2).join(' ') || s;
+}
+
+function parseAgeGroups(clientAge) {
+  if (!clientAge) return [];
+  const map = [['Children','6–10 yrs'],['Preteen','Preteen'],['Adolescents','Teens'],['Teen','Teens']];
+  const found = new Set();
+  for (const [key, label] of map) { if (clientAge.includes(key)) found.add(label); }
+  return [...found];
+}
+
+function toggleBio(btn) {
+  const bio = btn.closest('.therapist-card').querySelector('.card-bio');
+  bio.hidden = !bio.hidden;
+  btn.textContent = bio.hidden ? 'About ▾' : 'About ▴';
+}
+
+function parseFee(fees) {
+  if (!fees) return '';
+  const m = (fees||'').match(/Individual Sessions?\s*\$(\d+)/i);
+  if (m) return '$' + m[1] + '/session';
+  if ((fees||'').toLowerCase().includes('sliding scale')) return 'Sliding scale';
+  return '';
+}
+
+function parseInsurers(ins) {
+  if (!ins) return [];
+  return INS_NAMES.filter(name => ins.includes(name)).slice(0,4);
+}
+
+function tCardHTML(t) {
+  const initials = (t.name||'?').split(' ').map(w=>w[0]).slice(0,2).join('');
+  const photoEl = t.photo
+    ? `<img class="card-photo" src="${esc(t.photo)}" alt="${esc(t.name)}" loading="lazy" onerror="this.outerHTML='<div class=card-photo-placeholder>${esc(initials)}</div>'">`
+    : `<div class="card-photo-placeholder">${esc(initials)}</div>`;
+  const specs = (() => { if (!t.top_specialties) return []; const p = t.top_specialties.split(',').map(s=>s.trim()).filter(Boolean); if (p.length===1&&p[0].length>25) return []; return p.filter(s=>s.length<=35).slice(0,3); })();
+  const ages = parseAgeGroups(t.client_age);
+  const fee = parseFee(t.fees);
+  const insurers = parseInsurers(t.insurance);
+  const hasIns = insurers.length>0||(t.insurance||'').length>0;
+  const city = extractCity(t.city);
+  const hasBio = !!(t.bio||t.summary);
+  const bioText = hasBio ? (t.bio||t.summary).substring(0,350) : '';
+  return `<article class="therapist-card">
+    <div class="card-top">${photoEl}<div class="card-identity">
+      <div class="card-name">${esc(t.name)}</div>
+      <div class="card-creds">${credTooltip(t.credentials)}</div>
+      <div class="card-location"><svg width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true"><path d="M5.5 0A4.5 4.5 0 0 0 1 4.5C1 7.875 5.5 13 5.5 13S10 7.875 10 4.5A4.5 4.5 0 0 0 5.5 0Zm0 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="currentColor"/></svg>${esc(city)}, CA</div>
+    </div></div>
+    <div class="card-badges">${ages.map(a=>`<span class="badge badge-age">${esc(a)}</span>`).join('')}${specs.map(s=>`<span class="badge">${esc(s)}</span>`).join('')}</div>
+    <div class="card-info-tags">
+      ${fee==='Sliding scale'?'<span class="badge badge-sliding">Sliding scale</span>':fee?`<span class="badge badge-price">${esc(fee)}</span>`:''}
+      ${insurers.length?insurers.map(i=>`<span class="badge badge-ins-name">${esc(i)}</span>`).join(''):!hasIns?'<span class="badge badge-no-ins">No insurance</span>':''}
+      ${t.online?'<span class="badge badge-online">Online</span>':''}
+      ${t.languages&&t.languages!=='English'?`<span class="badge badge-lang">${esc(t.languages)}</span>`:''}
+    </div>
+    ${hasBio?`<div class="card-bio" hidden>${esc(bioText)}</div>`:''}
+    <div class="card-footer">
+      <span class="card-source">Psychology Today</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        ${hasBio?'<button class="bio-btn" onclick="toggleBio(this)">About &#9662;</button>':''}
+        <a class="view-btn" href="${esc(t.profile_url)}" target="_blank" rel="noopener">View Profile &#8594;</a>
+      </div>
+    </div>
+  </article>`;
+}
+
 </script>

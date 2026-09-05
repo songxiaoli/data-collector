@@ -790,17 +790,12 @@ function cardHTML(b, matchTags) {
     ? `<div class="book-meta-row">${ratingHTML}${ageHTML}</div>`
     : '';
 
-  const descHTML = b.description
-    ? `<div class="book-desc">${esc(b.description)}</div>`
-    : '';
-
   return `
     <article class="book-card" role="button" aria-label="${esc(b.title)} by ${esc(b.author)}">
       <div class="book-source">${esc(src)}</div>
       <div class="book-title">${esc(b.title)}</div>
       <div class="book-author">${esc(b.author)}</div>
       ${match ? `<div class="book-match">${match}</div>` : ''}
-      ${descHTML}
       ${metaRow}
       <div class="book-tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
     </article>`;

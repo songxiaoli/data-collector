@@ -105,6 +105,18 @@ a{color:var(--primary);}
 .header-stat{
   font-size:12px;color:var(--ink-3);font-weight:500;
 }
+.site-nav{
+  display:flex;align-items:center;gap:4px;
+}
+.nav-link{
+  font-size:13px;font-weight:600;
+  color:var(--ink-2);text-decoration:none;
+  padding:6px 14px;border-radius:var(--r-pill);
+  transition:background .15s,color .15s;
+}
+.nav-link:hover{background:var(--chip-bg);color:var(--ink);}
+.nav-link.active{background:var(--tag-bg);color:var(--primary);}
+
 
 /* ── HERO ─────────────────────────────────────────────── */
 .hero{
@@ -515,10 +527,13 @@ a{color:var(--primary);}
 
 <header class="site-header">
   <div class="logo">
-    <span class="logo-name">SEL Book Finder</span>
+    <span class="logo-name">SEL Resource Finder</span>
     <span class="logo-by">Power Plus Partner</span>
   </div>
-  <span class="header-stat" id="dbStat">2,474 books</span>
+  <nav class="site-nav">
+    <a href="/" class="nav-link active">📚 Books</a>
+    <a href="/therapists" class="nav-link">🧠 Therapists</a>
+  </nav>
 </header>
 
 <main>

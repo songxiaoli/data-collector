@@ -1,0 +1,643 @@
+<title>Child Therapist Finder — California</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+/* ── TOKENS (identical to index.html) ─────────────────── */
+:root {
+  --ground:      #F2EDE4;
+  --surface:     #FDFAF6;
+  --card:        #FFFFFF;
+  --ink:         #1B2B1E;
+  --ink-2:       #4A5E4F;
+  --ink-3:       #7F9485;
+  --primary:     #2C5F45;
+  --primary-h:   #245038;
+  --accent:      #BE8A2C;
+  --border:      #DDD7CA;
+  --chip-bg:     #E8E1D5;
+  --chip-fg:     #3A5040;
+  --tag-bg:      #EAF1EC;
+  --tag-fg:      #2C5F45;
+  --skel-base:   #E4DDD1;
+  --skel-shine:  #EDE8E0;
+  --shadow:      0 1px 3px rgba(27,43,30,.07), 0 6px 20px rgba(27,43,30,.05);
+  --shadow-hov:  0 2px 8px rgba(27,43,30,.1), 0 12px 32px rgba(27,43,30,.08);
+  --r:           12px;
+  --r-sm:        8px;
+  --r-pill:      999px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:      #0F1610;
+    --surface:     #141C15;
+    --card:        #1A2419;
+    --ink:         #DDD6C8;
+    --ink-2:       #87A48E;
+    --ink-3:       #526B57;
+    --primary:     #5B9A76;
+    --primary-h:   #6EAD8A;
+    --accent:      #C99040;
+    --border:      #233027;
+    --chip-bg:     #1C2B1F;
+    --chip-fg:     #7EB898;
+    --tag-bg:      #1A2F22;
+    --tag-fg:      #6BB892;
+    --skel-base:   #1E2C21;
+    --skel-shine:  #253423;
+    --shadow:      0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+    --shadow-hov:  0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:      #0F1610;
+  --surface:     #141C15;
+  --card:        #1A2419;
+  --ink:         #DDD6C8;
+  --ink-2:       #87A48E;
+  --ink-3:       #526B57;
+  --primary:     #5B9A76;
+  --primary-h:   #6EAD8A;
+  --accent:      #C99040;
+  --border:      #233027;
+  --chip-bg:     #1C2B1F;
+  --chip-fg:     #7EB898;
+  --tag-bg:      #1A2F22;
+  --tag-fg:      #6BB892;
+  --skel-base:   #1E2C21;
+  --skel-shine:  #253423;
+  --shadow:      0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+  --shadow-hov:  0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+}
+
+/* ── RESET ────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{color-scheme:light dark;}
+body{
+  font-family:'Source Sans 3',system-ui,sans-serif;
+  font-weight:400;font-size:15px;line-height:1.6;
+  color:var(--ink);background:var(--ground);min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer;}
+a{color:var(--primary);}
+
+/* ── HEADER ───────────────────────────────────────────── */
+.site-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 28px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+}
+.logo{display:flex;align-items:baseline;gap:10px;}
+.logo-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:700;font-size:18px;
+  color:var(--primary);letter-spacing:-0.02em;
+}
+.logo-by{
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.site-nav{display:flex;gap:4px;}
+.nav-link{
+  padding:6px 14px;border-radius:var(--r-pill);
+  font-size:13px;font-weight:500;
+  color:var(--ink-2);text-decoration:none;
+  transition:background .15s,color .15s;
+}
+.nav-link:hover{background:var(--chip-bg);color:var(--ink);}
+.nav-link.active{background:var(--primary);color:#fff;}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:44px 24px 36px;
+  text-align:center;
+}
+.hero-eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--accent);
+  margin-bottom:12px;
+}
+.hero-hl{
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:700;
+  font-size:clamp(26px,4vw,44px);
+  line-height:1.15;letter-spacing:-.025em;
+  color:var(--ink);text-wrap:balance;
+  max-width:520px;margin:0 auto 12px;
+}
+.hero-sub{
+  color:var(--ink-2);font-size:16px;font-weight:300;
+  max-width:440px;margin:0 auto 32px;
+}
+
+/* SEARCH */
+.search-wrap{
+  max-width:540px;margin:0 auto;position:relative;
+}
+.search-input{
+  width:100%;
+  padding:13px 130px 13px 18px;
+  border:1.5px solid var(--border);border-radius:var(--r);
+  background:var(--card);color:var(--ink);
+  font-family:inherit;font-size:15px;
+  outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.search-input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 14%,transparent);
+}
+.search-input::placeholder{color:var(--ink-3);}
+.search-btn{
+  position:absolute;right:8px;top:8px;
+  padding:8px 22px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:var(--r-sm);
+  font-size:14px;font-weight:600;
+  transition:background .15s;
+}
+.search-btn:hover{background:var(--accent);}
+
+/* QUICK FILTERS */
+.filter-row{
+  display:flex;flex-wrap:wrap;gap:7px;
+  justify-content:center;max-width:700px;
+  margin:22px auto 0;
+}
+.filter-chip{
+  padding:5px 14px;border-radius:var(--r-pill);
+  background:var(--chip-bg);color:var(--chip-fg);
+  border:1.5px solid transparent;
+  font-size:13px;font-weight:500;
+  transition:background .12s,color .12s,border-color .12s;
+}
+.filter-chip:hover{background:var(--primary);color:#fff;}
+.filter-chip.active{
+  background:var(--primary);color:#fff;
+  border-color:var(--primary-h);
+}
+
+/* ── FILTER BAR ───────────────────────────────────────── */
+.filter-bar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:12px 28px;
+  display:flex;align-items:center;gap:12px;
+  flex-wrap:wrap;
+}
+.filter-bar-label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);
+  white-space:nowrap;
+}
+.filter-select{
+  padding:6px 12px;border-radius:var(--r-sm);
+  border:1px solid var(--border);background:var(--card);
+  color:var(--ink);font-family:inherit;font-size:13px;
+  cursor:pointer;
+}
+.filter-select:focus{outline:2px solid var(--primary);}
+.online-toggle{
+  display:flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:500;color:var(--ink-2);
+  cursor:pointer;
+  padding:6px 12px;border-radius:var(--r-sm);
+  border:1px solid var(--border);background:var(--card);
+  transition:background .12s,color .12s,border-color .12s;
+}
+.online-toggle.active{
+  background:var(--tag-bg);color:var(--primary);
+  border-color:var(--primary);
+}
+.online-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--ink-3);flex-shrink:0;
+}
+.online-toggle.active .online-dot{background:var(--primary);}
+
+/* ── RESULTS ──────────────────────────────────────────── */
+.results-section{
+  max-width:1240px;margin:0 auto;
+  padding:28px 24px 72px;
+}
+.results-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:22px;
+}
+.results-label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.results-count{font-size:13px;color:var(--ink-3);}
+
+/* THERAPIST GRID */
+.therapist-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:18px;
+}
+
+/* THERAPIST CARD */
+.therapist-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:22px;
+  display:flex;flex-direction:column;gap:12px;
+  box-shadow:var(--shadow);
+  transition:transform .18s,box-shadow .18s;
+}
+.therapist-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hov);}
+
+.card-top{display:flex;gap:14px;align-items:flex-start;}
+.card-photo{
+  width:64px;height:64px;border-radius:50%;
+  object-fit:cover;flex-shrink:0;
+  background:var(--chip-bg);
+  border:2px solid var(--border);
+}
+.card-photo-placeholder{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--chip-bg);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:24px;color:var(--ink-3);
+  border:2px solid var(--border);
+}
+.card-identity{flex:1;min-width:0;}
+.card-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:700;font-size:16px;line-height:1.3;
+  color:var(--ink);
+}
+.card-creds{
+  font-size:12.5px;color:var(--ink-2);
+  margin-top:2px;line-height:1.4;
+}
+.card-location{
+  display:flex;align-items:center;gap:5px;
+  font-size:12.5px;color:var(--ink-3);margin-top:4px;
+}
+.card-location svg{flex-shrink:0;}
+
+.card-badges{display:flex;flex-wrap:wrap;gap:5px;}
+.badge{
+  font-size:11px;font-weight:500;
+  padding:3px 9px;border-radius:var(--r-pill);
+  background:var(--tag-bg);color:var(--tag-fg);
+}
+.badge-online{background:#EAF4EF;color:#1C6B44;}
+.badge-insurance{background:#FBF3E5;color:#7A5010;}
+.badge-lang{background:#EDF0F8;color:#2E4A8A;}
+
+.card-fees{
+  font-size:13px;color:var(--ink-2);
+  border-left:2px solid var(--accent);
+  padding-left:10px;line-height:1.4;
+}
+.card-bio{
+  font-size:13px;color:var(--ink-2);
+  line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+
+.card-footer{
+  margin-top:auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;
+}
+.card-source{
+  font-size:10.5px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--accent);
+}
+.view-btn{
+  padding:7px 16px;border-radius:var(--r-sm);
+  background:var(--primary);color:#fff;border:none;
+  font-size:13px;font-weight:600;text-decoration:none;
+  transition:background .15s;white-space:nowrap;
+}
+.view-btn:hover{background:var(--accent);color:#fff;}
+
+/* SKELETONS */
+@keyframes shimmer{
+  0%{background-position:-600px 0}100%{background-position:600px 0}
+}
+.skel{
+  border-radius:4px;
+  background:linear-gradient(90deg,var(--skel-base) 25%,var(--skel-shine) 50%,var(--skel-base) 75%);
+  background-size:1200px 100%;animation:shimmer 1.6s infinite;
+}
+.sk-photo{width:64px;height:64px;border-radius:50%;}
+.sk-name{height:18px;width:75%;}
+.sk-cred{height:13px;width:55%;margin-top:4px;}
+.sk-loc{height:12px;width:40%;margin-top:4px;}
+.sk-tags{height:22px;width:65%;}
+.sk-btn{height:32px;width:90px;border-radius:var(--r-sm);}
+
+/* EMPTY / ERROR */
+.empty-state{
+  grid-column:1/-1;text-align:center;
+  padding:72px 24px;color:var(--ink-2);
+}
+.empty-state h3{font-size:18px;font-weight:600;margin-bottom:8px;color:var(--ink);}
+
+/* ── FOOTER ───────────────────────────────────────────── */
+.site-footer{
+  border-top:1px solid var(--border);background:var(--surface);
+  padding:24px;text-align:center;
+  font-size:13px;color:var(--ink-3);
+}
+.site-footer a{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media(max-width:640px){
+  .hero{padding:32px 16px 28px;}
+  .results-section{padding:20px 16px 56px;}
+  .filter-bar{padding:10px 16px;gap:8px;}
+  .search-input{padding-right:110px;}
+  .search-btn{padding:8px 14px;font-size:13px;}
+  .logo-by{display:none;}
+  .site-nav .nav-link{padding:5px 10px;font-size:12px;}
+}
+@media(prefers-reduced-motion:reduce){
+  .therapist-card{transition:none;}
+  .skel{animation:none;}
+}
+</style>
+
+<header class="site-header">
+  <div class="logo">
+    <span class="logo-name">SEL Resource Finder</span>
+    <span class="logo-by">Power Plus Partner</span>
+  </div>
+  <nav class="site-nav" aria-label="Resource types">
+    <a href="/" class="nav-link">📚 Books</a>
+    <a href="/therapists" class="nav-link active">🧠 Therapists</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="hero-eyebrow">California Directory</p>
+    <h1 class="hero-hl">Find the right therapist for your child.</h1>
+    <p class="hero-sub">Licensed professionals specializing in children ages 6–13. Search by specialty, city, or language.</p>
+
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="searchInput"
+        placeholder="Anxiety, trauma, ADHD, San Francisco…"
+        aria-label="Search therapists">
+      <button class="search-btn" id="searchBtn">Search</button>
+    </div>
+
+    <div class="filter-row" id="specialtyChips" aria-label="Filter by specialty"></div>
+  </section>
+
+  <div class="filter-bar">
+    <span class="filter-bar-label">Filter by</span>
+    <select class="filter-select" id="cityFilter" aria-label="City">
+      <option value="">All cities</option>
+    </select>
+    <select class="filter-select" id="insuranceFilter" aria-label="Insurance">
+      <option value="">All insurance</option>
+    </select>
+    <button class="online-toggle" id="onlineToggle" aria-pressed="false">
+      <span class="online-dot"></span>
+      Online sessions
+    </button>
+  </div>
+
+  <section class="results-section" aria-live="polite">
+    <div class="results-bar">
+      <span class="results-label" id="resultsLabel">All Therapists</span>
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+    <div class="therapist-grid" id="therapistGrid"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  &copy; 2025 <a href="https://powerpluspartner.com">Power Plus Partner</a>
+  &middot; Data sourced from Psychology Today &middot; 99 CA therapists
+</footer>
+
+<script>
+const SB  = 'https://nhdswigpkiwbgtxugtmw.supabase.co';
+const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZHN3aWdwa2l3Ymd0eHVndG13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjQ5NTAsImV4cCI6MjEwMzgwMDk1MH0.MCKdc8uhnLVkc8tO8mtDm504zCYRp0azfcMj0a_yXIM';
+const H   = { 'apikey': KEY, 'Authorization': `Bearer ${KEY}` };
+
+const SPECIALTIES = [
+  'Anxiety','Trauma and PTSD','ADHD','Depression','Autism',
+  'LGBTQ+','Family Conflict','Child','Parenting','Grief',
+  'Anger Management','Learning Differences',
+];
+
+// ── STATE ────────────────────────────────────────────────
+let ALL = [];          // all 99 therapists from Supabase
+let activeSpecialty = '';
+let onlineOnly = false;
+
+// ── INIT ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', async () => {
+  renderSpecialtyChips();
+  showSkeleton();
+  await loadAll();
+  populateFilters();
+  render(ALL);
+
+  document.getElementById('searchBtn').addEventListener('click', applyFilters);
+  document.getElementById('searchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') applyFilters();
+  });
+  document.getElementById('cityFilter').addEventListener('change', applyFilters);
+  document.getElementById('insuranceFilter').addEventListener('change', applyFilters);
+  document.getElementById('onlineToggle').addEventListener('click', () => {
+    onlineOnly = !onlineOnly;
+    const btn = document.getElementById('onlineToggle');
+    btn.classList.toggle('active', onlineOnly);
+    btn.setAttribute('aria-pressed', onlineOnly);
+    applyFilters();
+  });
+});
+
+// ── LOAD ALL ─────────────────────────────────────────────
+async function loadAll() {
+  try {
+    const r = await fetch(
+      `${SB}/rest/v1/therapists?select=name,credentials,city,zip,phone,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary&order=name.asc&limit=200`,
+      { headers: H }
+    );
+    if (!r.ok) throw new Error(r.status);
+    ALL = await r.json();
+    document.getElementById('resultsCount').textContent = `${ALL.length} therapists`;
+  } catch(e) {
+    showError();
+  }
+}
+
+// ── FILTERS ──────────────────────────────────────────────
+function populateFilters() {
+  // Cities
+  const cities = [...new Set(ALL.map(t => t.city).filter(Boolean))].sort();
+  const cityEl = document.getElementById('cityFilter');
+  cities.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    cityEl.appendChild(opt);
+  });
+
+  // Insurance (extract unique insurers from comma-separated strings)
+  const insurers = new Set();
+  ALL.forEach(t => {
+    (t.insurance || '').split(',').forEach(ins => {
+      const s = ins.trim();
+      if (s) insurers.add(s);
+    });
+  });
+  const insEl = document.getElementById('insuranceFilter');
+  [...insurers].sort().forEach(ins => {
+    const opt = document.createElement('option');
+    opt.value = ins; opt.textContent = ins;
+    insEl.appendChild(opt);
+  });
+}
+
+function applyFilters() {
+  const query   = document.getElementById('searchInput').value.trim().toLowerCase();
+  const city    = document.getElementById('cityFilter').value;
+  const ins     = document.getElementById('insuranceFilter').value;
+
+  let filtered = ALL;
+
+  if (activeSpecialty) {
+    filtered = filtered.filter(t => {
+      const combined = [t.top_specialties, t.expertise, t.therapy_types, t.bio, t.summary].join(' ').toLowerCase();
+      return combined.includes(activeSpecialty.toLowerCase());
+    });
+  }
+  if (query) {
+    filtered = filtered.filter(t => {
+      const combined = [t.name, t.city, t.credentials, t.top_specialties, t.expertise, t.therapy_types, t.insurance, t.languages, t.bio].join(' ').toLowerCase();
+      return combined.includes(query);
+    });
+  }
+  if (city) filtered = filtered.filter(t => t.city === city);
+  if (ins)  filtered = filtered.filter(t => (t.insurance || '').includes(ins));
+  if (onlineOnly) filtered = filtered.filter(t => t.online);
+
+  document.getElementById('resultsLabel').textContent =
+    query || activeSpecialty || city || ins || onlineOnly ? 'Matching therapists' : 'All Therapists';
+  document.getElementById('resultsCount').textContent = `${filtered.length} therapists`;
+  render(filtered);
+}
+
+// ── SPECIALTY CHIPS ───────────────────────────────────────
+function renderSpecialtyChips() {
+  const el = document.getElementById('specialtyChips');
+  el.innerHTML = SPECIALTIES.map(s =>
+    `<button class="filter-chip" data-spec="${esc(s)}">${esc(s)}</button>`
+  ).join('');
+  el.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const spec = chip.dataset.spec;
+      if (activeSpecialty === spec) {
+        activeSpecialty = '';
+        chip.classList.remove('active');
+      } else {
+        el.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeSpecialty = spec;
+      }
+      applyFilters();
+    });
+  });
+}
+
+// ── RENDER ────────────────────────────────────────────────
+function showSkeleton() {
+  document.getElementById('therapistGrid').innerHTML =
+    Array.from({length:6}, () => `
+      <div class="therapist-card" aria-hidden="true">
+        <div class="card-top">
+          <div class="skel sk-photo"></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:6px;padding-top:4px;">
+            <div class="skel sk-name"></div>
+            <div class="skel sk-cred"></div>
+            <div class="skel sk-loc"></div>
+          </div>
+        </div>
+        <div class="skel sk-tags"></div>
+        <div style="display:flex;justify-content:flex-end;"><div class="skel sk-btn"></div></div>
+      </div>`).join('');
+}
+
+function showError() {
+  document.getElementById('therapistGrid').innerHTML = `
+    <div class="empty-state">
+      <h3>Couldn't load therapists</h3>
+      <p>Check your connection and try again.</p>
+    </div>`;
+}
+
+function render(therapists) {
+  if (!therapists.length) {
+    document.getElementById('therapistGrid').innerHTML = `
+      <div class="empty-state">
+        <h3>No therapists match these filters</h3>
+        <p>Try a broader search or clear some filters.</p>
+      </div>`;
+    return;
+  }
+  document.getElementById('therapistGrid').innerHTML = therapists.map(cardHTML).join('');
+}
+
+function cardHTML(t) {
+  const initials = (t.name || '?').split(' ').map(w=>w[0]).slice(0,2).join('');
+  const photoEl = t.photo
+    ? `<img class="card-photo" src="${esc(t.photo)}" alt="${esc(t.name)}" loading="lazy" onerror="this.outerHTML='<div class=card-photo-placeholder>${esc(initials)}</div>'">`
+    : `<div class="card-photo-placeholder">${esc(initials)}</div>`;
+
+  const specialties = (t.top_specialties || '').split(',').map(s=>s.trim()).filter(Boolean).slice(0,4);
+
+  const badges = [];
+  if (t.online) badges.push(`<span class="badge badge-online">Online</span>`);
+  if (t.insurance) badges.push(`<span class="badge badge-insurance">Accepts Insurance</span>`);
+  if (t.languages && t.languages !== 'English') badges.push(`<span class="badge badge-lang">${esc(t.languages)}</span>`);
+
+  const feesLine = (t.fees || '').split('|')[0].trim();
+
+  return `
+    <article class="therapist-card">
+      <div class="card-top">
+        ${photoEl}
+        <div class="card-identity">
+          <div class="card-name">${esc(t.name)}</div>
+          <div class="card-creds">${esc(t.credentials)}</div>
+          <div class="card-location">
+            <svg width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true">
+              <path d="M5.5 0A4.5 4.5 0 0 0 1 4.5C1 7.875 5.5 13 5.5 13S10 7.875 10 4.5A4.5 4.5 0 0 0 5.5 0Zm0 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="currentColor"/>
+            </svg>
+            ${esc(t.city)}, CA
+          </div>
+        </div>
+      </div>
+      ${specialties.length ? `<div class="card-badges">${specialties.map(s=>`<span class="badge">${esc(s)}</span>`).join('')}</div>` : ''}
+      ${badges.length ? `<div class="card-badges">${badges.join('')}</div>` : ''}
+      ${feesLine ? `<div class="card-fees">${esc(feesLine)}</div>` : ''}
+      ${(t.bio||t.summary) ? `<div class="card-bio">${esc((t.bio||t.summary).substring(0,200))}</div>` : ''}
+      <div class="card-footer">
+        <span class="card-source">Psychology Today</span>
+        <a class="view-btn" href="${esc(t.profile_url)}" target="_blank" rel="noopener">View Profile →</a>
+      </div>
+    </article>`;
+}
+
+function esc(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>

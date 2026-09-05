@@ -689,21 +689,24 @@ async function fetchTag(tag, limit=30) {
   return r.json();
 }
 
-const FEATURED_BY_ROLE = {
-  parent:  [['belonging',25],['resilience',20],['friendship',20],['anxiety',15]],
-  teacher: [['resilience',25],['emotions',25],['social-skills',20],['responsibility',20],['empathy',20]],
-  student: [['friendship',25],['belonging',20],['anxiety',15],['resilience',15],['confidence',15]],
-};
+async function fetchAll() {
+  const r = await fetch(`${SB}/rest/v1/books?select=*&limit=500`, { headers: H });
+  if (!r.ok) return [];
+  return r.json();
+}
+
+let allBooksCache = null;
 
 async function loadFeatured() {
   showSkeleton();
   try {
-    const tagList = FEATURED_BY_ROLE[currentRole] || FEATURED_BY_ROLE.parent;
-    const results = await Promise.all(tagList.map(([tag, lim]) => fetchTag(tag, lim)));
-    const merged = filterByRole(mergeAndScore(results.flat(), []));
+    if (!allBooksCache) allBooksCache = await fetchAll();
+    const filtered = filterByRole(allBooksCache);
+    // Shuffle for variety
+    const shuffled = [...filtered].sort(() => Math.random() - 0.5);
     document.getElementById('resultsLabel').textContent = 'Featured';
-    document.getElementById('resultsCount').textContent = `${merged.slice(0,12).length} books`;
-    renderCards(merged.slice(0,12), [], '');
+    document.getElementById('resultsCount').textContent = `${shuffled.slice(0,12).length} books`;
+    renderCards(shuffled.slice(0,12), [], '');
   } catch(e) {
     showError();
   }

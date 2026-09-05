@@ -309,8 +309,20 @@ a{color:var(--primary);}
 .card-bio{
   font-size:13px;color:var(--ink-2);
   line-height:1.5;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  padding-top:8px;margin-top:4px;
+  border-top:1px solid var(--border);
 }
+.badge-age{background:#FFF3E8;color:#9A4A00;}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .badge-age{background:#3A1A00;color:#F0975A;}}
+:root[data-theme="dark"] .badge-age{background:#3A1A00;color:#F0975A;}
+.bio-btn{
+  padding:5px 12px;
+  background:var(--chip-bg);color:var(--chip-fg);
+  border:1px solid var(--border);border-radius:var(--r-sm);
+  font-size:12px;font-weight:500;cursor:pointer;
+  transition:background .12s,color .12s;
+}
+.bio-btn:hover{background:var(--tag-bg);color:var(--primary);}
 
 .card-footer{
   margin-top:auto;
@@ -541,8 +553,9 @@ async function loadAll() {
 
 // ── FILTERS ──────────────────────────────────────────────
 function populateFilters() {
-  // Cities
-  const cities = [...new Set(ALL.map(t => t.city).filter(Boolean))].sort();
+  // Cities — extract clean city names from possible full addresses
+  const rawCities = ALL.map(t => extractCity(t.city)).filter(Boolean);
+  const cities = [...new Set(rawCities)].sort();
   const cityEl = document.getElementById('cityFilter');
   cities.forEach(c => {
     const opt = document.createElement('option');
@@ -583,7 +596,7 @@ function applyFilters() {
       return combined.includes(query);
     });
   }
-  if (city) filtered = filtered.filter(t => t.city === city);
+  if (city) filtered = filtered.filter(t => extractCity(t.city) === city);
   if (ins)  filtered = filtered.filter(t => (t.insurance || '').toLowerCase().includes(ins.toLowerCase()));
   if (onlineOnly) filtered = filtered.filter(t => t.online);
   if (ageFilter) filtered = filtered.filter(t => (t.client_age || '').includes(ageFilter));
@@ -683,6 +696,42 @@ function credTooltip(credsStr) {
 }
 
 
+function extractCity(raw) {
+  if (!raw) return '';
+  const s = raw.trim();
+  if (!/^\d/.test(s)) return s; // already a city name
+  let clean = s
+    .replace(/\([^)]*\)/g, '')
+    .replace(/\b(suite?|ste\.?|unit|apt\.?|#)\s*[\w-]+/gi, '')
+    .trim();
+  const m = clean.match(/\b(?:avenue|ave|boulevard|blvd|street|st|drive|dr|road|rd|way|lane|ln|court|ct|circle|place|pl|parkway|pkwy|row|route|hwy|highway)\b\.?\s+(.+)$/i);
+  if (m && m[1].trim()) return m[1].trim();
+  const words = clean.split(/\s+/).filter(w => /^[A-Z]/.test(w) && !/^\d/.test(w));
+  return words.slice(-2).join(' ') || s;
+}
+
+function parseAgeGroups(clientAge) {
+  if (!clientAge) return [];
+  const map = [
+    ['Children', '6–10 yrs'],
+    ['Preteen', 'Preteen'],
+    ['Adolescents', 'Teens'],
+    ['Teen', 'Teens'],
+  ];
+  const found = new Set();
+  for (const [key, label] of map) {
+    if (clientAge.includes(key)) found.add(label);
+  }
+  return [...found];
+}
+
+function toggleBio(btn) {
+  const card = btn.closest('.therapist-card');
+  const bio = card.querySelector('.card-bio');
+  bio.hidden = !bio.hidden;
+  btn.textContent = bio.hidden ? 'About ▾' : 'About ▴';
+}
+
 function parseFee(fees) {
   if (!fees) return '';
   const m = (fees || '').match(/Individual Sessions?\s*\$(\d+)/i);
@@ -706,11 +755,14 @@ function cardHTML(t) {
     ? `<img class="card-photo" src="${esc(t.photo)}" alt="${esc(t.name)}" loading="lazy" onerror="this.outerHTML='<div class=card-photo-placeholder>${esc(initials)}</div>'">`
     : `<div class="card-photo-placeholder">${esc(initials)}</div>`;
 
-  const specialties = (t.top_specialties || '').split(',').map(s=>s.trim()).filter(Boolean).slice(0,4);
-
+  const specialties = (t.top_specialties || '').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);
+  const ageGroups = parseAgeGroups(t.client_age);
   const feeStr = parseFee(t.fees);
   const insurers = parseInsurers(t.insurance);
   const hasInsurance = insurers.length > 0 || (t.insurance || '').length > 0;
+  const cityName = extractCity(t.city);
+  const hasBio = !!(t.bio || t.summary);
+  const bioText = hasBio ? (t.bio || t.summary).substring(0, 350) : '';
 
   return `
     <article class="therapist-card">
@@ -723,21 +775,27 @@ function cardHTML(t) {
             <svg width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true">
               <path d="M5.5 0A4.5 4.5 0 0 0 1 4.5C1 7.875 5.5 13 5.5 13S10 7.875 10 4.5A4.5 4.5 0 0 0 5.5 0Zm0 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="currentColor"/>
             </svg>
-            ${esc(t.city)}, CA
+            ${esc(cityName)}, CA
           </div>
         </div>
       </div>
-      ${specialties.length ? `<div class="card-badges">${specialties.map(s=>`<span class="badge">${esc(s)}</span>`).join('')}</div>` : ''}
+      <div class="card-badges">
+        ${ageGroups.map(a=>`<span class="badge badge-age">${esc(a)}</span>`).join('')}
+        ${specialties.map(s=>`<span class="badge">${esc(s)}</span>`).join('')}
+      </div>
       <div class="card-info-tags">
         ${feeStr === 'Sliding scale' ? `<span class="badge badge-sliding">Sliding scale</span>` : feeStr ? `<span class="badge badge-price">${esc(feeStr)}</span>` : ''}
         ${insurers.length ? insurers.map(i=>`<span class="badge badge-ins-name">${esc(i)}</span>`).join('') : !hasInsurance ? `<span class="badge badge-no-ins">No insurance</span>` : ''}
         ${t.online ? `<span class="badge badge-online">Online</span>` : ''}
         ${t.languages && t.languages !== 'English' ? `<span class="badge badge-lang">${esc(t.languages)}</span>` : ''}
       </div>
-      ${(t.bio||t.summary) ? `<div class="card-bio">${esc((t.bio||t.summary).substring(0,200))}</div>` : ''}
+      ${hasBio ? `<div class="card-bio" hidden>${esc(bioText)}</div>` : ''}
       <div class="card-footer">
         <span class="card-source">Psychology Today</span>
-        <a class="view-btn" href="${esc(t.profile_url)}" target="_blank" rel="noopener">View Profile →</a>
+        <div style="display:flex;gap:8px;align-items:center;">
+          ${hasBio ? `<button class="bio-btn" onclick="toggleBio(this)">About &#9662;</button>` : ''}
+          <a class="view-btn" href="${esc(t.profile_url)}" target="_blank" rel="noopener">View Profile &#8594;</a>
+        </div>
       </div>
     </article>`;
 }

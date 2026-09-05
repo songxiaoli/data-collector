@@ -367,6 +367,36 @@ a{color:var(--primary);}
   .therapist-card{transition:none;}
   .skel{animation:none;}
 }
+
+/* ── CREDENTIAL TOOLTIP ───────────────────────────────── */
+.cred-wrap{position:relative;display:inline-flex;align-items:baseline;gap:4px;}
+.cred-help{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--chip-bg);color:var(--ink-3);
+  font-size:9px;font-weight:700;font-style:normal;
+  cursor:help;flex-shrink:0;border:1px solid var(--border);
+  position:relative;top:-1px;
+}
+.cred-help:hover .cred-tip,
+.cred-help:focus .cred-tip{opacity:1;pointer-events:auto;transform:translateY(0);}
+.cred-tip{
+  position:absolute;left:0;top:20px;z-index:20;
+  background:var(--ink);color:var(--surface);
+  font-size:11.5px;font-weight:400;font-style:normal;
+  line-height:1.5;padding:8px 12px;border-radius:var(--r-sm);
+  width:220px;
+  opacity:0;pointer-events:none;
+  transform:translateY(-4px);
+  transition:opacity .15s,transform .15s;
+  box-shadow:0 4px 16px rgba(0,0,0,.25);
+}
+.cred-tip::before{
+  content:'';position:absolute;top:-5px;left:10px;
+  border:5px solid transparent;
+  border-bottom-color:var(--ink);border-top:none;
+}
+/* age-filter select same style as existing */
 </style>
 
 <header class="site-header">
@@ -404,6 +434,12 @@ a{color:var(--primary);}
     <select class="filter-select" id="insuranceFilter" aria-label="Insurance">
       <option value="">All insurance</option>
     </select>
+    <select class="filter-select" id="ageFilter" aria-label="Age group">
+      <option value="">All ages</option>
+      <option value="Children">Ages 6–10</option>
+      <option value="Preteen">Preteen (11–12)</option>
+      <option value="Teen">Teen (13–17)</option>
+    </select>
     <button class="online-toggle" id="onlineToggle" aria-pressed="false">
       <span class="online-dot"></span>
       Online sessions
@@ -425,7 +461,7 @@ a{color:var(--primary);}
 
 <footer class="site-footer">
   &copy; 2025 <a href="https://powerpluspartner.com">Power Plus Partner</a>
-  &middot; Data sourced from Psychology Today &middot; 99 CA therapists
+  &middot; Data sourced from Psychology Today &middot; <span id="footerCount"></span>
 </footer>
 
 <script>
@@ -444,6 +480,7 @@ let ALL = [];          // all 99 therapists from Supabase
 let activeSpecialty = '';
 let onlineOnly = false;
 let childFocusOnly = true;
+let ageFilter = '';
 
 // ── INIT ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
@@ -466,6 +503,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     btn.setAttribute('aria-pressed', childFocusOnly);
     applyFilters();
   });
+  document.getElementById('ageFilter').addEventListener('change', () => {
+    ageFilter = document.getElementById('ageFilter').value;
+    applyFilters();
+  });
   document.getElementById('onlineToggle').addEventListener('click', () => {
     onlineOnly = !onlineOnly;
     const btn = document.getElementById('onlineToggle');
@@ -479,12 +520,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadAll() {
   try {
     const r = await fetch(
-      `${SB}/rest/v1/therapists?select=name,credentials,city,zip,phone,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary,child_focus_score&order=name.asc&limit=200`,
+      `${SB}/rest/v1/therapists?select=name,credentials,city,zip,phone,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary,child_focus_score,client_age&order=child_focus_score.desc,name.asc&limit=500`,
       { headers: H }
     );
     if (!r.ok) throw new Error(r.status);
     ALL = await r.json();
     document.getElementById('resultsCount').textContent = `${ALL.length} therapists`;
+    const fc = document.getElementById('footerCount'); if(fc) fc.textContent = `${ALL.length} CA therapists`;
   } catch(e) {
     showError();
   }
@@ -501,16 +543,14 @@ function populateFilters() {
     cityEl.appendChild(opt);
   });
 
-  // Insurance (extract unique insurers from comma-separated strings)
-  const insurers = new Set();
-  ALL.forEach(t => {
-    (t.insurance || '').split(',').forEach(ins => {
-      const s = ins.trim();
-      if (s) insurers.add(s);
-    });
-  });
+  // Insurance — known major insurers present in the data
+  const KNOWN_INSURERS = [
+    'Aetna','Anthem','Blue Cross','Blue Shield','Cigna','UnitedHealthcare',
+    'Kaiser','Medi-Cal','Medicare','Medicaid','Optum','Health Net',
+    'Magellan','Molina','Tricare','Out of Network'
+  ];
   const insEl = document.getElementById('insuranceFilter');
-  [...insurers].sort().forEach(ins => {
+  KNOWN_INSURERS.forEach(ins => {
     const opt = document.createElement('option');
     opt.value = ins; opt.textContent = ins;
     insEl.appendChild(opt);
@@ -537,8 +577,9 @@ function applyFilters() {
     });
   }
   if (city) filtered = filtered.filter(t => t.city === city);
-  if (ins)  filtered = filtered.filter(t => (t.insurance || '').includes(ins));
+  if (ins)  filtered = filtered.filter(t => (t.insurance || '').toLowerCase().includes(ins.toLowerCase()));
   if (onlineOnly) filtered = filtered.filter(t => t.online);
+  if (ageFilter) filtered = filtered.filter(t => (t.client_age || '').includes(ageFilter));
   if (childFocusOnly) filtered = filtered.filter(t => (t.child_focus_score || 0) >= 5);
 
   document.getElementById('resultsLabel').textContent =
@@ -607,6 +648,33 @@ function render(therapists) {
   document.getElementById('therapistGrid').innerHTML = therapists.map(cardHTML).join('');
 }
 
+
+// ── CREDENTIAL EXPLANATIONS ──────────────────────────────
+const CRED_INFO = {
+  'LMFT':  'Licensed Marriage & Family Therapist — Master's level, specializes in family/relationship dynamics.',
+  'AMFT':  'Associate MFT — Completing supervised hours before full licensure.',
+  'LCSW':  'Licensed Clinical Social Worker — Master's level, trained in therapy and social systems.',
+  'ACSW':  'Associate CSW — Completing supervised hours before full licensure.',
+  'LPCC':  'Licensed Professional Clinical Counselor — Master's level counselor.',
+  'APCC':  'Associate PCC — Completing supervised hours before full licensure.',
+  'PsyD':  'Doctor of Psychology — Clinical doctorate focused on therapy practice.',
+  'PhD':   'Doctor of Philosophy in Psychology — Research + clinical doctorate.',
+  'Psychologist': 'Doctoral-level (PhD or PsyD) — highest level of psychology licensure.',
+};
+
+function credTooltip(credsStr) {
+  if (!credsStr) return '';
+  const matches = [];
+  for (const [abbr, desc] of Object.entries(CRED_INFO)) {
+    if (credsStr.includes(abbr) && !matches.find(m => m.abbr === abbr)) {
+      matches.push({abbr, desc});
+    }
+  }
+  if (!matches.length) return esc(credsStr);
+  const tipHtml = matches.map(m => `<b>${m.abbr}</b>: ${m.desc}`).join('<br>');
+  return `<span class="cred-wrap">${esc(credsStr)}<span class="cred-help" tabindex="0">?<span class="cred-tip">${tipHtml}</span></span></span>`;
+}
+
 function cardHTML(t) {
   const initials = (t.name || '?').split(' ').map(w=>w[0]).slice(0,2).join('');
   const photoEl = t.photo
@@ -628,7 +696,7 @@ function cardHTML(t) {
         ${photoEl}
         <div class="card-identity">
           <div class="card-name">${esc(t.name)}</div>
-          <div class="card-creds">${esc(t.credentials)}</div>
+          <div class="card-creds">${credTooltip(t.credentials)}</div>
           <div class="card-location">
             <svg width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true">
               <path d="M5.5 0A4.5 4.5 0 0 0 1 4.5C1 7.875 5.5 13 5.5 13S10 7.875 10 4.5A4.5 4.5 0 0 0 5.5 0Zm0 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="currentColor"/>

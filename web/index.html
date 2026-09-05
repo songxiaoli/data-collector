@@ -611,6 +611,9 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       currentRole = btn.dataset.role;
       document.getElementById('searchInput').placeholder = PLACEHOLDERS[currentRole];
+      // Re-run current view with new role filter
+      const q = document.getElementById('searchInput').value.trim();
+      if (q) runSearch(); else loadFeatured();
     });
   });
 
@@ -668,7 +671,7 @@ async function loadFeatured() {
       fetchTag('resilience', 12),
       fetchTag('friendship', 12),
     ]);
-    const merged = mergeAndScore([...a,...b,...c], []);
+    const merged = filterByRole(mergeAndScore([...a,...b,...c], []));
     document.getElementById('resultsLabel').textContent = 'Featured';
     document.getElementById('resultsCount').textContent = `${merged.slice(0,12).length} books`;
     renderCards(merged.slice(0,12), [], '');
@@ -690,7 +693,7 @@ async function runSearch() {
 
   try {
     const results = await Promise.all(tags.map(t => fetchTag(t, 30)));
-    const merged = mergeAndScore(results.flat(), tags);
+    const merged = filterByRole(mergeAndScore(results.flat(), tags));
     const top = merged.slice(0, 15);
     document.getElementById('resultsCount').textContent = `${top.length} found`;
     top.length ? renderCards(top, tags, raw) : showEmpty();
@@ -705,6 +708,17 @@ function normTitle(title) {
     .replace(/[.,!?;:'"……]/g,'')  // punctuation
     .replace(/\.{2,}/g,'')         // ellipsis dots
     .replace(/\s+/g,' ').trim();
+}
+
+function filterByRole(books) {
+  if (currentRole === 'teacher') {
+    return books.filter(b => (b.audience || '').includes('educator'));
+  }
+  if (currentRole === 'student') {
+    return books.filter(b => (b.audience || '').includes('children'));
+  }
+  // parent: show everything
+  return books;
 }
 
 function mergeAndScore(books, matchTags) {

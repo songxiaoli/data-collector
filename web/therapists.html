@@ -294,6 +294,13 @@ a{color:var(--primary);}
 .badge-insurance{background:#FBF3E5;color:#7A5010;}
 .badge-lang{background:#EDF0F8;color:#2E4A8A;}
 
+.badge-price{background:#FBF3E5;color:#7A5010;font-weight:600;}
+.badge-ins-name{background:#EDF5FF;color:#1D4E89;}
+.badge-no-ins{background:#F5F0FF;color:#5B2D8E;}
+.badge-sliding{background:#F0FAF4;color:#1A6B3A;}
+.card-info-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px;}
+
+
 .card-fees{
   font-size:13px;color:var(--ink-2);
   border-left:2px solid var(--accent);
@@ -675,6 +682,24 @@ function credTooltip(credsStr) {
   return `<span class="cred-wrap">${esc(credsStr)}<span class="cred-help" tabindex="0">?<span class="cred-tip">${tipHtml}</span></span></span>`;
 }
 
+
+function parseFee(fees) {
+  if (!fees) return '';
+  const m = (fees || '').match(/Individual Sessions?\s*\$(\d+)/i);
+  if (m) return '$' + m[1] + '/session';
+  if ((fees || '').toLowerCase().includes('sliding scale')) return 'Sliding scale';
+  return '';
+}
+
+const INS_NAMES = ['Aetna','Anthem','Blue Cross','Blue Shield','Cigna',
+  'UnitedHealthcare','Kaiser','Medi-Cal','Medicare','Optum',
+  'Health Net','Magellan','Molina','Tricare'];
+
+function parseInsurers(ins) {
+  if (!ins) return [];
+  return INS_NAMES.filter(name => ins.includes(name)).slice(0, 4);
+}
+
 function cardHTML(t) {
   const initials = (t.name || '?').split(' ').map(w=>w[0]).slice(0,2).join('');
   const photoEl = t.photo
@@ -683,12 +708,9 @@ function cardHTML(t) {
 
   const specialties = (t.top_specialties || '').split(',').map(s=>s.trim()).filter(Boolean).slice(0,4);
 
-  const badges = [];
-  if (t.online) badges.push(`<span class="badge badge-online">Online</span>`);
-  if (t.insurance) badges.push(`<span class="badge badge-insurance">Accepts Insurance</span>`);
-  if (t.languages && t.languages !== 'English') badges.push(`<span class="badge badge-lang">${esc(t.languages)}</span>`);
-
-  const feesLine = (t.fees || '').split('|')[0].trim();
+  const feeStr = parseFee(t.fees);
+  const insurers = parseInsurers(t.insurance);
+  const hasInsurance = insurers.length > 0 || (t.insurance || '').length > 0;
 
   return `
     <article class="therapist-card">
@@ -706,8 +728,12 @@ function cardHTML(t) {
         </div>
       </div>
       ${specialties.length ? `<div class="card-badges">${specialties.map(s=>`<span class="badge">${esc(s)}</span>`).join('')}</div>` : ''}
-      ${badges.length ? `<div class="card-badges">${badges.join('')}</div>` : ''}
-      ${feesLine ? `<div class="card-fees">${esc(feesLine)}</div>` : ''}
+      <div class="card-info-tags">
+        ${feeStr === 'Sliding scale' ? `<span class="badge badge-sliding">Sliding scale</span>` : feeStr ? `<span class="badge badge-price">${esc(feeStr)}</span>` : ''}
+        ${insurers.length ? insurers.map(i=>`<span class="badge badge-ins-name">${esc(i)}</span>`).join('') : !hasInsurance ? `<span class="badge badge-no-ins">No insurance</span>` : ''}
+        ${t.online ? `<span class="badge badge-online">Online</span>` : ''}
+        ${t.languages && t.languages !== 'English' ? `<span class="badge badge-lang">${esc(t.languages)}</span>` : ''}
+      </div>
       ${(t.bio||t.summary) ? `<div class="card-bio">${esc((t.bio||t.summary).substring(0,200))}</div>` : ''}
       <div class="card-footer">
         <span class="card-source">Psychology Today</span>

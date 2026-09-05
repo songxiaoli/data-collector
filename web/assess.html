@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Child Mental Health Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@500;600&display=swap">
+<style>
+/* ── Tokens ── */
+:root {
+  --bg: #F7F9FC;
+  --surface: #FFFFFF;
+  --surface-2: #F0F4FA;
+  --border: #E2E8F2;
+  --primary: #3A6EA8;
+  --primary-light: #EBF2FB;
+  --primary-dark: #2B5285;
+  --accent: #48A07A;
+  --accent-light: #E8F5EE;
+  --warn: #D97706;
+  --warn-light: #FEF3C7;
+  --danger: #DC2626;
+  --danger-light: #FEE2E2;
+  --ink: #1A2438;
+  --ink-2: #4A5568;
+  --ink-3: #718096;
+  --r: 12px;
+  --r-sm: 8px;
+  --shadow: 0 2px 12px rgba(30,50,90,0.08);
+  --shadow-md: 0 4px 24px rgba(30,50,90,0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1724;
+    --surface: #1A2438;
+    --surface-2: #1F2D42;
+    --border: #2D3F5A;
+    --primary: #5B8DC4;
+    --primary-light: #1A2D42;
+    --primary-dark: #7AA8D8;
+    --accent: #5DBF92;
+    --accent-light: #162A22;
+    --warn: #F59E0B;
+    --warn-light: #2D2010;
+    --danger: #EF4444;
+    --danger-light: #2D1010;
+    --ink: #E8EDF5;
+    --ink-2: #B0BDD0;
+    --ink-3: #718096;
+    --shadow: 0 2px 12px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1724;
+  --surface: #1A2438;
+  --surface-2: #1F2D42;
+  --border: #2D3F5A;
+  --primary: #5B8DC4;
+  --primary-light: #1A2D42;
+  --primary-dark: #7AA8D8;
+  --accent: #5DBF92;
+  --accent-light: #162A22;
+  --warn: #F59E0B;
+  --warn-light: #2D2010;
+  --danger: #EF4444;
+  --danger-light: #2D1010;
+  --ink: #E8EDF5;
+  --ink-2: #B0BDD0;
+  --ink-3: #718096;
+  --shadow: 0 2px 12px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.header-logo {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary);
+}
+.header-sub {
+  font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* ── Progress bar ── */
+.progress-wrap {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+}
+.progress-label {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.progress-track {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* ── Main container ── */
+.main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px 60px;
+}
+.card {
+  background: var(--surface);
+  border-radius: var(--r);
+  box-shadow: var(--shadow);
+  padding: 40px;
+  width: 100%;
+  max-width: 680px;
+}
+
+/* ── Section visibility ── */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ── Typography ── */
+.eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+  text-wrap: balance;
+  margin-bottom: 12px;
+}
+.section-desc {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--r-sm);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background .15s, transform .1s;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+}
+.btn-outline:hover { background: var(--primary-light); }
+.btn-lg { padding: 14px 32px; font-size: 16px; }
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+/* ── Form elements ── */
+.form-group {
+  margin-bottom: 20px;
+}
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.form-select, .form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 15px;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s;
+}
+.form-select:focus, .form-input:focus {
+  border-color: var(--primary);
+}
+
+/* ── Question block ── */
+.q-block {
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.q-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.q-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 6px;
+}
+.q-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+.q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.q-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: border-color .12s, background .12s;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.q-option:hover { border-color: var(--primary); background: var(--primary-light); }
+.q-option input[type="radio"] { display: none; }
+.q-option.selected {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 500;
+}
+.q-option .dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  transition: border-color .12s, background .12s;
+}
+.q-option.selected .dot {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+/* ── Section group header ── */
+.q-group-header {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.5;
+}
+.q-group-header strong { color: var(--ink); }
+
+/* ── Chip checklist ── */
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+}
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .12s;
+  color: var(--ink-2);
+}
+.chip:hover { border-color: var(--primary); color: var(--primary); }
+.chip.selected {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.chip input { display: none; }
+
+/* ── Results ── */
+.result-band {
+  border-radius: var(--r-sm);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.result-band.normal { background: var(--accent-light); border-left: 4px solid var(--accent); }
+.result-band.mild { background: var(--warn-light); border-left: 4px solid var(--warn); }
+.result-band.concern { background: var(--danger-light); border-left: 4px solid var(--danger); }
+.result-band-icon { font-size: 22px; flex-shrink: 0; }
+.result-band-body {}
+.result-band-title { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+.result-band-desc { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+
+.rec-section { margin-top: 32px; }
+.rec-title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+.rec-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.rec-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .12s, background .12s;
+}
+.rec-card:hover { border-color: var(--primary); background: var(--primary-light); }
+.rec-card-icon { font-size: 24px; flex-shrink: 0; }
+.rec-card-body {}
+.rec-card-label { font-size: 12px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .05em; }
+.rec-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-top: 2px; }
+
+/* ── Alert banner ── */
+.alert {
+  border-radius: var(--r-sm);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.alert-danger {
+  background: var(--danger-light);
+  border: 1.5px solid var(--danger);
+  color: var(--ink);
+}
+.alert-danger strong { color: var(--danger); }
+
+/* ── Divider ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0;
+}
+
+/* ── Footer ── */
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: var(--ink-3);
+  border-top: 1px solid var(--border);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .card { padding: 24px 20px; }
+  .section-title { font-size: 22px; }
+  .btn-row { flex-direction: column; }
+  .btn { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div>
+    <div class="header-logo">MindBridge</div>
+    <div class="header-sub">Child Mental Health Assessment</div>
+  </div>
+</header>
+
+<!-- Progress bar -->
+<div class="progress-wrap" id="progressWrap" style="display:none">
+  <div class="progress-label">
+    <span id="progressLabel">Getting started</span>
+    <span id="progressPct">0%</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+</div>
+
+<!-- Main -->
+<main class="main">
+<div class="card">
+
+<!-- ══ SECTION: Intro ══ -->
+<div class="section active" id="sec-intro">
+  <div class="eyebrow">Free Assessment</div>
+  <h1 class="section-title">Understand your child's mental health in 10–15 minutes</h1>
+  <p class="section-desc">
+    This assessment uses clinically validated screening tools used by pediatricians and child psychologists worldwide.
+    It is designed for children ages 6–12 and covers emotional wellbeing, behavior, attention, and social development.
+  </p>
+  <p class="section-desc" style="margin-bottom:0">
+    You'll answer questions as the parent or caregiver. At the end, you'll receive a personalized report with resources matched to your child's needs.
+  </p>
+
+  <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:16px 20px;margin:24px 0;display:flex;gap:24px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);">
+      <span style="font-size:20px;">⏱</span> 10–15 minutes
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);">
+      <span style="font-size:20px;">🔒</span> Private & confidential
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);">
+      <span style="font-size:20px;">📋</span> Clinically validated
+    </div>
+  </div>
+
+  <div class="alert alert-danger" style="margin-bottom:0;margin-top:8px;">
+    <strong>Important:</strong> This is a screening tool, not a clinical diagnosis. If your child is in crisis or you believe they may harm themselves or others, please call <strong>988</strong> (Suicide & Crisis Lifeline) or go to your nearest emergency room.
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary btn-lg" onclick="goTo('sec-info')">Start Assessment →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: Child Info ══ -->
+<div class="section" id="sec-info">
+  <div class="eyebrow">Step 1 of 4</div>
+  <h2 class="section-title">Tell us about your child</h2>
+  <p class="section-desc">This helps us select the most appropriate screening questions.</p>
+
+  <div class="form-group">
+    <label class="form-label">Child's age</label>
+    <select class="form-select" id="childAge">
+      <option value="">Select age</option>
+      <option value="6">6 years old</option>
+      <option value="7">7 years old</option>
+      <option value="8">8 years old</option>
+      <option value="9">9 years old</option>
+      <option value="10">10 years old</option>
+      <option value="11">11 years old</option>
+      <option value="12">12 years old</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Child's gender</label>
+    <select class="form-select" id="childGender">
+      <option value="">Select gender</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other / Prefer not to say</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Your relationship to the child</label>
+    <select class="form-select" id="childRelation">
+      <option value="">Select relationship</option>
+      <option value="parent">Parent</option>
+      <option value="grandparent">Grandparent</option>
+      <option value="guardian">Guardian</option>
+      <option value="other">Other caregiver</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">What brought you here today? <span style="color:var(--ink-3);font-weight:400">(optional)</span></label>
+    <select class="form-select" id="concern">
+      <option value="">Select primary concern</option>
+      <option value="behavior">Behavior or discipline issues</option>
+      <option value="attention">Attention or focus problems</option>
+      <option value="anxiety">Anxiety or excessive worrying</option>
+      <option value="mood">Sadness or mood changes</option>
+      <option value="social">Social difficulties</option>
+      <option value="school">School performance</option>
+      <option value="sleep">Sleep problems</option>
+      <option value="eating">Eating concerns</option>
+      <option value="general">General wellness check</option>
+    </select>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-intro')">← Back</button>
+    <button class="btn btn-primary" onclick="startSDQ()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: SDQ Part 1 (Q1–9) ══ -->
+<div class="section" id="sec-sdq-1">
+  <div class="eyebrow">Step 2 of 4 — General Screening (SDQ)</div>
+  <h2 class="section-title">Questions 1–9</h2>
+
+  <div class="q-group-header">
+    <strong>Instructions:</strong> For each statement below, please choose how true it is for your child <strong>over the last 6 months</strong>.
+  </div>
+
+  <div id="sdq-q1-9"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-info')">← Back</button>
+    <button class="btn btn-primary" onclick="nextSDQ(1)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: SDQ Part 2 (Q10–18) ══ -->
+<div class="section" id="sec-sdq-2">
+  <div class="eyebrow">Step 2 of 4 — General Screening (SDQ)</div>
+  <h2 class="section-title">Questions 10–18</h2>
+  <div id="sdq-q10-18"></div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-sdq-1')">← Back</button>
+    <button class="btn btn-primary" onclick="nextSDQ(2)">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: SDQ Part 3 (Q19–25) ══ -->
+<div class="section" id="sec-sdq-3">
+  <div class="eyebrow">Step 2 of 4 — General Screening (SDQ)</div>
+  <h2 class="section-title">Questions 19–25</h2>
+  <div id="sdq-q19-25"></div>
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-sdq-2')">← Back</button>
+    <button class="btn btn-primary" onclick="scoreSDQ()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: RCADS (Anxiety & Depression) ══ -->
+<div class="section" id="sec-rcads">
+  <div class="eyebrow">Step 3 of 4 — Emotional Screening</div>
+  <h2 class="section-title">Anxiety & Mood Questions</h2>
+  <p class="section-desc">Based on your previous answers, we'd like to ask a few more questions about your child's emotional experiences.</p>
+
+  <div class="q-group-header">
+    <strong>Instructions:</strong> How often does each of the following apply to your child?
+    Choose <em>Never, Sometimes, Often,</em> or <em>Always</em>.
+  </div>
+
+  <div id="rcads-questions"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-sdq-3')">← Back</button>
+    <button class="btn btn-primary" onclick="scoreRCADS()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: asQ (Suicide Risk) ══ -->
+<div class="section" id="sec-asq">
+  <div class="alert alert-danger">
+    <strong>Important:</strong> The next 4 questions are about safety. These questions are asked to every child with elevated mood scores. Please answer as honestly as possible.
+  </div>
+
+  <h2 class="section-title">Safety Check</h2>
+  <p class="section-desc">The following questions refer to your child's recent thoughts or feelings.</p>
+
+  <div id="asq-questions"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-rcads')">← Back</button>
+    <button class="btn btn-primary" onclick="scoreASQ()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: Vanderbilt (ADHD) ══ -->
+<div class="section" id="sec-vanderbilt">
+  <div class="eyebrow">Step 3 of 4 — Attention Screening</div>
+  <h2 class="section-title">Attention & Activity Questions</h2>
+  <p class="section-desc">Based on your earlier answers, we'd like to understand your child's attention and activity levels better.</p>
+
+  <div class="q-group-header">
+    <strong>Instructions:</strong> How often does each behavior occur?
+    Choose <em>Never, Occasionally, Often,</em> or <em>Very Often</em>.
+  </div>
+
+  <div id="vanderbilt-questions"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-sdq-3')">← Back</button>
+    <button class="btn btn-primary" onclick="scoreVanderbilt()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: AQ-Child (ASD) ══ -->
+<div class="section" id="sec-aq">
+  <div class="eyebrow">Step 3 of 4 — Social Communication Screening</div>
+  <h2 class="section-title">Social & Communication Questions</h2>
+  <p class="section-desc">These questions help us understand how your child relates to others and communicates.</p>
+
+  <div class="q-group-header">
+    <strong>Instructions:</strong> Please rate how accurately each statement describes your child.
+  </div>
+
+  <div id="aq-questions"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="goTo('sec-sdq-3')">← Back</button>
+    <button class="btn btn-primary" onclick="scoreAQ()">Continue →</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: Optional Screens ══ -->
+<div class="section" id="sec-optional">
+  <div class="eyebrow">Step 3 of 4 — Optional Add-ons</div>
+  <h2 class="section-title">Any other concerns?</h2>
+  <p class="section-desc">Select any additional areas you'd like to screen for. These are optional — you can skip to your results now.</p>
+
+  <div class="chip-list" id="optionalChips">
+    <label class="chip" id="chip-sleep">
+      <input type="checkbox" value="sleep"> 😴 Sleep difficulties
+    </label>
+    <label class="chip" id="chip-eating">
+      <input type="checkbox" value="eating"> 🍽 Eating concerns
+    </label>
+    <label class="chip" id="chip-trauma">
+      <input type="checkbox" value="trauma"> 💔 Trauma or stressful events
+    </label>
+  </div>
+
+  <div id="optional-sleep" style="display:none">
+    <hr class="divider">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;">Sleep Questions (CSHQ)</h3>
+    <div id="sleep-questions"></div>
+  </div>
+
+  <div id="optional-eating" style="display:none">
+    <hr class="divider">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;">Eating Questions (EAT-26)</h3>
+    <div id="eating-questions"></div>
+  </div>
+
+  <div id="optional-trauma" style="display:none">
+    <hr class="divider">
+    <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;">Trauma & Stress (UCLA PTSD-RI)</h3>
+    <div id="trauma-questions"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-outline" onclick="skipOptional()">Skip → View Results</button>
+    <button class="btn btn-primary" onclick="submitOptional()">Submit & View Results</button>
+  </div>
+</div>
+
+<!-- ══ SECTION: Results ══ -->
+<div class="section" id="sec-results">
+  <div class="eyebrow">Your Results</div>
+  <h2 class="section-title">Assessment Complete</h2>
+  <p class="section-desc" id="results-intro">Based on your responses, here's what we found:</p>
+
+  <div id="results-bands"></div>
+
+  <div id="results-crisis" style="display:none">
+    <div class="alert alert-danger">
+      <strong>⚠️ Immediate attention needed:</strong> Your responses indicate a potential safety concern. Please reach out to a mental health professional right away, or call <strong>988</strong> (Suicide & Crisis Lifeline) for immediate support.
+    </div>
+  </div>
+
+  <div class="rec-section" id="results-recs">
+    <div class="rec-title">Recommended Resources</div>
+    <div class="rec-cards" id="rec-cards-list"></div>
+  </div>
+
+  <hr class="divider">
+
+  <div style="font-size:13px;color:var(--ink-3);line-height:1.6;">
+    <strong style="color:var(--ink-2);">Disclaimer:</strong> This assessment is a screening tool only and does not constitute a clinical diagnosis.
+    Results should be discussed with a qualified mental health professional.
+    Screening tools referenced: SDQ (Goodman, 1997), RCADS (Chorpita et al., 2000), Vanderbilt (Wolraich et al., 1998), asQ (Horowitz et al., 2012).
+  </div>
+
+  <div class="btn-row" style="margin-top:24px;">
+    <a href="therapists.html" class="btn btn-primary">Find a Therapist →</a>
+    <button class="btn btn-outline" onclick="restartAssessment()">Start Over</button>
+  </div>
+</div>
+
+</div><!-- /card -->
+</main>
+
+<footer class="footer">
+  This is a screening tool, not a clinical diagnosis. For emergencies, call 988 or 911.
+</footer>
+
+<script>
+// ══════════════════════════════════════════
+// DATA: Questions
+// ══════════════════════════════════════════
+
+const SDQ = [
+  {id:1,  text:"Considerate of other people's feelings", sub:"pro", rev:false},
+  {id:2,  text:"Restless, overactive, cannot stay still for long", sub:"hyper", rev:false},
+  {id:3,  text:"Often complains of headaches, stomach-aches, or sickness", sub:"emo", rev:false},
+  {id:4,  text:"Shares readily with other children (e.g., books, games, food)", sub:"pro", rev:false},
+  {id:5,  text:"Often has temper tantrums or hot tempers", sub:"conduct", rev:false},
+  {id:6,  text:"Rather solitary, tends to play alone", sub:"peer", rev:false},
+  {id:7,  text:"Generally obedient, usually does what adults request", sub:"conduct", rev:true},
+  {id:8,  text:"Many worries, often seems worried", sub:"emo", rev:false},
+  {id:9,  text:"Helpful if someone is hurt, upset, or feeling ill", sub:"pro", rev:false},
+  {id:10, text:"Constantly fidgeting or squirming", sub:"hyper", rev:false},
+  {id:11, text:"Has at least one good friend", sub:"peer", rev:true},
+  {id:12, text:"Often fights with other children or bullies them", sub:"conduct", rev:false},
+  {id:13, text:"Often unhappy, downhearted, or tearful", sub:"emo", rev:false},
+  {id:14, text:"Generally liked by other children", sub:"peer", rev:true},
+  {id:15, text:"Easily distracted, concentration wanders", sub:"hyper", rev:false},
+  {id:16, text:"Nervous or clingy in new situations, easily loses confidence", sub:"emo", rev:false},
+  {id:17, text:"Kind to younger children", sub:"pro", rev:false},
+  {id:18, text:"Often lies or cheats", sub:"conduct", rev:false},
+  {id:19, text:"Picked on or bullied by other children", sub:"peer", rev:false},
+  {id:20, text:"Often volunteers to help others (parents, teachers, other children)", sub:"pro", rev:false},
+  {id:21, text:"Thinks things out before acting", sub:"hyper", rev:true},
+  {id:22, text:"Steals from home, school, or elsewhere", sub:"conduct", rev:false},
+  {id:23, text:"Gets along better with adults than with other children", sub:"peer", rev:false},
+  {id:24, text:"Many fears, easily scared", sub:"emo", rev:false},
+  {id:25, text:"Good attention span, sees tasks through to the end", sub:"hyper", rev:true},
+];
+const SDQ_OPTS = ["Not True", "Somewhat True", "Certainly True"];
+
+const RCADS = [
+  // Depression subscale
+  {id:"r1",  text:"My child feels sad or empty", sub:"dep"},
+  {id:"r2",  text:"My child has no energy to do things", sub:"dep"},
+  {id:"r3",  text:"My child is no longer interested in things they used to enjoy", sub:"dep"},
+  {id:"r4",  text:"My child feels worthless", sub:"dep"},
+  {id:"r5",  text:"My child blames themselves for problems in the family", sub:"dep"},
+  {id:"r6",  text:"My child feels like they can't do anything right", sub:"dep"},
+  {id:"r7",  text:"My child thinks about death or dying", sub:"dep"},
+  {id:"r8",  text:"My child feels like they don't want to move or do anything", sub:"dep"},
+  {id:"r9",  text:"My child feels unhappy", sub:"dep"},
+  {id:"r10", text:"My child feels like crying for no reason", sub:"dep"},
+  // Anxiety subscale (generalized + social + separation)
+  {id:"r11", text:"My child worries about things", sub:"anx"},
+  {id:"r12", text:"My child worries when they think they've done poorly at something", sub:"anx"},
+  {id:"r13", text:"My child worries about what is going to happen in the future", sub:"anx"},
+  {id:"r14", text:"My child feels nervous", sub:"anx"},
+  {id:"r15", text:"My child feels afraid when they have to face new situations", sub:"anx"},
+  {id:"r16", text:"My child worries about being as good as other kids", sub:"anx"},
+  {id:"r17", text:"My child is scared to be alone at home", sub:"anx"},
+  {id:"r18", text:"My child has trouble sleeping away from home", sub:"anx"},
+  {id:"r19", text:"My child feels afraid to be in a crowded place", sub:"anx"},
+  {id:"r20", text:"My child has sudden feelings of panic for no reason", sub:"anx"},
+];
+const RCADS_OPTS = ["Never", "Sometimes", "Often", "Always"];
+
+const ASQ = [
+  {id:"asq1", text:"In the past few weeks, has your child wished they were dead?"},
+  {id:"asq2", text:"In the past few weeks, has your child felt that they or the family would be better off if they were dead?"},
+  {id:"asq3", text:"In the past week, has your child been having thoughts about killing themselves?"},
+  {id:"asq4", text:"Has your child ever tried to kill themselves?"},
+];
+const ASQ_OPTS = ["No", "Yes"];
+
+const VANDERBILT = [
+  {id:"v1",  text:"Fails to give close attention to details or makes careless mistakes in schoolwork", sub:"inatt"},
+  {id:"v2",  text:"Has difficulty sustaining attention in tasks or play", sub:"inatt"},
+  {id:"v3",  text:"Does not seem to listen when spoken to directly", sub:"inatt"},
+  {id:"v4",  text:"Does not follow through on instructions and fails to finish schoolwork", sub:"inatt"},
+  {id:"v5",  text:"Has difficulty organizing tasks and activities", sub:"inatt"},
+  {id:"v6",  text:"Avoids or is reluctant to engage in tasks requiring sustained mental effort", sub:"inatt"},
+  {id:"v7",  text:"Loses things necessary for tasks (toys, pencils, books)", sub:"inatt"},
+  {id:"v8",  text:"Easily distracted by outside stimuli", sub:"inatt"},
+  {id:"v9",  text:"Forgetful in daily activities", sub:"inatt"},
+  {id:"v10", text:"Fidgets with hands or feet or squirms in seat", sub:"hyper"},
+  {id:"v11", text:"Leaves seat when expected to remain seated", sub:"hyper"},
+  {id:"v12", text:"Runs about or climbs excessively in inappropriate situations", sub:"hyper"},
+  {id:"v13", text:"Has difficulty playing quietly", sub:"hyper"},
+  {id:"v14", text:"Is \"on the go\" or acts as if \"driven by a motor\"", sub:"hyper"},
+  {id:"v15", text:"Talks excessively", sub:"hyper"},
+  {id:"v16", text:"Blurts out answers before questions are completed", sub:"hyper"},
+  {id:"v17", text:"Has difficulty waiting for their turn", sub:"hyper"},
+  {id:"v18", text:"Interrupts or intrudes on others", sub:"hyper"},
+];
+const VANDERBILT_OPTS = ["Never", "Occasionally", "Often", "Very Often"];
+
+const AQ = [
+  {id:"aq1",  text:"Prefers to do things the same way over and over again", aq:true},
+  {id:"aq2",  text:"Has difficulty making friends", aq:true},
+  {id:"aq3",  text:"Becomes very upset if their daily routine is changed", aq:true},
+  {id:"aq4",  text:"Has difficulty understanding what other people are thinking or feeling", aq:true},
+  {id:"aq5",  text:"Notices small sounds that others don't", aq:true},
+  {id:"aq6",  text:"Has very strong, focused interests in specific topics", aq:true},
+  {id:"aq7",  text:"Makes up stories or games with other children easily", aq:false},
+  {id:"aq8",  text:"Finds it easy to understand what someone is feeling by looking at their face", aq:false},
+  {id:"aq9",  text:"Is aware of social rules and doesn't need to be told how to behave", aq:false},
+  {id:"aq10", text:"Has difficulty making eye contact", aq:true},
+];
+const AQ_OPTS = ["Definitely Agree", "Slightly Agree", "Slightly Disagree", "Definitely Disagree"];
+
+const SLEEP_Q = [
+  {id:"sl1", text:"My child goes to bed at the same time each night"},
+  {id:"sl2", text:"My child falls asleep within 20 minutes of going to bed"},
+  {id:"sl3", text:"My child wakes up more than once during the night"},
+  {id:"sl4", text:"My child has nightmares"},
+  {id:"sl5", text:"My child is tired during the daytime"},
+  {id:"sl6", text:"My child resists going to bed at bedtime"},
+];
+const SLEEP_OPTS = ["Usually (5–7 nights/week)", "Sometimes (2–4 nights/week)", "Rarely (0–1 night/week)"];
+
+const EATING_Q = [
+  {id:"eat1", text:"Is preoccupied with being thinner"},
+  {id:"eat2", text:"Feels uncomfortable after eating sweets"},
+  {id:"eat3", text:"Cuts food into small pieces"},
+  {id:"eat4", text:"Is aware of the calorie content of foods"},
+  {id:"eat5", text:"Avoids eating when hungry"},
+];
+const EATING_OPTS = ["Always", "Usually", "Often", "Sometimes", "Rarely", "Never"];
+
+const TRAUMA_Q = [
+  {id:"tr1", text:"Has experienced or witnessed something very frightening or upsetting (e.g., accident, abuse, violence)"},
+  {id:"tr2", text:"Has bad dreams or nightmares about the upsetting event"},
+  {id:"tr3", text:"Avoids thinking about or being reminded of the upsetting event"},
+  {id:"tr4", text:"Seems on edge or easily startled"},
+  {id:"tr5", text:"Has difficulty concentrating since the upsetting event"},
+];
+const TRAUMA_OPTS = ["Not at all", "A little", "Somewhat", "A lot"];
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+const state = {
+  childAge: null, childGender: null,
+  sdqAnswers: {},
+  rcadsAnswers: {},
+  asqAnswers: {},
+  vanderbiltAnswers: {},
+  aqAnswers: {},
+  sleepAnswers: {},
+  eatingAnswers: {},
+  traumaAnswers: {},
+  sdqScores: {},
+  showRCADS: false,
+  showVanderbilt: false,
+  showAQ: false,
+  rcadsNeeded: false,
+  asqNeeded: false,
+};
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+let currentSection = 'sec-intro';
+const PROGRESS_MAP = {
+  'sec-intro': 0, 'sec-info': 5,
+  'sec-sdq-1': 15, 'sec-sdq-2': 30, 'sec-sdq-3': 45,
+  'sec-rcads': 58, 'sec-asq': 70,
+  'sec-vanderbilt': 60, 'sec-aq': 68,
+  'sec-optional': 80, 'sec-results': 100,
+};
+const PROGRESS_LABELS = {
+  'sec-intro': 'Welcome',
+  'sec-info': 'Child Information',
+  'sec-sdq-1': 'General Screening — Part 1',
+  'sec-sdq-2': 'General Screening — Part 2',
+  'sec-sdq-3': 'General Screening — Part 3',
+  'sec-rcads': 'Emotional Screening',
+  'sec-asq': 'Safety Check',
+  'sec-vanderbilt': 'Attention Screening',
+  'sec-aq': 'Social Screening',
+  'sec-optional': 'Additional Concerns',
+  'sec-results': 'Your Results',
+};
+
+function goTo(id) {
+  document.getElementById(currentSection).classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  currentSection = id;
+  const pct = PROGRESS_MAP[id] || 0;
+  const wrap = document.getElementById('progressWrap');
+  wrap.style.display = id === 'sec-intro' ? 'none' : '';
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = PROGRESS_LABELS[id] || '';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ══════════════════════════════════════════
+// RENDER HELPERS
+// ══════════════════════════════════════════
+function renderQuestions(questions, opts, answerMap, containerId, prefix) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = questions.map((q, qi) => `
+    <div class="q-block">
+      <div class="q-num">${prefix || ''}${qi + 1}</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-options">
+        ${opts.map((o, oi) => `
+          <label class="q-option ${answerMap[q.id] === oi ? 'selected' : ''}" onclick="selectAnswer('${q.id}','${oi}','${containerId}',this)">
+            <input type="radio" name="${q.id}" value="${oi}">
+            <span class="dot"></span>
+            ${o}
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectAnswer(qid, val, containerId, clickedLabel) {
+  // determine which answer map to use
+  const maps = {
+    'sdq-q1-9': state.sdqAnswers,
+    'sdq-q10-18': state.sdqAnswers,
+    'sdq-q19-25': state.sdqAnswers,
+    'rcads-questions': state.rcadsAnswers,
+    'asq-questions': state.asqAnswers,
+    'vanderbilt-questions': state.vanderbiltAnswers,
+    'aq-questions': state.aqAnswers,
+    'sleep-questions': state.sleepAnswers,
+    'eating-questions': state.eatingAnswers,
+    'trauma-questions': state.traumaAnswers,
+  };
+  const map = maps[containerId];
+  if (map !== undefined) map[qid] = parseInt(val);
+
+  // Update UI
+  const block = clickedLabel.closest('.q-block');
+  block.querySelectorAll('.q-option').forEach(l => l.classList.remove('selected'));
+  clickedLabel.classList.add('selected');
+}
+
+// ══════════════════════════════════════════
+// SDQ
+// ══════════════════════════════════════════
+function startSDQ() {
+  const age = document.getElementById('childAge').value;
+  const gender = document.getElementById('childGender').value;
+  const rel = document.getElementById('childRelation').value;
+  if (!age || !gender || !rel) {
+    alert('Please fill in all required fields before continuing.');
+    return;
+  }
+  state.childAge = parseInt(age);
+  state.childGender = gender;
+  renderQuestions(SDQ.slice(0,9), SDQ_OPTS, state.sdqAnswers, 'sdq-q1-9');
+  goTo('sec-sdq-1');
+}
+
+function nextSDQ(part) {
+  const questions = part === 1 ? SDQ.slice(0,9) : SDQ.slice(9,18);
+  const containerId = part === 1 ? 'sdq-q1-9' : 'sdq-q10-18';
+  const answered = questions.filter(q => state.sdqAnswers[q.id] !== undefined).length;
+  if (answered < questions.length) {
+    alert(`Please answer all ${questions.length} questions before continuing.`);
+    return;
+  }
+  if (part === 1) {
+    renderQuestions(SDQ.slice(9,18), SDQ_OPTS, state.sdqAnswers, 'sdq-q10-18');
+    goTo('sec-sdq-2');
+  } else {
+    renderQuestions(SDQ.slice(18,25), SDQ_OPTS, state.sdqAnswers, 'sdq-q19-25');
+    goTo('sec-sdq-3');
+  }
+}
+
+function scoreSDQ() {
+  const answered = SDQ.filter(q => state.sdqAnswers[q.id] !== undefined).length;
+  if (answered < 25) {
+    alert('Please answer all questions before continuing.');
+    return;
+  }
+
+  let emo=0, conduct=0, hyper=0, peer=0, pro=0;
+  SDQ.forEach(q => {
+    let val = state.sdqAnswers[q.id];
+    if (q.rev) val = 2 - val;
+    if (q.sub === 'emo') emo += val;
+    else if (q.sub === 'conduct') conduct += val;
+    else if (q.sub === 'hyper') hyper += val;
+    else if (q.sub === 'peer') peer += val;
+    else if (q.sub === 'pro') pro += val;
+  });
+
+  state.sdqScores = {emo, conduct, hyper, peer, pro, total: emo+conduct+hyper+peer};
+  state.showRCADS = emo >= 5;
+  state.showVanderbilt = hyper >= 6;
+  state.showAQ = peer >= 4;
+
+  if (state.showRCADS) {
+    renderQuestions(RCADS, RCADS_OPTS, state.rcadsAnswers, 'rcads-questions');
+    goTo('sec-rcads');
+  } else if (state.showVanderbilt) {
+    renderQuestions(VANDERBILT, VANDERBILT_OPTS, state.vanderbiltAnswers, 'vanderbilt-questions');
+    goTo('sec-vanderbilt');
+  } else if (state.showAQ) {
+    renderQuestions(AQ, AQ_OPTS, state.aqAnswers, 'aq-questions');
+    goTo('sec-aq');
+  } else {
+    setupOptional();
+    goTo('sec-optional');
+  }
+}
+
+// ══════════════════════════════════════════
+// RCADS
+// ══════════════════════════════════════════
+function scoreRCADS() {
+  const answered = RCADS.filter(q => state.rcadsAnswers[q.id] !== undefined).length;
+  if (answered < RCADS.length) {
+    alert('Please answer all questions before continuing.');
+    return;
+  }
+
+  let dep=0, anx=0;
+  RCADS.forEach(q => {
+    const val = state.rcadsAnswers[q.id] || 0;
+    if (q.sub === 'dep') dep += val;
+    else anx += val;
+  });
+  state.rcadsScores = {dep, anx};
+  state.asqNeeded = dep >= 10;
+
+  if (state.asqNeeded) {
+    renderASQ();
+    goTo('sec-asq');
+  } else if (state.showVanderbilt) {
+    renderQuestions(VANDERBILT, VANDERBILT_OPTS, state.vanderbiltAnswers, 'vanderbilt-questions');
+    goTo('sec-vanderbilt');
+  } else if (state.showAQ) {
+    renderQuestions(AQ, AQ_OPTS, state.aqAnswers, 'aq-questions');
+    goTo('sec-aq');
+  } else {
+    setupOptional();
+    goTo('sec-optional');
+  }
+}
+
+// ══════════════════════════════════════════
+// asQ
+// ══════════════════════════════════════════
+function renderASQ() {
+  const container = document.getElementById('asq-questions');
+  container.innerHTML = ASQ.map((q,i) => `
+    <div class="q-block">
+      <div class="q-num">Question ${i+1} of 4</div>
+      <div class="q-text">${q.text}</div>
+      <div class="q-options">
+        ${ASQ_OPTS.map((o, oi) => `
+          <label class="q-option ${state.asqAnswers[q.id] === oi ? 'selected' : ''}"
+            onclick="selectAnswer('${q.id}','${oi}','asq-questions',this)">
+            <input type="radio" name="${q.id}" value="${oi}">
+            <span class="dot"></span>
+            ${o}
+          </label>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function scoreASQ() {
+  const answered = ASQ.filter(q => state.asqAnswers[q.id] !== undefined).length;
+  if (answered < ASQ.length) {
+    alert('Please answer all 4 questions before continuing.');
+    return;
+  }
+  // Any "Yes" (value 1) on first 3 = positive screen
+  state.asqPositive = [0,1,2].some(i => state.asqAnswers[ASQ[i].id] === 1);
+
+  if (state.showVanderbilt) {
+    renderQuestions(VANDERBILT, VANDERBILT_OPTS, state.vanderbiltAnswers, 'vanderbilt-questions');
+    goTo('sec-vanderbilt');
+  } else if (state.showAQ) {
+    renderQuestions(AQ, AQ_OPTS, state.aqAnswers, 'aq-questions');
+    goTo('sec-aq');
+  } else {
+    setupOptional();
+    goTo('sec-optional');
+  }
+}
+
+// ══════════════════════════════════════════
+// Vanderbilt
+// ══════════════════════════════════════════
+function scoreVanderbilt() {
+  const answered = VANDERBILT.filter(q => state.vanderbiltAnswers[q.id] !== undefined).length;
+  if (answered < VANDERBILT.length) {
+    alert('Please answer all questions before continuing.');
+    return;
+  }
+  let inatt=0, hyper=0;
+  VANDERBILT.forEach(q => {
+    const val = state.vanderbiltAnswers[q.id] || 0;
+    if (val >= 2) { // Often or Very Often
+      if (q.sub === 'inatt') inatt++;
+      else hyper++;
+    }
+  });
+  state.vanderbiltScores = {inatt, hyper};
+
+  if (state.showAQ) {
+    renderQuestions(AQ, AQ_OPTS, state.aqAnswers, 'aq-questions');
+    goTo('sec-aq');
+  } else {
+    setupOptional();
+    goTo('sec-optional');
+  }
+}
+
+// ══════════════════════════════════════════
+// AQ
+// ══════════════════════════════════════════
+function scoreAQ() {
+  const answered = AQ.filter(q => state.aqAnswers[q.id] !== undefined).length;
+  if (answered < AQ.length) {
+    alert('Please answer all questions before continuing.');
+    return;
+  }
+  let score = 0;
+  AQ.forEach(q => {
+    const val = state.aqAnswers[q.id];
+    if (q.aq) {
+      if (val === 0 || val === 1) score++; // Agree = AQ point
+    } else {
+      if (val === 2 || val === 3) score++; // Disagree = AQ point
+    }
+  });
+  state.aqScore = score;
+  setupOptional();
+  goTo('sec-optional');
+}
+
+// ══════════════════════════════════════════
+// Optional
+// ══════════════════════════════════════════
+function setupOptional() {
+  // Render optional question blocks
+  renderQuestions(SLEEP_Q, SLEEP_OPTS, state.sleepAnswers, 'sleep-questions');
+  renderQuestions(EATING_Q, EATING_OPTS, state.eatingAnswers, 'eating-questions');
+  renderQuestions(TRAUMA_Q, TRAUMA_OPTS, state.traumaAnswers, 'trauma-questions');
+
+  // Wire up chip toggles
+  document.querySelectorAll('#optionalChips .chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      this.classList.toggle('selected');
+      const val = this.querySelector('input').value;
+      document.getElementById('optional-' + val).style.display =
+        this.classList.contains('selected') ? 'block' : 'none';
+    });
+  });
+}
+
+function skipOptional() { showResults(); }
+function submitOptional() { showResults(); }
+
+// ══════════════════════════════════════════
+// RESULTS
+// ══════════════════════════════════════════
+function showResults() {
+  const bands = [];
+  const recs = [];
+  let hasCrisis = false;
+
+  // ── SDQ overall
+  const total = state.sdqScores.total;
+  if (total >= 17) {
+    bands.push({level:'concern', icon:'🔴', title:'Significant Difficulties Detected', desc:'Your child\'s overall score indicates a high level of emotional, behavioral, and social difficulties. Professional evaluation is strongly recommended.'});
+  } else if (total >= 12) {
+    bands.push({level:'mild', icon:'🟡', title:'Some Difficulties Noted', desc:'Your child\'s overall score falls in the borderline range. Some support and monitoring is recommended.'});
+  } else {
+    bands.push({level:'normal', icon:'🟢', title:'Overall Wellbeing: Within Normal Range', desc:'Your child\'s overall score does not indicate significant difficulties at this time.'});
+  }
+
+  // ── Emotional / RCADS
+  if (state.showRCADS && state.rcadsScores) {
+    const {dep, anx} = state.rcadsScores;
+    if (dep >= 10) {
+      bands.push({level:'concern', icon:'💙', title:'Elevated Depression Symptoms', desc:`Your child's responses suggest significant low mood symptoms (score: ${dep}/30). A mental health professional should evaluate further.`});
+      recs.push({icon:'🧑‍⚕️', label:'Therapist', title:'Find a licensed child therapist specializing in depression', href:'therapists.html'});
+      recs.push({icon:'📚', label:'Book', title:'"The Whole-Brain Child" — Daniel J. Siegel', href:'books.html'});
+    } else if (dep >= 6) {
+      bands.push({level:'mild', icon:'💙', title:'Mild-Moderate Mood Concerns', desc:`Some depressive symptoms were noted (score: ${dep}/30). Monitoring and support resources are recommended.`});
+    }
+    if (anx >= 14) {
+      bands.push({level:'concern', icon:'😰', title:'Elevated Anxiety Symptoms', desc:`Your child's responses suggest significant anxiety (score: ${anx}/30). Consider evaluation by a mental health professional.`});
+      recs.push({icon:'🧑‍⚕️', label:'Therapist', title:'Find a therapist specializing in childhood anxiety', href:'therapists.html'});
+    } else if (anx >= 9) {
+      bands.push({level:'mild', icon:'😰', title:'Moderate Anxiety Symptoms', desc:`Some anxiety-related difficulties were noted (score: ${anx}/30). Supportive resources may help.`});
+      recs.push({icon:'📚', label:'Book', title:'"What to Do When You Worry Too Much" — Dawn Huebner', href:'books.html'});
+    }
+  } else if (state.sdqScores.emo >= 5) {
+    bands.push({level:'mild', icon:'💙', title:'Emotional Difficulties Noted', desc:'Your child shows some signs of emotional stress. Consider monitoring and supportive resources.'});
+  }
+
+  // ── asQ crisis
+  if (state.asqPositive) {
+    hasCrisis = true;
+    bands.push({level:'concern', icon:'⚠️', title:'Safety Concern — Immediate Action Needed', desc:'Your child\'s responses indicate potential thoughts of self-harm. Please seek immediate professional support.'});
+    recs.push({icon:'📞', label:'Crisis Line', title:'988 Suicide & Crisis Lifeline — Call or Text 988', href:'tel:988'});
+    recs.push({icon:'🧑‍⚕️', label:'Therapist', title:'Find an emergency mental health provider', href:'therapists.html'});
+  }
+
+  // ── ADHD / Vanderbilt
+  if (state.vanderbiltScores) {
+    const {inatt, hyper} = state.vanderbiltScores;
+    if (inatt >= 6 && hyper >= 6) {
+      bands.push({level:'concern', icon:'⚡', title:'ADHD Combined Type — Symptoms Present', desc:'Your child shows significant inattention and hyperactivity/impulsivity symptoms. A formal evaluation by a pediatrician or child psychiatrist is recommended.'});
+      recs.push({icon:'🧑‍⚕️', label:'Therapist', title:'Find a specialist in ADHD evaluation and treatment', href:'therapists.html'});
+      recs.push({icon:'📚', label:'Book', title:'"The ADHD Advantage" — Dale Archer', href:'books.html'});
+    } else if (inatt >= 6) {
+      bands.push({level:'mild', icon:'⚡', title:'Inattentive ADHD Symptoms Present', desc:'Your child shows significant inattention symptoms. A formal ADHD evaluation is recommended.'});
+      recs.push({icon:'🧑‍⚕️', label:'Therapist', title:'Find a specialist in ADHD evaluation', href:'therapists.html'});
+    } else if (hyper >= 6) {
+      bands.push({level:'mild', icon:'⚡', title:'Hyperactive ADHD Symptoms Present', desc:'Your child shows significant hyperactivity/impulsivity symptoms. Consider a formal evaluation.'});
+    } else if (inatt >= 4 || hyper >= 4) {
+      bands.push({level:'mild', icon:'⚡', title:'Some Attention Difficulties Noted', desc:'Your child shows some attention-related difficulties, but below the clinical threshold. Monitoring is recommended.'});
+    }
+  } else if (state.sdqScores.hyper >= 6) {
+    bands.push({level:'mild', icon:'⚡', title:'High Activity / Attention Concerns', desc:'Your child shows elevated hyperactivity on the general screen. Consider a focused evaluation.'});
+  }
+
+  // ── ASD / AQ
+  if (state.aqScore !== undefined) {
+    if (state.aqScore >= 7) {
+      bands.push({level:'concern', icon:'🧩', title:'Social Communication — Further Evaluation Recommended', desc:`Your child scored ${state.aqScore}/10 on the social communication screen. A formal evaluation by a developmental pediatrician or child psychologist may be helpful.`});
+      recs.push({icon:'🧑‍⚕️', label:'Therapist', title:'Find a specialist in developmental assessment', href:'therapists.html'});
+    } else if (state.aqScore >= 5) {
+      bands.push({level:'mild', icon:'🧩', title:'Some Social Communication Differences Noted', desc:`Your child shows some traits associated with social communication differences (score: ${state.aqScore}/10). Monitor and consider professional consultation.`});
+    }
+  } else if (state.sdqScores.peer >= 4) {
+    bands.push({level:'mild', icon:'🧩', title:'Peer Relationship Difficulties', desc:'Your child shows some challenges with peer relationships. Social skills support may be beneficial.'});
+    recs.push({icon:'📚', label:'Book', title:'"The Social Skills Guidebook" — Chris MacLeod', href:'books.html'});
+  }
+
+  // ── Conduct
+  if (state.sdqScores.conduct >= 4) {
+    bands.push({level:'mild', icon:'🔶', title:'Behavioral Difficulties Noted', desc:'Your child shows some conduct or oppositional behaviors. Parent support strategies and possibly therapy may help.'});
+    recs.push({icon:'📚', label:'Book', title:'"The Explosive Child" — Ross W. Greene', href:'books.html'});
+  }
+
+  // ── Default recs if none
+  if (recs.length === 0) {
+    recs.push({icon:'📚', label:'Books', title:'Browse our children\'s mental health book library', href:'books.html'});
+    recs.push({icon:'🧑‍⚕️', label:'Therapist', title:'Find a child therapist in your area', href:'therapists.html'});
+  }
+
+  // ── Deduplicate recs
+  const seen = new Set();
+  const uniqueRecs = recs.filter(r => {
+    const k = r.title;
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+
+  // ── Render
+  document.getElementById('results-bands').innerHTML = bands.map(b => `
+    <div class="result-band ${b.level}">
+      <div class="result-band-icon">${b.icon}</div>
+      <div class="result-band-body">
+        <div class="result-band-title">${b.title}</div>
+        <div class="result-band-desc">${b.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('results-crisis').style.display = hasCrisis ? 'block' : 'none';
+
+  document.getElementById('rec-cards-list').innerHTML = uniqueRecs.map(r => `
+    <a class="rec-card" href="${r.href}">
+      <div class="rec-card-icon">${r.icon}</div>
+      <div class="rec-card-body">
+        <div class="rec-card-label">${r.label}</div>
+        <div class="rec-card-title">${r.title}</div>
+      </div>
+      <span style="color:var(--ink-3);margin-left:auto;">→</span>
+    </a>
+  `).join('');
+
+  goTo('sec-results');
+}
+
+function restartAssessment() {
+  // Reset state
+  Object.keys(state).forEach(k => {
+    if (typeof state[k] === 'object' && state[k] !== null) state[k] = {};
+    else if (typeof state[k] === 'boolean') state[k] = false;
+    else state[k] = null;
+  });
+  goTo('sec-intro');
+}
+</script>
+</body>
+</html>

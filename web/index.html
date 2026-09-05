@@ -710,15 +710,19 @@ function normTitle(title) {
     .replace(/\s+/g,' ').trim();
 }
 
+function audienceHas(b, keyword) {
+  const a = b.audience;
+  if (!a) return false;
+  if (Array.isArray(a)) return a.some(v => String(v).toLowerCase().includes(keyword));
+  return String(a).toLowerCase().includes(keyword);
+}
+
 function filterByRole(books) {
-  // Debug: log unique audience values
-  const audVals = [...new Set(books.map(b => b.audience))];
-  console.log('🎭 Audience values in results:', audVals, '| Role:', currentRole);
   if (currentRole === 'teacher') {
-    return books.filter(b => (b.audience || '').includes('educator'));
+    return books.filter(b => audienceHas(b, 'educator'));
   }
   if (currentRole === 'student') {
-    return books.filter(b => (b.audience || '').includes('children'));
+    return books.filter(b => audienceHas(b, 'children'));
   }
   // parent: show everything
   return books;

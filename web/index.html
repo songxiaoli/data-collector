@@ -711,6 +711,9 @@ function normTitle(title) {
 }
 
 function filterByRole(books) {
+  // Debug: log unique audience values
+  const audVals = [...new Set(books.map(b => b.audience))];
+  console.log('🎭 Audience values in results:', audVals, '| Role:', currentRole);
   if (currentRole === 'teacher') {
     return books.filter(b => (b.audience || '').includes('educator'));
   }

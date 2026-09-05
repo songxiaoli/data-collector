@@ -579,6 +579,8 @@ a{color:var(--primary);}
 .bio-btn:hover{background:var(--tag-bg);color:var(--primary);}
 .card-footer{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .card-source{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);}
+.card-rating{font-size:13px;font-weight:700;color:#f59e0b;display:flex;align-items:center;gap:3px;}
+.card-rating-count{font-size:11px;font-weight:400;color:var(--muted);}
 .view-btn{padding:7px 16px;border-radius:var(--r-sm);background:var(--primary);color:#fff;border:none;font-size:13px;font-weight:600;text-decoration:none;transition:background .15s;white-space:nowrap;}
 .view-btn:hover{background:var(--accent);color:#fff;}
 .sk-photo{width:64px;height:64px;border-radius:50%;}
@@ -1359,7 +1361,7 @@ async function initTherapistsTab() {
   if (tLoaded) return;
   showTherapistSkeleton();
   const r = await fetch(
-    `${SB}/rest/v1/therapists?select=name,credentials,city,zip,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary,child_focus_score,client_age&order=child_focus_score.desc,name.asc&limit=500`,
+    `${SB}/rest/v1/therapists?select=name,credentials,city,zip,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary,child_focus_score,client_age,google_rating,google_review_count&order=child_focus_score.desc,name.asc&limit=500`,
     { headers: H }
   );
   if (!r.ok) { showTherapistError(); return; }
@@ -1520,7 +1522,7 @@ function tCardHTML(t) {
     </div>
     ${hasBio?`<div class="card-bio" hidden>${esc(bioText)}</div>`:''}
     <div class="card-footer">
-      <span class="card-source">Psychology Today</span>
+      ${t.google_rating ? `<span class="card-rating">★ ${parseFloat(t.google_rating).toFixed(1)}${t.google_review_count ? ` <span class="card-rating-count">(${Number(t.google_review_count).toLocaleString()})</span>` : ''}</span>` : '<span class="card-source">Psychology Today</span>'}
       <div style="display:flex;gap:8px;align-items:center;">
         ${hasBio?'<button class="bio-btn" onclick="toggleBio(this)">About &#9662;</button>':''}
         <a class="view-btn" href="${esc(t.profile_url)}" target="_blank" rel="noopener">View Profile &#8594;</a>

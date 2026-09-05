@@ -1,5 +1,7 @@
 {
   "outputDirectory": "web",
+  "buildCommand": "",
+  "installCommand": "",
   "cleanUrls": true,
   "trailingSlash": false
 }

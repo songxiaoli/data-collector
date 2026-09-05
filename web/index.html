@@ -712,16 +712,21 @@ function mergeAndScore(books, matchTags) {
   for (const b of books) {
     const k = normTitle(b.title) + '|' + String(b.author||'').toLowerCase().trim();
     if (map.has(k)) {
-      map.get(k).score++;
+      const entry = map.get(k);
+      entry.score++;
+      // Collect unique sources
+      const s = (b.source || '').replace(/ SEL$/, '').trim();
+      if (s && !entry.sources.includes(s)) entry.sources.push(s);
     } else {
       const bt = b.problem_tags || [];
       let bonus = matchTags.filter(t => bt.includes(t)).length;
-      map.set(k, { book: b, score: 1 + bonus });
+      const s = (b.source || '').replace(/ SEL$/, '').trim();
+      map.set(k, { book: b, score: 1 + bonus, sources: s ? [s] : [] });
     }
   }
   return [...map.values()]
     .sort((a,b) => b.score - a.score)
-    .map(v => v.book);
+    .map(v => { v.book._sources = v.sources; return v.book; });
 }
 
 // ── RENDER ────────────────────────────────────────────────
@@ -764,7 +769,7 @@ function renderCards(books, matchTags, userText) {
 
 function cardHTML(b, matchTags) {
   const tags  = (b.problem_tags || []).slice(0, 4);
-  const src   = (b.source || '').replace(/ SEL$/, '');
+  const src   = (b._sources && b._sources.length) ? b._sources.join(' · ') : (b.source || '').replace(/ SEL$/, '');
   const hits  = matchTags.filter(t => (b.problem_tags||[]).includes(t));
   const match = hits.length
     ? `Addresses: <strong>${hits.slice(0,2).map(cap).join(' &amp; ')}</strong>`
@@ -812,7 +817,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hid
 
 function openModal(b) {
   lastFocus = document.activeElement;
-  const src = (b.source || '').replace(/ SEL$/, '');
+  const src = (b._sources && b._sources.length) ? b._sources.join(' · ') : (b.source || '').replace(/ SEL$/, '');
   const tags = b.problem_tags || [];
 
   document.getElementById('mSource').textContent = src;

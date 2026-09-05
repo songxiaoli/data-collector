@@ -408,6 +408,10 @@ a{color:var(--primary);}
       <span class="online-dot"></span>
       Online sessions
     </button>
+    <button class="online-toggle active" id="childFocusToggle" aria-pressed="true">
+      <span class="online-dot" style="background:var(--accent)"></span>
+      Child-focused only
+    </button>
   </div>
 
   <section class="results-section" aria-live="polite">
@@ -439,6 +443,7 @@ const SPECIALTIES = [
 let ALL = [];          // all 99 therapists from Supabase
 let activeSpecialty = '';
 let onlineOnly = false;
+let childFocusOnly = true;
 
 // ── INIT ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
@@ -454,6 +459,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   document.getElementById('cityFilter').addEventListener('change', applyFilters);
   document.getElementById('insuranceFilter').addEventListener('change', applyFilters);
+  document.getElementById('childFocusToggle').addEventListener('click', () => {
+    childFocusOnly = !childFocusOnly;
+    const btn = document.getElementById('childFocusToggle');
+    btn.classList.toggle('active', childFocusOnly);
+    btn.setAttribute('aria-pressed', childFocusOnly);
+    applyFilters();
+  });
   document.getElementById('onlineToggle').addEventListener('click', () => {
     onlineOnly = !onlineOnly;
     const btn = document.getElementById('onlineToggle');
@@ -467,7 +479,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadAll() {
   try {
     const r = await fetch(
-      `${SB}/rest/v1/therapists?select=name,credentials,city,zip,phone,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary&order=name.asc&limit=200`,
+      `${SB}/rest/v1/therapists?select=name,credentials,city,zip,phone,bio,profile_url,photo,online,top_specialties,expertise,therapy_types,fees,insurance,languages,endorsement_count,summary,child_focus_score&order=name.asc&limit=200`,
       { headers: H }
     );
     if (!r.ok) throw new Error(r.status);
@@ -527,9 +539,10 @@ function applyFilters() {
   if (city) filtered = filtered.filter(t => t.city === city);
   if (ins)  filtered = filtered.filter(t => (t.insurance || '').includes(ins));
   if (onlineOnly) filtered = filtered.filter(t => t.online);
+  if (childFocusOnly) filtered = filtered.filter(t => (t.child_focus_score || 0) >= 5);
 
   document.getElementById('resultsLabel').textContent =
-    query || activeSpecialty || city || ins || onlineOnly ? 'Matching therapists' : 'All Therapists';
+    query || activeSpecialty || city || ins || onlineOnly ? 'Matching therapists' : childFocusOnly ? 'Child-focused therapists' : 'All Therapists';
   document.getElementById('resultsCount').textContent = `${filtered.length} therapists`;
   render(filtered);
 }

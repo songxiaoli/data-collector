@@ -655,6 +655,21 @@ a{color:var(--primary);}
     </div>
     <div id="booksPanel"><div class="book-grid" id="bookGrid"></div></div>
     <div id="videosPanel" hidden><div class="video-grid" id="videoGrid"></div></div>
+    <div id="therapistsPanel" hidden>
+      <div class="therapist-filters" id="therapistFilters">
+        <select id="cityFilter"><option value="">All cities</option></select>
+        <select id="insuranceFilter"><option value="">All insurance</option></select>
+        <select id="ageFilter">
+          <option value="">All ages</option>
+          <option value="child">Children (0-12)</option>
+          <option value="teen">Teens (13-17)</option>
+        </select>
+        <button class="online-toggle" id="onlineToggle">Online only</button>
+        <button class="online-toggle active" id="childFocusToggle">Child-focused</button>
+      </div>
+      <div class="spec-chips" id="specChips"></div>
+      <div class="therapist-grid" id="therapistGrid"></div>
+    </div>
   </section>
 </main>
 
@@ -828,7 +843,7 @@ document.addEventListener('DOMContentLoaded', () => {
       currentTab = btn.dataset.tab;
       document.getElementById('booksPanel').hidden      = (currentTab !== 'books');
       document.getElementById('videosPanel').hidden     = (currentTab !== 'videos');
-      document.getElementById('therapistsPanel').hidden = (currentTab !== 'therapists');
+      const tPanel = document.getElementById('therapistsPanel'); if (tPanel) tPanel.hidden = (currentTab !== 'therapists');
       // Show/hide search bar
       document.querySelector('.search-wrap').style.display = currentTab === 'therapists' ? 'none' : '';
       document.querySelector('.quick-topics').style.display = currentTab === 'therapists' ? 'none' : '';

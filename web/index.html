@@ -244,6 +244,22 @@ a{color:var(--primary);}
   line-height:1.4;
 }
 .book-match strong{font-style:normal;font-weight:600;color:var(--ink);}
+.book-desc{
+  font-size:13px;color:var(--ink-2);line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.book-meta-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-size:12px;color:var(--ink-3);
+}
+.book-rating{display:flex;align-items:center;gap:3px;}
+.star-icon{color:#F5A623;font-size:12px;}
+.book-age{
+  padding:2px 7px;border-radius:var(--r-pill);
+  background:var(--chip-bg);color:var(--chip-fg);
+  font-size:11px;font-weight:500;
+}
 .book-tags{
   display:flex;flex-wrap:wrap;gap:5px;
   margin-top:auto;padding-top:4px;
@@ -652,7 +668,6 @@ async function loadFeatured() {
       fetchTag('resilience', 12),
       fetchTag('friendship', 12),
     ]);
-    if (a[0]) console.log('📚 Book fields available:', Object.keys(a[0]));
     const merged = mergeAndScore([...a,...b,...c], []);
     document.getElementById('resultsLabel').textContent = 'Featured';
     document.getElementById('resultsCount').textContent = `${merged.slice(0,12).length} books`;
@@ -754,12 +769,39 @@ function cardHTML(b, matchTags) {
   const match = hits.length
     ? `Addresses: <strong>${hits.slice(0,2).map(cap).join(' &amp; ')}</strong>`
     : '';
+
+  // Rating: prefer Google, fall back to Goodreads
+  const rating = b.google_rating || b.goodreads_rating;
+  const ratingCount = b.google_rating
+    ? b.google_ratings_count
+    : b.goodreads_ratings_count;
+  const ratingHTML = rating
+    ? `<span class="book-rating"><span class="star-icon">★</span>${parseFloat(rating).toFixed(1)}${ratingCount ? ` <span style="opacity:.7">(${Number(ratingCount).toLocaleString()})</span>` : ''}</span>`
+    : '';
+
+  // Age range
+  const ageHTML = (b.age_min != null && b.age_max != null)
+    ? `<span class="book-age">Ages ${b.age_min}–${b.age_max}</span>`
+    : b.age_min != null
+    ? `<span class="book-age">Ages ${b.age_min}+</span>`
+    : '';
+
+  const metaRow = (ratingHTML || ageHTML)
+    ? `<div class="book-meta-row">${ratingHTML}${ageHTML}</div>`
+    : '';
+
+  const descHTML = b.description
+    ? `<div class="book-desc">${esc(b.description)}</div>`
+    : '';
+
   return `
     <article class="book-card" role="button" aria-label="${esc(b.title)} by ${esc(b.author)}">
       <div class="book-source">${esc(src)}</div>
       <div class="book-title">${esc(b.title)}</div>
       <div class="book-author">${esc(b.author)}</div>
       ${match ? `<div class="book-match">${match}</div>` : ''}
+      ${descHTML}
+      ${metaRow}
       <div class="book-tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
     </article>`;
 }
@@ -783,45 +825,80 @@ function openModal(b) {
   document.getElementById('mAuthor').textContent = b.author;
   document.getElementById('mTags').innerHTML     = tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('');
 
-  // Search links
+  // Links — prefer DB fields
   const q = encodeURIComponent(`${b.title} ${b.author}`);
-  document.getElementById('mGoogleBooks').href  = `https://www.google.com/search?q=${q}+book`;
-  document.getElementById('mOpenLibrary').href  = `https://openlibrary.org/search?q=${q}`;
+  document.getElementById('mGoogleBooks').href = `https://www.google.com/search?q=${q}+book`;
+  document.getElementById('mAmazon').href      = b.amazon_url || `https://www.amazon.com/s?k=${q}`;
 
-  document.getElementById('mAmazon').href = `https://www.amazon.com/s?k=${encodeURIComponent(b.title + ' ' + b.author)}`;
+  const olBtn = document.getElementById('mOpenLibrary');
+  if (b.goodreads_url) {
+    olBtn.href = b.goodreads_url;
+    olBtn.textContent = 'Goodreads ↗';
+  } else {
+    olBtn.href = `https://openlibrary.org/search?q=${q}`;
+    olBtn.textContent = 'Open Library ↗';
+  }
 
-  // Reset cover & desc to loading state
-  document.getElementById('mDesc').className = 'modal-desc loading';
-  document.getElementById('mDesc').textContent = '';
-  document.getElementById('modalCoverWrap').innerHTML = `<div class="modal-cover-skel skel" style="width:140px;height:180px;border-radius:6px;"></div>`;
+  // Sub-info: age range, casel domain, ratings
+  const ageStr  = (b.age_min != null && b.age_max != null) ? `Ages ${b.age_min}–${b.age_max}`
+                : (b.age_min != null) ? `Ages ${b.age_min}+` : '';
+  const casel   = b.casel_domain || '';
+  const rParts  = [];
+  if (b.google_rating)    rParts.push(`★ ${parseFloat(b.google_rating).toFixed(1)} Google${b.google_ratings_count ? ` (${Number(b.google_ratings_count).toLocaleString()})` : ''}`);
+  if (b.goodreads_rating) rParts.push(`★ ${parseFloat(b.goodreads_rating).toFixed(1)} Goodreads${b.goodreads_ratings_count ? ` (${Number(b.goodreads_ratings_count).toLocaleString()})` : ''}`);
+  let subEl = document.getElementById('mSubInfo');
+  if (!subEl) {
+    subEl = document.createElement('div');
+    subEl.id = 'mSubInfo';
+    subEl.style.cssText = 'font-size:12px;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:8px;margin-top:-4px;';
+    document.getElementById('mAuthor').insertAdjacentElement('afterend', subEl);
+  }
+  subEl.innerHTML = [ageStr, casel, ...rParts].filter(Boolean).map(s=>`<span>${esc(s)}</span>`).join('');
+
+  // Cover — use DB cover_url, fall back to Open Library
+  const wrap = document.getElementById('modalCoverWrap');
+  if (b.cover_url) {
+    wrap.innerHTML = '';
+    const img = new Image();
+    img.className = 'modal-cover-img';
+    img.alt = `Cover of ${b.title}`;
+    img.onerror = () => { wrap.innerHTML = `<div class="modal-cover-placeholder">📚</div>`; };
+    img.src = b.cover_url;
+    wrap.appendChild(img);
+  } else {
+    wrap.innerHTML = `<div class="modal-cover-skel skel" style="width:140px;height:180px;border-radius:6px;"></div>`;
+    fetchOpenLibrary(b.title, b.author).then(({ coverUrl }) => {
+      if (coverUrl) {
+        const img = new Image();
+        img.className = 'modal-cover-img';
+        img.alt = `Cover of ${b.title}`;
+        img.onerror = () => { wrap.innerHTML = `<div class="modal-cover-placeholder">📚</div>`; };
+        img.src = coverUrl;
+        wrap.innerHTML = '';
+        wrap.appendChild(img);
+      } else {
+        wrap.innerHTML = `<div class="modal-cover-placeholder">📚</div>`;
+      }
+    });
+  }
+
+  // Description — use DB field, fall back to Open Library
+  const descEl = document.getElementById('mDesc');
+  if (b.description) {
+    descEl.className = 'modal-desc';
+    descEl.textContent = b.description;
+  } else {
+    descEl.className = 'modal-desc loading';
+    descEl.textContent = '';
+    fetchOpenLibrary(b.title, b.author).then(({ description }) => {
+      descEl.className = 'modal-desc';
+      descEl.textContent = description || '';
+    });
+  }
 
   modal.hidden = false;
   document.body.style.overflow = 'hidden';
   document.getElementById('modalClose').focus();
-
-  // Fetch cover + description from Open Library
-  fetchOpenLibrary(b.title, b.author).then(({ coverUrl, description }) => {
-    const wrap = document.getElementById('modalCoverWrap');
-    if (coverUrl) {
-      const img = document.createElement('img');
-      img.className = 'modal-cover-img';
-      img.alt = `Cover of ${b.title}`;
-      img.src = coverUrl;
-      img.onerror = () => { wrap.innerHTML = `<div class="modal-cover-placeholder">📚</div>`; };
-      wrap.innerHTML = '';
-      wrap.appendChild(img);
-    } else {
-      wrap.innerHTML = `<div class="modal-cover-placeholder">📚</div>`;
-    }
-    const descEl = document.getElementById('mDesc');
-    if (description) {
-      descEl.className = 'modal-desc';
-      descEl.textContent = description;
-    } else {
-      descEl.className = 'modal-desc';
-      descEl.textContent = '';
-    }
-  });
 }
 
 function closeModal() {

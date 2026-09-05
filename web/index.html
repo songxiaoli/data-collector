@@ -520,20 +520,44 @@ const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 const H   = { 'apikey': KEY, 'Authorization': `Bearer ${KEY}` };
 
 // ── QUICK TOPICS ─────────────────────────────────────────
-const TOPICS = [
-  { label:'Anxiety',             q:'anxiety and worry fear' },
-  { label:'Bullying',            q:'bullied bullying teased' },
-  { label:'Friendship',          q:'making friends friendship social' },
-  { label:'Grief & Loss',        q:'death grief loss died' },
-  { label:'Divorce',             q:'parents divorce family separation' },
-  { label:'Identity',            q:'identity self-esteem confidence belonging' },
-  { label:'New School',          q:'new school moving school transition' },
-  { label:'Immigration',         q:'immigration new country culture refugee' },
-  { label:'Learning Differences',q:'dyslexia adhd learning difficulties' },
-  { label:'Anger',               q:'anger management emotional regulation' },
-  { label:'Body Image',          q:'body image confidence weight self-esteem' },
-  { label:'Cultural Heritage',   q:'culture heritage identity belonging community' },
-];
+const TOPICS_BY_ROLE = {
+  parent: [
+    { label:'Anxiety',             q:'anxiety worry fear nervous' },
+    { label:'Bullying',            q:'bullying teased excluded' },
+    { label:'Grief & Loss',        q:'death grief loss died' },
+    { label:'Divorce',             q:'divorce family separation' },
+    { label:'Anger',               q:'anger tantrums emotional regulation' },
+    { label:'Sibling Rivalry',     q:'sibling rivalry jealousy brothers sisters' },
+    { label:'New School',          q:'new school moving transition' },
+    { label:'Identity & Belonging',q:'identity belonging self-esteem confidence' },
+    { label:'Immigration',         q:'immigration new country refugee' },
+    { label:'Learning Differences',q:'dyslexia adhd learning difficulties' },
+  ],
+  teacher: [
+    { label:'Classroom Conflict',  q:'conflict resolution classroom peer disagreement' },
+    { label:'Empathy',             q:'empathy kindness compassion perspective' },
+    { label:'Teamwork',            q:'cooperation teamwork working together' },
+    { label:'Growth Mindset',      q:'growth mindset perseverance resilience effort' },
+    { label:'Inclusion',           q:'inclusion belonging diversity differences' },
+    { label:'Test & School Stress',q:'test anxiety school stress performance' },
+    { label:'Focus & ADHD',        q:'focus attention adhd self-regulation' },
+    { label:'Peer Pressure',       q:'peer pressure choices integrity courage' },
+    { label:'Emotions',            q:'identifying emotions feelings self-awareness' },
+    { label:'Bullying Prevention', q:'bullying bystander upstander prevention' },
+  ],
+  student: [
+    { label:'Feeling Lonely',      q:'lonely left out no friends' },
+    { label:'Making Friends',      q:'making friends friendship social' },
+    { label:'Being Bullied',       q:'bullied teased mean kids' },
+    { label:'Feeling Different',   q:'different not fitting in belonging' },
+    { label:'Scared or Worried',   q:'scared worried anxious fear' },
+    { label:'Feeling Angry',       q:'angry mad feelings out of control' },
+    { label:'Missing Someone',     q:'missing someone grief loss moved away' },
+    { label:'New School',          q:'new school nervous moving' },
+    { label:'Family Changes',      q:'divorce new baby moving family change' },
+    { label:'Being Myself',        q:'identity confidence self-esteem who I am' },
+  ],
+};
 
 // ── KEYWORD → TAG RULES ──────────────────────────────────
 const RULES = [
@@ -611,6 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
       currentRole = btn.dataset.role;
       document.getElementById('searchInput').placeholder = PLACEHOLDERS[currentRole];
+      renderTopics();
       // Re-run current view with new role filter
       const q = document.getElementById('searchInput').value.trim();
       if (q) runSearch(); else loadFeatured();
@@ -626,7 +651,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function renderTopics() {
   const el = document.getElementById('quickTopics');
-  el.innerHTML = TOPICS.map(t =>
+  const topics = TOPICS_BY_ROLE[currentRole] || TOPICS_BY_ROLE.parent;
+  el.innerHTML = topics.map(t =>
     `<button class="topic-chip" data-q="${esc(t.q)}">${esc(t.label)}</button>`
   ).join('');
   el.querySelectorAll('.topic-chip').forEach(chip => {

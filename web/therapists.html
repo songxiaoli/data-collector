@@ -698,14 +698,20 @@ function credTooltip(credsStr) {
 
 function extractCity(raw) {
   if (!raw) return '';
-  const s = raw.trim();
-  if (!/^\d/.test(s)) return s; // already a city name
+  let s = raw.trim();
+  // Handle "#240 Huntington Beach" style (no street name)
+  s = s.replace(/^#\d+\s+/, '');
+  // If doesn't start with a digit, already a city name
+  if (!/^\d/.test(s)) return s;
+  // Remove parenthetical text and suite/unit markers
   let clean = s
     .replace(/\([^)]*\)/g, '')
     .replace(/\b(suite?|ste\.?|unit|apt\.?|#)\s*[\w-]+/gi, '')
     .trim();
+  // Extract city: text after last street-type keyword
   const m = clean.match(/\b(?:avenue|ave|boulevard|blvd|street|st|drive|dr|road|rd|way|lane|ln|court|ct|circle|place|pl|parkway|pkwy|row|route|hwy|highway)\b\.?\s+(.+)$/i);
   if (m && m[1].trim()) return m[1].trim();
+  // Fallback: last capitalized words
   const words = clean.split(/\s+/).filter(w => /^[A-Z]/.test(w) && !/^\d/.test(w));
   return words.slice(-2).join(' ') || s;
 }
@@ -755,7 +761,14 @@ function cardHTML(t) {
     ? `<img class="card-photo" src="${esc(t.photo)}" alt="${esc(t.name)}" loading="lazy" onerror="this.outerHTML='<div class=card-photo-placeholder>${esc(initials)}</div>'">`
     : `<div class="card-photo-placeholder">${esc(initials)}</div>`;
 
-  const specialties = (t.top_specialties || '').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);
+  // Parse specialties — skip unseparated blobs (1 part that's too long)
+  function parseSpecialties(raw) {
+    if (!raw) return [];
+    const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+    if (parts.length === 1 && parts[0].length > 25) return []; // concatenated blob
+    return parts.filter(s => s.length <= 35).slice(0, 3);
+  }
+  const specialties = parseSpecialties(t.top_specialties);
   const ageGroups = parseAgeGroups(t.client_age);
   const feeStr = parseFee(t.fees);
   const insurers = parseInsurers(t.insurance);

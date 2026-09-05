@@ -1,0 +1,606 @@
+<title>SEL Book Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+/* ── TOKENS ───────────────────────────────────────────── */
+:root {
+  --ground:      #F2EDE4;
+  --surface:     #FDFAF6;
+  --card:        #FFFFFF;
+  --ink:         #1B2B1E;
+  --ink-2:       #4A5E4F;
+  --ink-3:       #7F9485;
+  --primary:     #2C5F45;
+  --primary-h:   #245038;
+  --accent:      #BE8A2C;
+  --border:      #DDD7CA;
+  --chip-bg:     #E8E1D5;
+  --chip-fg:     #3A5040;
+  --tag-bg:      #EAF1EC;
+  --tag-fg:      #2C5F45;
+  --skel-base:   #E4DDD1;
+  --skel-shine:  #EDE8E0;
+  --shadow:      0 1px 3px rgba(27,43,30,.07), 0 6px 20px rgba(27,43,30,.05);
+  --shadow-hov:  0 2px 8px rgba(27,43,30,.1), 0 12px 32px rgba(27,43,30,.08);
+  --r:           12px;
+  --r-sm:        8px;
+  --r-pill:      999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:      #0F1610;
+    --surface:     #141C15;
+    --card:        #1A2419;
+    --ink:         #DDD6C8;
+    --ink-2:       #87A48E;
+    --ink-3:       #526B57;
+    --primary:     #5B9A76;
+    --primary-h:   #6EAD8A;
+    --accent:      #C99040;
+    --border:      #233027;
+    --chip-bg:     #1C2B1F;
+    --chip-fg:     #7EB898;
+    --tag-bg:      #1A2F22;
+    --tag-fg:      #6BB892;
+    --skel-base:   #1E2C21;
+    --skel-shine:  #253423;
+    --shadow:      0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+    --shadow-hov:  0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:      #0F1610;
+  --surface:     #141C15;
+  --card:        #1A2419;
+  --ink:         #DDD6C8;
+  --ink-2:       #87A48E;
+  --ink-3:       #526B57;
+  --primary:     #5B9A76;
+  --primary-h:   #6EAD8A;
+  --accent:      #C99040;
+  --border:      #233027;
+  --chip-bg:     #1C2B1F;
+  --chip-fg:     #7EB898;
+  --tag-bg:      #1A2F22;
+  --tag-fg:      #6BB892;
+  --skel-base:   #1E2C21;
+  --skel-shine:  #253423;
+  --shadow:      0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+  --shadow-hov:  0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+}
+
+/* ── RESET ────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{color-scheme:light dark;}
+body{
+  font-family:'Source Sans 3',system-ui,sans-serif;
+  font-weight:400;font-size:15px;line-height:1.6;
+  color:var(--ink);background:var(--ground);min-height:100vh;
+}
+button{font-family:inherit;cursor:pointer;}
+a{color:var(--primary);}
+
+/* ── HEADER ───────────────────────────────────────────── */
+.site-header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 28px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+}
+.logo{
+  display:flex;align-items:baseline;gap:10px;
+}
+.logo-name{
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:700;font-size:18px;
+  color:var(--primary);letter-spacing:-0.02em;
+}
+.logo-by{
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.header-stat{
+  font-size:12px;color:var(--ink-3);font-weight:500;
+}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:52px 24px 44px;
+  text-align:center;
+}
+.hero-hl{
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:700;
+  font-size:clamp(30px,4.5vw,50px);
+  line-height:1.15;letter-spacing:-.025em;
+  color:var(--ink);text-wrap:balance;
+  max-width:560px;margin:0 auto 14px;
+}
+.hero-sub{
+  color:var(--ink-2);font-size:16px;font-weight:300;
+  max-width:440px;margin:0 auto 36px;
+}
+
+/* ROLE TOGGLE */
+.role-row{display:flex;justify-content:center;margin-bottom:22px;}
+.role-bar{
+  display:inline-flex;
+  background:var(--chip-bg);border-radius:var(--r-pill);
+  padding:3px;gap:2px;
+}
+.role-btn{
+  padding:7px 22px;border-radius:var(--r-pill);border:none;
+  background:transparent;color:var(--ink-2);
+  font-size:14px;font-weight:500;
+  transition:background .15s,color .15s;
+}
+.role-btn.active{background:var(--primary);color:#fff;}
+.role-btn:hover:not(.active){background:var(--border);}
+
+/* SEARCH */
+.search-wrap{
+  max-width:580px;margin:0 auto;
+  position:relative;
+}
+.search-input{
+  width:100%;
+  padding:13px 120px 13px 18px;
+  border:1.5px solid var(--border);border-radius:var(--r);
+  background:var(--card);color:var(--ink);
+  font-family:inherit;font-size:15px;line-height:1.5;
+  outline:none;resize:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.search-input:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 14%,transparent);
+}
+.search-input::placeholder{color:var(--ink-3);}
+.search-btn{
+  position:absolute;right:8px;top:8px;
+  padding:8px 20px;
+  background:var(--primary);color:#fff;border:none;
+  border-radius:var(--r-sm);
+  font-size:14px;font-weight:600;letter-spacing:.01em;
+  transition:background .15s;
+  white-space:nowrap;
+}
+.search-btn:hover{background:var(--accent);}
+.search-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* QUICK CHIPS */
+.quick-topics{
+  display:flex;flex-wrap:wrap;gap:7px;
+  justify-content:center;max-width:660px;
+  margin:24px auto 0;
+}
+.topic-chip{
+  padding:5px 14px;border-radius:var(--r-pill);
+  background:var(--chip-bg);color:var(--chip-fg);
+  border:none;font-size:13px;font-weight:500;
+  transition:background .12s,color .12s;
+}
+.topic-chip:hover{background:var(--primary);color:#fff;}
+.topic-chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* ── RESULTS ──────────────────────────────────────────── */
+.results-section{
+  max-width:1240px;margin:0 auto;
+  padding:32px 24px 72px;
+}
+.results-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;
+}
+.results-label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.results-count{font-size:13px;color:var(--ink-3);}
+
+/* BOOK GRID */
+.book-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:18px;
+}
+
+/* BOOK CARD */
+.book-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  padding:20px;
+  display:flex;flex-direction:column;gap:10px;
+  box-shadow:var(--shadow);
+  transition:transform .18s,box-shadow .18s;
+}
+.book-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-hov);}
+.book-source{
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--accent);
+}
+.book-title{
+  font-family:'Playfair Display',Georgia,serif;
+  font-weight:700;font-size:17px;line-height:1.3;
+  color:var(--ink);text-wrap:balance;
+}
+.book-author{
+  font-size:13px;color:var(--ink-2);
+  margin-top:-4px;
+}
+.book-match{
+  font-size:13px;color:var(--ink-2);
+  font-style:italic;
+  border-left:2px solid var(--accent);
+  padding-left:10px;margin-top:2px;
+  line-height:1.4;
+}
+.book-match strong{font-style:normal;font-weight:600;color:var(--ink);}
+.book-tags{
+  display:flex;flex-wrap:wrap;gap:5px;
+  margin-top:auto;padding-top:4px;
+}
+.tag{
+  font-size:11px;font-weight:500;
+  padding:3px 9px;border-radius:var(--r-pill);
+  background:var(--tag-bg);color:var(--tag-fg);
+  text-transform:capitalize;
+}
+
+/* SKELETONS */
+@keyframes shimmer{
+  0%{background-position:-600px 0}
+  100%{background-position:600px 0}
+}
+.skel{
+  border-radius:4px;
+  background:linear-gradient(90deg,var(--skel-base) 25%,var(--skel-shine) 50%,var(--skel-base) 75%);
+  background-size:1200px 100%;
+  animation:shimmer 1.6s infinite;
+}
+.sk-source{height:10px;width:38%;}
+.sk-title{height:20px;width:88%;}
+.sk-title2{height:16px;width:60%;margin-top:-4px;}
+.sk-author{height:12px;width:50%;}
+.sk-tags{height:22px;width:72%;}
+
+/* STATES */
+.empty-state{
+  grid-column:1/-1;
+  text-align:center;padding:72px 24px;color:var(--ink-2);
+}
+.empty-state h3{
+  font-size:18px;font-weight:600;margin-bottom:8px;color:var(--ink);
+}
+
+/* ── FOOTER ───────────────────────────────────────────── */
+.site-footer{
+  border-top:1px solid var(--border);background:var(--surface);
+  padding:24px;text-align:center;
+  font-size:13px;color:var(--ink-3);
+}
+.site-footer a{color:var(--ink-3);text-decoration:underline;text-underline-offset:3px;}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media(max-width:600px){
+  .hero{padding:36px 16px 32px;}
+  .results-section{padding:24px 16px 56px;}
+  .search-input{padding-right:108px;}
+  .search-btn{padding:8px 16px;font-size:13px;}
+  .logo-by{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  .book-card{transition:none;}
+  .skel{animation:none;}
+}
+</style>
+
+<header class="site-header">
+  <div class="logo">
+    <span class="logo-name">SEL Book Finder</span>
+    <span class="logo-by">Power Plus Partner</span>
+  </div>
+  <span class="header-stat" id="dbStat">2,474 books</span>
+</header>
+
+<main>
+  <section class="hero">
+    <h1 class="hero-hl">Find the right book for every child's journey.</h1>
+    <p class="hero-sub">Describe what a child is going through — we'll match books that speak directly to it.</p>
+
+    <div class="role-row">
+      <div class="role-bar" role="group" aria-label="I am a…">
+        <button class="role-btn active" data-role="parent">Parent</button>
+        <button class="role-btn" data-role="teacher">Teacher</button>
+        <button class="role-btn" data-role="student">Student</button>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <input type="text" class="search-input" id="searchInput"
+        placeholder="My child is anxious about starting middle school…"
+        aria-label="Describe the situation">
+      <button class="search-btn" id="searchBtn">Find Books</button>
+    </div>
+
+    <div class="quick-topics" id="quickTopics" aria-label="Quick topic shortcuts"></div>
+  </section>
+
+  <section class="results-section" aria-live="polite">
+    <div class="results-bar">
+      <span class="results-label" id="resultsLabel">Featured</span>
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+    <div class="book-grid" id="bookGrid"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  &copy; 2025 <a href="https://powerpluspartner.com">Power Plus Partner</a> &middot; 2,474+ curated SEL titles
+</footer>
+
+<script>
+const SB  = 'https://nhdswigpkiwbgtxugtmw.supabase.co';
+const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZHN3aWdwa2l3Ymd0eHVndG13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjQ5NTAsImV4cCI6MjEwMzgwMDk1MH0.MCKdc8uhnLVkc8tO8mtDm504zCYRp0azfcMj0a_yXIM';
+const H   = { 'apikey': KEY, 'Authorization': `Bearer ${KEY}` };
+
+// ── QUICK TOPICS ─────────────────────────────────────────
+const TOPICS = [
+  { label:'Anxiety',             q:'anxiety and worry fear' },
+  { label:'Bullying',            q:'bullied bullying teased' },
+  { label:'Friendship',          q:'making friends friendship social' },
+  { label:'Grief & Loss',        q:'death grief loss died' },
+  { label:'Divorce',             q:'parents divorce family separation' },
+  { label:'Identity',            q:'identity self-esteem confidence belonging' },
+  { label:'New School',          q:'new school moving school transition' },
+  { label:'Immigration',         q:'immigration new country culture refugee' },
+  { label:'Learning Differences',q:'dyslexia adhd learning difficulties' },
+  { label:'Anger',               q:'anger management emotional regulation' },
+  { label:'Body Image',          q:'body image confidence weight self-esteem' },
+  { label:'Cultural Heritage',   q:'culture heritage identity belonging community' },
+];
+
+// ── KEYWORD → TAG RULES ──────────────────────────────────
+const RULES = [
+  { re:/anxi|worri|\bworry\b|nervous|stress\b|overwhelm/i,       tags:['anxiety','fear','self-regulation'] },
+  { re:/\bscared\b|afraid|\bfear\b|phobia/i,                     tags:['fear','courage','anxiety'] },
+  { re:/angr|\bmad\b|temper|\brage\b|frustrat/i,                 tags:['anger','self-regulation','emotional regulation'] },
+  { re:/\bsad\b|depress|unhappy|miserable/i,                     tags:['depression','grief','resilience'] },
+  { re:/grief|grievi|mourn|\bloss\b|died\b|death|passed away/i,  tags:['grief','loss','resilience'] },
+  { re:/lone|alone\b|isolat|no friend/i,                         tags:['belonging','friendship','isolation'] },
+  { re:/bully|bullied|teas|torment/i,                            tags:['bullying','courage','belonging'] },
+  { re:/friend|friendship|social skill/i,                        tags:['friendship','belonging','community'] },
+  { re:/left out|exclud|fit in|fitting in/i,                     tags:['belonging','peer pressure','identity'] },
+  { re:/divorc|separat|broken home|steppar/i,                    tags:['divorce','family','resilience'] },
+  { re:/new baby|sibling|\bbrother\b|\bsister\b/i,               tags:['sibling','family','belonging'] },
+  { re:/adopt|foster\b/i,                                        tags:['adoption','foster care','belonging','identity'] },
+  { re:/grandpar|grandma|grandpa/i,                              tags:['grandparents','family','belonging'] },
+  { re:/\brace\b|racis|skin color|discrimin/i,                   tags:['race','identity','belonging','courage'] },
+  { re:/immigr|new country|moved from|refugee|asylum/i,          tags:['immigration','belonging','identity','resilience'] },
+  { re:/new school|transferr|transfer/i,                         tags:['school transition','belonging','identity'] },
+  { re:/\bmoving\b|moved to|new neighborhood/i,                  tags:['belonging','identity','resilience'] },
+  { re:/dyslexia|reading difficul|reading strug|learning disab/i,tags:['dyslexia','learning differences','resilience'] },
+  { re:/\badhd\b|attention deficit|hyperactiv/i,                 tags:['adhd','learning differences','self-regulation'] },
+  { re:/autis|asperger|\bspectrum\b/i,                           tags:['autism','belonging','neurodiversity'] },
+  { re:/\bdeaf\b|hearing loss|hearing impair/i,                  tags:['deafness','belonging','identity'] },
+  { re:/speech|stutter|\bmute\b|selective mutism/i,              tags:['selective mutism','speech differences','belonging'] },
+  { re:/disabil|wheelchair|amput/i,                              tags:['disability','belonging','resilience'] },
+  { re:/\bgay\b|lesbian|\bqueer\b|\blgbtq/i,                     tags:['lgbtq+','belonging','identity','coming out'] },
+  { re:/\btrans\b|transgender|non.?binary/i,                     tags:['transgender','gender identity','belonging','identity'] },
+  { re:/coming out/i,                                            tags:['coming out','lgbtq+','belonging'] },
+  { re:/body image|body confident|overweight|\bfat\b|\bthin\b/i, tags:['body positivity','identity','self-esteem'] },
+  { re:/eating disord|anorexia|bulimia/i,                        tags:['eating disorder','mental health','resilience'] },
+  { re:/self.harm|cutting\b|hurt.*self/i,                        tags:['self-harm','mental health','recovery'] },
+  { re:/mental health|therapy|counseling/i,                      tags:['mental health','resilience','identity'] },
+  { re:/addict|alcohol\b|\bdrunk\b|substance/i,                  tags:['addiction','resilience','family'] },
+  { re:/homeless|housing|shelter\b/i,                            tags:['homelessness','resilience','belonging'] },
+  { re:/povert|\bpoor\b|financial|money problem/i,               tags:['poverty','resilience','community'] },
+  { re:/prison|\bjail\b|incarcerat/i,                            tags:['incarcerated parent','belonging','family'] },
+  { re:/milit|deploy|army\b|soldier\b/i,                         tags:['military family','belonging','resilience'] },
+  { re:/\bwar\b|\btrauma\b|\babuse\b|violence\b/i,               tags:['trauma','resilience','belonging'] },
+  { re:/chinese|china\b|\bjapanese\b|\bkorean\b|vietnamese|asian\b/i, tags:['asian american','belonging','identity','culture'] },
+  { re:/\bblack\b|african american/i,                            tags:['african american','belonging','identity','race'] },
+  { re:/latino|latina|hispanic|mexican|chicano/i,                tags:['latinx culture','belonging','identity'] },
+  { re:/\bindian\b|south asian|pakistan|bangla/i,                tags:['south asian culture','belonging','identity'] },
+  { re:/\bnative\b|indigenous|tribal/i,                          tags:['indigenous','belonging','identity'] },
+  { re:/jewish|hebrew|\bisrael/i,                                tags:['jewish culture','belonging','identity'] },
+  { re:/muslim|islam|\barab\b/i,                                 tags:['muslim culture','belonging','identity'] },
+  { re:/courage|\bbrave\b|stand up|speak up/i,                   tags:['courage','resilience','identity'] },
+  { re:/kind|\bempathy\b|compassion/i,                           tags:['empathy','community','belonging'] },
+  { re:/mindful|meditat|calm down/i,                             tags:['mindfulness','self-regulation','mental health'] },
+  { re:/identity|self.esteem|\bconfidence\b/i,                   tags:['identity','belonging','self-esteem'] },
+  { re:/growth mindset|\bfail\b|mistake|persist|resilience/i,    tags:['growth mindset','resilience','identity'] },
+  { re:/climate|environment|\bnature\b/i,                        tags:['climate change','nature','community'] },
+  { re:/sport|\bteam\b|compet|athlet/i,                          tags:['sports','teamwork','community'] },
+  { re:/middle school|high school|college|starting school/i,     tags:['school transition','belonging','identity'] },
+  { re:/\bschool\b|academ|class\b/i,                             tags:['school','belonging','community'] },
+];
+
+const PLACEHOLDERS = {
+  parent:  'My child is anxious about starting middle school…',
+  teacher: 'I need books for students dealing with bullying or exclusion…',
+  student: "I feel left out and don't know how to make friends…",
+};
+
+// ── STATE ────────────────────────────────────────────────
+let currentRole = 'parent';
+
+// ── INIT ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderTopics();
+  loadFeatured();
+
+  document.querySelectorAll('.role-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentRole = btn.dataset.role;
+      document.getElementById('searchInput').placeholder = PLACEHOLDERS[currentRole];
+    });
+  });
+
+  const inp = document.getElementById('searchInput');
+  document.getElementById('searchBtn').addEventListener('click', runSearch);
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); runSearch(); }
+  });
+});
+
+function renderTopics() {
+  const el = document.getElementById('quickTopics');
+  el.innerHTML = TOPICS.map(t =>
+    `<button class="topic-chip" data-q="${esc(t.q)}">${esc(t.label)}</button>`
+  ).join('');
+  el.querySelectorAll('.topic-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.getElementById('searchInput').value = chip.dataset.q;
+      runSearch();
+    });
+  });
+}
+
+// ── TAG EXTRACTION ────────────────────────────────────────
+function extractTags(text) {
+  const scores = {};
+  for (const rule of RULES) {
+    if (rule.re.test(text)) {
+      for (const tag of rule.tags) {
+        scores[tag] = (scores[tag] || 0) + 1;
+      }
+    }
+  }
+  return Object.entries(scores)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0, 5)
+    .map(([tag]) => tag);
+}
+
+// ── FETCH ─────────────────────────────────────────────────
+async function fetchTag(tag, limit=30) {
+  const r = await fetch(
+    `${SB}/rest/v1/books?problem_tags=cs.${encodeURIComponent(`{${tag}}`)}&select=title,author,problem_tags,source&limit=${limit}`,
+    { headers: H }
+  );
+  if (!r.ok) return [];
+  return r.json();
+}
+
+async function loadFeatured() {
+  showSkeleton();
+  try {
+    const [a,b,c] = await Promise.all([
+      fetchTag('belonging', 15),
+      fetchTag('resilience', 12),
+      fetchTag('friendship', 12),
+    ]);
+    const merged = mergeAndScore([...a,...b,...c], []);
+    document.getElementById('resultsLabel').textContent = 'Featured';
+    document.getElementById('resultsCount').textContent = `${merged.slice(0,12).length} books`;
+    renderCards(merged.slice(0,12), [], '');
+  } catch(e) {
+    showError();
+  }
+}
+
+async function runSearch() {
+  const raw = document.getElementById('searchInput').value.trim();
+  if (!raw) return;
+
+  let tags = extractTags(raw);
+  if (!tags.length) tags = ['belonging'];
+
+  showSkeleton();
+  document.getElementById('resultsLabel').textContent = 'Matching books';
+  document.getElementById('resultsCount').textContent = '';
+
+  try {
+    const results = await Promise.all(tags.map(t => fetchTag(t, 30)));
+    const merged = mergeAndScore(results.flat(), tags);
+    const top = merged.slice(0, 15);
+    document.getElementById('resultsCount').textContent = `${top.length} found`;
+    top.length ? renderCards(top, tags, raw) : showEmpty();
+  } catch(e) {
+    showError();
+  }
+}
+
+function mergeAndScore(books, matchTags) {
+  const map = new Map();
+  for (const b of books) {
+    const k = b.title.toLowerCase().trim();
+    if (map.has(k)) {
+      map.get(k).score++;
+    } else {
+      const bt = b.problem_tags || [];
+      let bonus = matchTags.filter(t => bt.includes(t)).length;
+      map.set(k, { book: b, score: 1 + bonus });
+    }
+  }
+  return [...map.values()]
+    .sort((a,b) => b.score - a.score)
+    .map(v => v.book);
+}
+
+// ── RENDER ────────────────────────────────────────────────
+function showSkeleton() {
+  document.getElementById('bookGrid').innerHTML =
+    Array.from({length:6}, () => `
+      <div class="book-card" aria-hidden="true">
+        <div class="skel sk-source"></div>
+        <div class="skel sk-title"></div>
+        <div class="skel sk-title2"></div>
+        <div class="skel sk-author"></div>
+        <div class="skel sk-tags"></div>
+      </div>`).join('');
+}
+
+function showEmpty() {
+  document.getElementById('bookGrid').innerHTML = `
+    <div class="empty-state">
+      <h3>No exact matches found</h3>
+      <p>Try different words — "worried" instead of "nervous," or click a topic above.</p>
+    </div>`;
+}
+
+function showError() {
+  document.getElementById('bookGrid').innerHTML = `
+    <div class="empty-state">
+      <h3>Couldn't load books</h3>
+      <p>Check your connection and try again.</p>
+    </div>`;
+}
+
+function renderCards(books, matchTags, userText) {
+  document.getElementById('bookGrid').innerHTML = books.map(b => cardHTML(b, matchTags)).join('');
+}
+
+function cardHTML(b, matchTags) {
+  const tags  = (b.problem_tags || []).slice(0, 4);
+  const src   = (b.source || '').replace(/ SEL$/, '');
+  const hits  = matchTags.filter(t => (b.problem_tags||[]).includes(t));
+  const match = hits.length
+    ? `Addresses: <strong>${hits.slice(0,2).map(cap).join(' &amp; ')}</strong>`
+    : '';
+  return `
+    <article class="book-card">
+      <div class="book-source">${esc(src)}</div>
+      <div class="book-title">${esc(b.title)}</div>
+      <div class="book-author">${esc(b.author)}</div>
+      ${match ? `<div class="book-match">${match}</div>` : ''}
+      <div class="book-tags">${tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>
+    </article>`;
+}
+
+function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function esc(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>

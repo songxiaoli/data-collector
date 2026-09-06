@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Import data/raw/autism_resources_v3.json -> Supabase `autism_resources`.
 
-Run data/sql/schema_autism_resources.sql in the Supabase SQL editor first.
+Run autism/sql/001_schema.sql in the Supabase SQL editor first.
 
 The service key is read from the environment, never hardcoded:
 
@@ -18,7 +18,7 @@ def load_service_key():
     key = os.environ.get("SUPABASE_SERVICE_KEY")
     if key:
         return key.strip()
-    env_path = Path(__file__).parent / ".env"
+    env_path = repo_root() / ".env"
     if env_path.exists():
         for line in env_path.read_text(encoding="utf-8").splitlines():
             line = line.strip()
@@ -27,7 +27,15 @@ def load_service_key():
     return None
 
 SUPABASE_URL = "https://nhdswigpkiwbgtxugtmw.supabase.co"
-JSON_PATH    = Path(__file__).parent / "data" / "raw" / "autism_resources_v3.json"
+def repo_root():
+    """Walk up from this file until the repo root (the folder holding .git)."""
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / ".git").exists():
+            return parent
+    return p.parent
+
+JSON_PATH    = repo_root() / "autism" / "data" / "resources.json"
 BATCH        = 50
 
 # ── Matching axis 2 ─────────────────────────────────────────────────────────
@@ -144,7 +152,7 @@ def check(key):
         msg = str(e)
         if "does not exist" in msg or "PGRST205" in msg or "42P01" in msg:
             print("Table `autism_resources` does not exist yet.")
-            print("Run data/sql/schema_autism_resources.sql in the Supabase SQL editor first.")
+            print("Run autism/sql/001_schema.sql in the Supabase SQL editor first.")
         else:
             print(f"Could not reach the table: {msg}")
         return False

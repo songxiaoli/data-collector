@@ -25,6 +25,7 @@ data/raw/*.csv
 data/raw/*.json
 data/processed/*.csv
 data/processed/*.json
+autism/data/*.json
 
 # 日志
 logs/

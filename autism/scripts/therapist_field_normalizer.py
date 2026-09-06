@@ -27,6 +27,14 @@ from pathlib import Path
 from collections import Counter
 
 SUPABASE_URL = "https://nhdswigpkiwbgtxugtmw.supabase.co"
+def repo_root():
+    """Walk up from this file until the repo root (the folder holding .git)."""
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / ".git").exists():
+            return parent
+    return p.parent
+
 
 # Vocabulary Psychology Today actually uses. Longest first so that
 # "Autism" never eats the front of "Autism Spectrum Disorder".
@@ -95,7 +103,7 @@ def title_city(c):
 def load_key():
     k = os.environ.get("SUPABASE_SERVICE_KEY")
     if k: return k.strip()
-    p = Path(__file__).parent / ".env"
+    p = repo_root() / ".env"
     if p.exists():
         for line in p.read_text(encoding="utf-8").splitlines():
             if line.strip().startswith("SUPABASE_SERVICE_KEY="):

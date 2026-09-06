@@ -654,6 +654,7 @@ a{color:var(--primary);}
       <button class="tab-btn active" data-tab="books" role="tab" aria-selected="true">📚 Books</button>
       <button class="tab-btn" data-tab="videos" role="tab" aria-selected="false">▶ Videos</button>
       <button class="tab-btn" data-tab="therapists" role="tab" aria-selected="false">🧠 Therapists</button>
+      <button class="tab-btn" data-tab="groups" role="tab" aria-selected="false">🤝 Groups</button>
     </div>
     <div id="booksPanel"><div class="book-grid" id="bookGrid"></div></div>
     <div id="videosPanel" hidden><div class="video-grid" id="videoGrid"></div></div>
@@ -671,6 +672,25 @@ a{color:var(--primary);}
       </div>
       <div class="spec-chips" id="specChips"></div>
       <div class="therapist-grid" id="therapistGrid"></div>
+    </div>
+    <div id="groupsPanel" hidden>
+      <div class="therapist-filters" id="groupFilters">
+        <select id="groupCityFilter"><option value="">All cities</option></select>
+        <select id="groupCategoryFilter">
+          <option value="">All categories</option>
+          <option value="parenting">Parenting</option>
+          <option value="adhd">ADHD</option>
+          <option value="autism">Autism</option>
+          <option value="anxiety">Anxiety</option>
+          <option value="adolescents-teenagers-14-to-19">Teens</option>
+          <option value="peer-relationships">Peer Relationships</option>
+          <option value="art-therapy">Art Therapy</option>
+          <option value="cognitive-behavioral-cbt">CBT</option>
+          <option value="dialectical-dbt">DBT</option>
+        </select>
+        <button class="online-toggle" id="groupOnlineToggle" aria-pressed="false">Online only</button>
+      </div>
+      <div class="therapist-grid" id="groupGrid"></div>
     </div>
   </section>
 </main>
@@ -846,14 +866,17 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('booksPanel').hidden      = (currentTab !== 'books');
       document.getElementById('videosPanel').hidden     = (currentTab !== 'videos');
       const tPanel = document.getElementById('therapistsPanel'); if (tPanel) tPanel.hidden = (currentTab !== 'therapists');
+      const gPanel = document.getElementById('groupsPanel'); if (gPanel) gPanel.hidden = (currentTab !== 'groups');
       // Show/hide search bar
-      document.querySelector('.search-wrap').style.display = currentTab === 'therapists' ? 'none' : '';
-      document.querySelector('.quick-topics').style.display = currentTab === 'therapists' ? 'none' : '';
+      const hideSearch = currentTab === 'therapists' || currentTab === 'groups';
+      document.querySelector('.search-wrap').style.display = hideSearch ? 'none' : '';
+      document.querySelector('.quick-topics').style.display = hideSearch ? 'none' : '';
       if (currentTab === 'videos') {
         const q = document.getElementById('searchInput').value.trim();
         if (q) runVideoSearch(q); else loadFeaturedVideos();
       }
       if (currentTab === 'therapists') initTherapistsTab();
+      if (currentTab === 'groups') initGroupsTab();
     });
   });
 
@@ -1325,6 +1348,142 @@ function esc(s) {
   return String(s||'')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
     .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ══════════════════════════════════════════
+// GROUPS TAB
+// ══════════════════════════════════════════
+const CAT_LABELS = {
+  'parenting': 'Parenting',
+  'adhd': 'ADHD',
+  'autism': 'Autism',
+  'anxiety': 'Anxiety',
+  'adolescents-teenagers-14-to-19': 'Teens',
+  'peer-relationships': 'Peer Relationships',
+  'art-therapy': 'Art Therapy',
+  'cognitive-behavioral-cbt': 'CBT',
+  'dialectical-dbt': 'DBT',
+};
+const CAT_COLORS = {
+  'parenting':                       '#2C5F45',
+  'adhd':                            '#C05621',
+  'autism':                          '#6B4FAB',
+  'anxiety':                         '#1A7A8A',
+  'adolescents-teenagers-14-to-19':  '#B83280',
+  'peer-relationships':              '#2B4FAB',
+  'art-therapy':                     '#9B2C2C',
+  'cognitive-behavioral-cbt':        '#1A5276',
+  'dialectical-dbt':                 '#2E4057',
+};
+
+let ALL_G = [];
+let gLoaded = false;
+let gOnlineOnly = false;
+
+async function initGroupsTab() {
+  if (gLoaded) return;
+  showGroupSkeleton();
+  try {
+    const r = await fetch(
+      `${SB}/rest/v1/resources?resource_type=eq.group&select=name,category,description,credentials,city,state,zip,online,profile_url&order=category.asc,name.asc&limit=3000`,
+      { headers: H }
+    );
+    if (!r.ok) throw new Error('fetch failed');
+    ALL_G = await r.json();
+    gLoaded = true;
+    populateGroupCities();
+    wireGroupControls();
+    applyGroupFilters();
+  } catch(e) {
+    document.getElementById('groupGrid').innerHTML = '<div class="empty-state"><h3>Could not load groups</h3><p>Check your connection and try again.</p></div>';
+  }
+}
+
+function populateGroupCities() {
+  const cities = [...new Set(ALL_G.map(g => (g.city||'').trim()).filter(Boolean))].sort();
+  const el = document.getElementById('groupCityFilter');
+  cities.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; el.appendChild(o); });
+}
+
+function wireGroupControls() {
+  document.getElementById('groupCityFilter').addEventListener('change', applyGroupFilters);
+  document.getElementById('groupCategoryFilter').addEventListener('change', applyGroupFilters);
+  document.getElementById('groupOnlineToggle').addEventListener('click', function() {
+    gOnlineOnly = !gOnlineOnly;
+    this.classList.toggle('active', gOnlineOnly);
+    this.setAttribute('aria-pressed', gOnlineOnly);
+    applyGroupFilters();
+  });
+}
+
+function applyGroupFilters() {
+  const city = document.getElementById('groupCityFilter').value;
+  const cat  = document.getElementById('groupCategoryFilter').value;
+  let f = ALL_G;
+  if (city) f = f.filter(g => (g.city||'').trim() === city);
+  if (cat)  f = f.filter(g => g.category === cat);
+  if (gOnlineOnly) f = f.filter(g => (g.online||'').toLowerCase() === 'yes');
+  document.getElementById('resultsCount').textContent = f.length + ' groups';
+  document.getElementById('resultsLabel').textContent = (city||cat||gOnlineOnly) ? 'Matching groups' : 'Support groups & therapy groups';
+  renderGroups(f.slice(0, 100));
+}
+
+function renderGroups(list) {
+  const grid = document.getElementById('groupGrid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-state"><h3>No groups match</h3><p>Try clearing some filters.</p></div>';
+    return;
+  }
+  grid.innerHTML = list.map(gCardHTML).join('');
+}
+
+function gCardHTML(g) {
+  const cat = g.category || '';
+  const label = CAT_LABELS[cat] || cap(cat.replace(/-/g, ' '));
+  const color = CAT_COLORS[cat] || '#2C5F45';
+  const city = (g.city||'').trim();
+  const isOnline = (g.online||'').toLowerCase() === 'yes';
+  const loc = isOnline ? 'Online' : city ? `${city}, CA${g.zip ? ' ' + g.zip : ''}` : 'California';
+  const desc = (g.description||'').trim();
+  const shortDesc = desc.length > 220 ? desc.slice(0, 217) + '…' : desc;
+  const creds = (g.credentials||'').trim();
+  return `<article class="therapist-card">
+    <div class="card-top" style="align-items:flex-start;gap:10px;">
+      <div class="card-photo-placeholder" style="background:${esc(color)};font-size:18px;flex-shrink:0;">🤝</div>
+      <div class="card-identity" style="flex:1;min-width:0;">
+        <div class="card-name" style="font-size:14px;line-height:1.35;">${esc(g.name)}</div>
+        ${creds ? `<div class="card-creds" style="font-size:12px;opacity:.8;">${esc(creds)}</div>` : ''}
+        <div class="card-location">
+          <svg width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true"><path d="M5.5 0A4.5 4.5 0 0 0 1 4.5C1 7.875 5.5 13 5.5 13S10 7.875 10 4.5A4.5 4.5 0 0 0 5.5 0Zm0 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z" fill="currentColor"/></svg>
+          ${esc(loc)}
+        </div>
+      </div>
+    </div>
+    <div class="card-badges">
+      <span class="badge" style="background:${esc(color)}1A;color:${esc(color)};border:1px solid ${esc(color)}33;">${esc(label)}</span>
+      ${isOnline ? '<span class="badge badge-online">Online</span>' : ''}
+    </div>
+    ${shortDesc ? `<div class="card-bio" style="display:block;font-size:12.5px;line-height:1.55;color:var(--ink-2);margin:6px 0 2px;overflow:hidden;">${esc(shortDesc)}</div>` : ''}
+    <div class="card-footer">
+      <span class="card-source">Psychology Today</span>
+      <a class="view-btn" href="${esc(g.profile_url)}" target="_blank" rel="noopener">View Group &#8594;</a>
+    </div>
+  </article>`;
+}
+
+function showGroupSkeleton() {
+  document.getElementById('groupGrid').innerHTML = Array.from({length:6}, () => `
+    <div class="therapist-card" aria-hidden="true">
+      <div class="card-top">
+        <div class="skel sk-photo"></div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px;padding-top:4px;">
+          <div class="skel sk-name"></div><div class="skel sk-cred"></div><div class="skel sk-loc"></div>
+        </div>
+      </div>
+      <div class="skel sk-tags"></div>
+      <div class="skel" style="height:48px;border-radius:6px;"></div>
+      <div style="display:flex;justify-content:flex-end;"><div class="skel sk-btn2"></div></div>
+    </div>`).join('');
 }
 
 // ══════════════════════════════════════════

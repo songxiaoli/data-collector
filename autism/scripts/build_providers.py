@@ -108,9 +108,7 @@ TIER1 = {
     # tier 1 because in California it is funded through the regional centres and
     # the insurance mandate specifically for autism — relevance is not in doubt.
     # The stance flag, not the tier, is what carries the criticism.
-    "103K00000X": "bcba",          # Behavior Analyst
-    "106E00000X": "bcba",          # Assistant Behavior Analyst
-    "106S00000X": "bcba",          # Behavior Technician
+    "103K00000X": "bcba",          # Behavior Analyst (BCBA)
 }
 
 TIER2 = {
@@ -161,6 +159,17 @@ TIER3 = {
     "208000000X": "peds",
 }
 
+# Behaviour technicians and assistant behaviour analysts are deliberately absent,
+# and this is the entry most likely to look like an oversight, so: California has
+# 177,938 NPIs under Behavior Technician (106S00000X) and 3,412 under Assistant
+# Behavior Analyst (106E00000X), against 23,806 BCBAs. Including them made tier 1
+# 87% behaviour technicians. An RBT is an entry-level paraprofessional who works
+# under a BCBA's supervision and is assigned by an agency — a family hires the
+# agency, never the technician. Listing them would multiply the directory tenfold
+# with people nobody can choose, and bury the 314 developmental-behavioural
+# paediatricians in the state under them. They are real autism workers; they are
+# not a thing a parent picks from a list.
+#
 # Deliberately NOT here, and why — so nobody re-adds them by pattern later:
 # general Physical Therapist (225100000X), Addiction Counselor (101YA0400X),
 # Hospice (251G00000X), Home Health (251E00000X), dental, dialysis, ambulatory
@@ -255,20 +264,72 @@ def fetch_npi(explicit_url=None):
                 "city", "state", "zip", "phone", "taxonomies", "disciplines",
                 "tier", "license_no", "license_state"]
         with z.open(name) as raw, open(out, "w", newline="", encoding="utf-8") as fh:
-            rdr = csv.DictReader(io.TextIOWrapper(raw, encoding="utf-8", errors="replace"))
-            w = csv.DictWriter(fh, fieldnames=cols)
-            w.writeheader()
-            for row in rdr:
+            src = io.TextIOWrapper(raw, encoding="utf-8", errors="replace", newline="")
+            rdr = csv.reader(src)
+            w   = csv.writer(fh)
+            w.writerow(cols)
+
+            # This used to be a csv.DictReader, and it could not finish. The file
+            # is 330 columns wide and about ten million rows, so DictReader built
+            # ten million 330-key dictionaries — minutes of allocation for the
+            # dozen or so columns we actually read. csv.reader yields a plain
+            # list and we index it by position instead.
+            #
+            # Position indexing is only safe because the positions come from this
+            # file's own header, resolved below. NPPES has appended and reordered
+            # columns between releases, so a hardcoded index would quietly read
+            # the wrong field — the exact failure mode the taxonomy table above
+            # was rewritten to avoid. col() therefore dies loudly on a name it
+            # cannot find rather than defaulting to anything.
+            head  = next(rdr)
+            ncols = len(head)
+            pos   = {h.strip(): i for i, h in enumerate(head)}
+
+            def col(label):
+                if label not in pos:
+                    sys.exit(f"  {name} has no column {label!r}.\n"
+                             f"  NPPES changed the layout — read the header and fix the\n"
+                             f"  names below before trusting anything this writes.")
+                return pos[label]
+
+            i_npi   = col("NPI")
+            i_ent   = col("Entity Type Code")
+            i_org   = col("Provider Organization Name (Legal Business Name)")
+            i_first = col("Provider First Name")
+            i_last  = col("Provider Last Name (Legal Name)")
+            i_cred  = col("Provider Credential Text")
+            i_addr  = col("Provider First Line Business Practice Location Address")
+            i_city  = col("Provider Business Practice Location Address City Name")
+            i_state = col("Provider Business Practice Location Address State Name")
+            i_zip   = col("Provider Business Practice Location Address Postal Code")
+            i_phone = col("Provider Business Practice Location Address Telephone Number")
+            # The taxonomy columns repeat fifteen times as a code / licence /
+            # licence-state triple, so resolve them as triples: the licence we
+            # keep has to be the one belonging to the code that matched, not
+            # whichever licence happened to be first on the row.
+            slots = [(col(f"Healthcare Provider Taxonomy Code_{i}"),
+                      col(f"Provider License Number_{i}"),
+                      col(f"Provider License Number State Code_{i}"))
+                     for i in range(1, 16)]
+
+            for r in rdr:
                 seen += 1
                 if seen % 500000 == 0:
-                    print(f"    scanned {seen:,}, kept {kept:,}")
-                state = (row.get("Provider Business Practice Location Address State Name") or "").strip()
-                if state.upper() != "CA":
+                    print(f"    scanned {seen:,}, kept {kept:,}", flush=True)
+                # A short row would raise on a positional read where DictReader
+                # quietly handed back None. Pad it so malformed rows behave the
+                # way they always did — empty fields, filtered out downstream.
+                if len(r) < ncols:
+                    r = r + [""] * (ncols - len(r))
+                # State is checked before anything else touches the row: roughly
+                # nine rows in ten are not California, and dropping them here is
+                # most of what makes the scan fit in one pass.
+                if r[i_state].strip().upper() != "CA":
                     continue
 
                 taxes, discs, tiers, lic, licst = [], set(), set(), "", ""
-                for i in range(1, 16):
-                    code = (row.get(f"Healthcare Provider Taxonomy Code_{i}") or "").strip()
+                for i_code, i_lic, i_licst in slots:
+                    code = r[i_code].strip()
                     if not code or code not in keep_codes:
                         continue
                     tier, disc = keep_codes[code]
@@ -277,40 +338,40 @@ def fetch_npi(explicit_url=None):
                     discs.add(disc)
                     tiers.add(tier)
                     if not lic:
-                        lic   = (row.get(f"Provider License Number_{i}") or "").strip()
-                        licst = (row.get(f"Provider License Number State Code_{i}") or "").strip()
+                        lic   = r[i_lic].strip()
+                        licst = r[i_licst].strip()
                 if not discs:
                     continue
                 # A provider is placed at their strongest claim to relevance: a
                 # psychologist who also holds the I/DD specialisation is tier 1.
                 best_tier = min(tiers)
 
-                ent = (row.get("Entity Type Code") or "").strip()
-                org = (row.get("Provider Organization Name (Legal Business Name)") or "").strip()
+                ent = r[i_ent].strip()
+                org = r[i_org].strip()
                 if ent == "2":
                     nm = org
                 else:
-                    nm = " ".join(filter(None, [
-                        (row.get("Provider First Name") or "").strip().title(),
-                        (row.get("Provider Last Name (Legal Name)") or "").strip().title()]))
+                    nm = " ".join(filter(None, [r[i_first].strip().title(),
+                                                r[i_last].strip().title()]))
 
-                w.writerow({
-                    "npi":          row.get("NPI", ""),
-                    "npi_type":     "organization" if ent == "2" else "individual",
-                    "name":         nm,
-                    "credentials":  (row.get("Provider Credential Text") or "").strip(),
-                    "organization": org,
-                    "address":      (row.get("Provider First Line Business Practice Location Address") or "").strip(),
-                    "city":         (row.get("Provider Business Practice Location Address City Name") or "").strip().title(),
-                    "state":        "CA",
-                    "zip":          (row.get("Provider Business Practice Location Address Postal Code") or "")[:5],
-                    "phone":        (row.get("Provider Business Practice Location Address Telephone Number") or "").strip(),
-                    "taxonomies":   ";".join(taxes),
-                    "disciplines":  ";".join(sorted(discs)),
-                    "tier":         best_tier,
-                    "license_no":   lic,
-                    "license_state": licst,
-                })
+                # Written positionally in the same order as `cols` above.
+                w.writerow([
+                    r[i_npi],
+                    "organization" if ent == "2" else "individual",
+                    nm,
+                    r[i_cred].strip(),
+                    org,
+                    r[i_addr].strip(),
+                    r[i_city].strip().title(),
+                    "CA",
+                    r[i_zip][:5],
+                    r[i_phone].strip(),
+                    ";".join(taxes),
+                    ";".join(sorted(discs)),
+                    best_tier,
+                    lic,
+                    licst,
+                ])
                 kept += 1
                 tier_counts[best_tier] += 1
     print(f"  scanned {seen:,} NPI records, kept {kept:,} California rows -> {out}")

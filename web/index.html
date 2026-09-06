@@ -26,6 +26,8 @@
   --r:           12px;
   --r-sm:        8px;
   --r-pill:      999px;
+  --autism:      #8C6410;
+  --autism-wash: #F6EDD8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -48,6 +50,8 @@
     --skel-shine:  #253423;
     --shadow:      0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
     --shadow-hov:  0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+    --autism:      #D9A63F;
+    --autism-wash: #2A2313;
   }
 }
 :root[data-theme="dark"] {
@@ -69,6 +73,8 @@
   --skel-shine:  #253423;
   --shadow:      0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
   --shadow-hov:  0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+  --autism:      #D9A63F;
+  --autism-wash: #2A2313;
 }
 
 /* ── RESET ────────────────────────────────────────────── */
@@ -116,6 +122,18 @@ a{color:var(--primary);}
 }
 .nav-link:hover{background:var(--chip-bg);color:var(--ink);}
 .nav-link.active{background:var(--tag-bg);color:var(--primary);}
+
+/* ── AUTISM LIBRARY ENTRY ─────────────────────────────────
+   A sibling product, not a fourth tab of this finder: the rule
+   and the gold accent say "different library", not "another
+   category of books". Gold is the emblem autistic people chose
+   in place of the blue puzzle piece. */
+.nav-sep{width:1px;height:20px;background:var(--border);margin:0 6px;flex:none}
+.nav-autism{color:var(--autism)}
+.nav-autism:hover{background:var(--autism-wash);color:var(--autism)}
+.nav-autism svg{vertical-align:-2px;margin-right:4px}
+@media (max-width:560px){.nav-autism .nav-autism-long{display:none}}
+
 
 
 /* ── HERO ─────────────────────────────────────────────── */
@@ -609,6 +627,8 @@ a{color:var(--primary);}
   <nav class="site-nav">
     <a href="/" class="nav-link active">📚 Books</a>
     <a href="/therapists" class="nav-link">🧠 Therapists</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="/autism" class="nav-link nav-autism"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4.5 12c0-2 1.6-3.6 3.6-3.6 3.6 0 4.2 7.2 7.8 7.2 2 0 3.6-1.6 3.6-3.6s-1.6-3.6-3.6-3.6c-3.6 0-4.2 7.2-7.8 7.2C6.1 15.6 4.5 14 4.5 12z"/></svg>Autism<span class="nav-autism-long"> Library</span></a>
     <a href="/assess" class="nav-link" style="background:var(--primary);color:#fff;padding:6px 16px;border-radius:999px;margin-left:4px;">✦ Assessment</a>
   </nav>
 </header>

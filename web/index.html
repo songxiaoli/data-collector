@@ -655,6 +655,7 @@ a{color:var(--primary);}
       <button class="tab-btn" data-tab="videos" role="tab" aria-selected="false">▶ Videos</button>
       <button class="tab-btn" data-tab="therapists" role="tab" aria-selected="false">🧠 Therapists</button>
       <button class="tab-btn" data-tab="groups" role="tab" aria-selected="false">🤝 Groups</button>
+      <button class="tab-btn" data-tab="resources" role="tab" aria-selected="false">🛟 Resources</button>
     </div>
     <div id="booksPanel"><div class="book-grid" id="bookGrid"></div></div>
     <div id="videosPanel" hidden><div class="video-grid" id="videoGrid"></div></div>
@@ -693,6 +694,7 @@ a{color:var(--primary);}
       </div>
       <div class="therapist-grid" id="groupGrid"></div>
     </div>
+    <div id="resourcesPanel" hidden><div id="resourcesContent"></div></div>
   </section>
 </main>
 
@@ -1696,6 +1698,59 @@ function tCardHTML(t) {
       </div>
     </div>
   </article>`;
+}
+
+
+let resLoaded = false;
+const CRISIS = [
+  {name:'988 Suicide & Crisis Lifeline', number:'988', desc:'Call or text 988 anytime — trained counselors for kids, teens & adults in crisis.', tag:'Free · 24/7'},
+  {name:'Crisis Text Line', number:'Text HOME to 741741', desc:'Text-based crisis support — great for kids who prefer texting over calling.', tag:'Free · 24/7'},
+  {name:'NAMI Helpline', number:'1-800-950-6264', desc:'Mental health info and referrals from the National Alliance on Mental Illness.', tag:'Mon–Fri 10am–10pm ET'},
+  {name:'ChildHelp National Child Abuse Hotline', number:'1-800-422-4453', desc:'Crisis support and referrals for child abuse situations.', tag:'Free · 24/7'},
+  {name:'Boys Town National Hotline', number:'1-800-448-3000', desc:'Counseling for children and parents — bullying, family problems, anxiety.', tag:'Free · 24/7'},
+  {name:'SAMHSA Helpline', number:'1-800-662-4357', desc:'Substance abuse and mental health referrals; helps families find local services.', tag:'Free · 24/7 · Confidential'},
+];
+const APPS = [
+  {name:'Smiling Mind', desc:'Mindfulness for ages 7+. Free, developed by psychologists with a kids program.', tag:'Free · iOS & Android'},
+  {name:'GoNoodle', desc:'Short movement and mindfulness videos designed for classrooms and home (K–5).', tag:'Free · iOS & Android & Web'},
+  {name:'Headspace for Kids', desc:'Guided meditations for children ages 5–12, including sleep music and focus exercises.', tag:'Subscription · iOS & Android'},
+  {name:'Calm', desc:'Sleep stories and breathing exercises for kids ages 6–12. Requires parent subscription.', tag:'Subscription · iOS & Android'},
+  {name:'Stop, Breathe & Think Kids', desc:'Emotion check-ins and short mindfulness activities designed for ages 5–10.', tag:'Free · iOS & Android'},
+  {name:'Cosmic Kids Yoga', desc:'Yoga and mindfulness adventures through stories — great for ages 5–12.', tag:'Free on YouTube & App'},
+];
+const PODCASTS = [
+  {name:'Good Inside with Dr. Becky Kennedy', desc:'Practical parenting tools grounded in child psychology. Great for ages 3–12.', tag:'Parents & Teachers'},
+  {name:'Raising Good Humans', desc:'Interviews with child development experts on raising emotionally healthy kids.', tag:'Parents'},
+  {name:'Big Life Journal Podcast', desc:'Growth mindset and resilience for kids. Episodes include activities to do together.', tag:'Parents & Educators'},
+  {name:'Unruffled with Janet Lansbury', desc:'Short episodes answering real parent questions about challenging child behavior.', tag:'Parents'},
+  {name:'The Coping Toolbox', desc:'Teaches kids practical coping skills — anxiety, anger, worry — aimed at ages 6–12.', tag:'Kids · Ages 6–12'},
+];
+const GUIDES = [
+  {name:'Child Mind Institute', url:'https://childmind.org', desc:'In-depth guides on ADHD, anxiety, depression, and behavior for parents and educators.', tag:'Free · Evidence-based'},
+  {name:'Understood.org', url:'https://understood.org', desc:'Learning and attention issues (ADHD, dyslexia) — tools, articles, and community support.', tag:'Free'},
+  {name:'HealthyChildren.org (AAP)', url:'https://healthychildren.org', desc:'American Academy of Pediatrics guidance on mental health, behavior, and development.', tag:'Free · Medical'},
+  {name:'PBS Kids for Parents — SEL', url:'https://pbs.org/parents/social-emotional-learning', desc:'Activity ideas and articles on building SEL skills at home for ages 3–12.', tag:'Free'},
+  {name:'Sesame Street in Communities', url:'https://sesamestreetincommunities.org', desc:'Videos and activities for caretakers on emotional wellbeing for young children.', tag:'Free · Ages 3–8'},
+  {name:'NAMI Family Resources', url:'https://nami.org/Support-Education/Family-Members-and-Caregivers', desc:"Guides for families navigating a child's mental health diagnosis.", tag:'Free'},
+];
+function initResourcesTab() {
+  const container = document.getElementById('resourcesContent');
+  if (!container) return;
+  container.innerHTML =
+    rSection('📞 Crisis Hotlines', CRISIS, true) +
+    rSection('📱 Mental Health Apps (Ages 6–12)', APPS) +
+    rSection('🎙 Podcasts for Parents & Teachers', PODCASTS) +
+    rSection('📖 Articles & Guides', GUIDES);
+}
+function rSection(title, items, isCrisis) {
+  return '<div class="res-section"><h3>'+title+'</h3><div class="res-grid">'+items.map(function(r){return resCard(r,isCrisis);}).join('')+'</div></div>';
+}
+function resCard(r, isCrisis) {
+  var cls = isCrisis ? 'res-card crisis' : 'res-card';
+  var link = r.url ? 'href="'+r.url+'" target="_blank" rel="noopener"' : '';
+  var tag = link ? '<a '+link+' class="res-tag">'+r.tag+' ↗</a>' : '<span class="res-tag">'+r.tag+'</span>';
+  var num = r.number ? '<div class="res-number">'+r.number+'</div>' : '';
+  return '<div class="'+cls+'">'+num+'<div class="res-name">'+r.name+'</div><div class="res-desc">'+r.desc+'</div>'+tag+'</div>';
 }
 
 </script>

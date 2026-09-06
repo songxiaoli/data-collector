@@ -47,3 +47,19 @@ Thumbs.db
 # 数据库
 *.db
 *.sqlite3
+
+# Scraper scripts with embedded service keys — do not commit
+import_openpath_ca.py
+import_therapyden_ca.py
+import_groups.py
+import_therapists_full_ca.py
+scrape_openpath_ca.py
+scrape_therapyden_ca.py
+openpath_ca.csv
+therapyden_ca.csv
+scrape_openpath_all.py
+scrape_therapyden_all.py
+import_openpath_all.py
+import_therapyden_all.py
+openpath_all.csv
+therapyden_all.csv

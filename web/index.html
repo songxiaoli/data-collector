@@ -868,8 +868,9 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('videosPanel').hidden     = (currentTab !== 'videos');
       const tPanel = document.getElementById('therapistsPanel'); if (tPanel) tPanel.hidden = (currentTab !== 'therapists');
       const gPanel = document.getElementById('groupsPanel'); if (gPanel) gPanel.hidden = (currentTab !== 'groups');
+      const rPanel = document.getElementById('resourcesPanel'); if (rPanel) rPanel.hidden = (currentTab !== 'resources');
       // Show/hide search bar
-      const hideSearch = currentTab === 'therapists' || currentTab === 'groups';
+      const hideSearch = currentTab === 'therapists' || currentTab === 'groups' || currentTab === 'resources';
       document.querySelector('.search-wrap').style.display = hideSearch ? 'none' : '';
       document.querySelector('.quick-topics').style.display = hideSearch ? 'none' : '';
       if (currentTab === 'videos') {
@@ -878,6 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       if (currentTab === 'therapists') initTherapistsTab();
       if (currentTab === 'groups') initGroupsTab();
+      if (currentTab === 'resources' && !resLoaded) { initResourcesTab(); resLoaded = true; }
     });
   });
 

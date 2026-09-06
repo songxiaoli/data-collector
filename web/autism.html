@@ -457,37 +457,39 @@ const LA_CENTERS = [
 const DDS_LOOKUP = 'https://www.dds.ca.gov/rc/listings/';
 
 // A county can belong to more than one of the sub-regions used in the data.
-// Statewide "CA" rows always apply. Note the data also contains a lowercase
-// "ca" meaning Canada — the comparisons below are case-sensitive on purpose.
+// Statewide "US-CA" rows always apply. California uses the US-<state>
+// convention so that no other region can be mistaken for it by prefix:
+// "CANADA" once matched a startsWith('CA') test, which is exactly the class
+// of bug that puts a Vancouver charity in a Fresno family's results.
 const COUNTY_AREAS = {
-  'Los Angeles':['CA-LA'],
-  'Alameda':['CA-Bay Area'], 'Contra Costa':['CA-Bay Area'], 'Marin':['CA-Bay Area'],
-  'San Francisco':['CA-Bay Area'], 'San Mateo':['CA-Bay Area'],
-  'Napa':['CA-Bay Area','CA-North Bay'], 'Solano':['CA-Bay Area','CA-North Bay'],
-  'Sonoma':['CA-Bay Area','CA-North Bay'],
-  'Santa Clara':['CA-Bay Area','CA-Santa Clara & Central Coast'],
-  'Santa Cruz':['CA-Santa Clara & Central Coast'], 'San Benito':['CA-Santa Clara & Central Coast'],
-  'Monterey':['CA-Santa Clara & Central Coast','CA-Central Coast'],
-  'San Luis Obispo':['CA-Central Coast'],
-  'Santa Barbara':['CA-Central Coast','CA-Santa Barbara'],
-  'Ventura':['CA-Central Coast','CA-Ventura'],
-  'Sacramento':['CA-Sacramento'], 'Yolo':['CA-Sacramento'], 'Placer':['CA-Sacramento'],
-  'El Dorado':['CA-Sacramento'], 'Sutter':['CA-Sacramento'], 'Yuba':['CA-Sacramento'],
-  'Alpine':['CA-Sacramento'], 'Nevada':['CA-Sacramento'], 'Sierra':['CA-Sacramento'],
-  'Colusa':['CA-Sacramento'],
-  'Del Norte':['CA-North Coast'], 'Humboldt':['CA-North Coast'],
-  'Mendocino':['CA-North Coast'], 'Lake':['CA-North Coast'],
-  'Butte':['CA-Far North'], 'Glenn':['CA-Far North'], 'Lassen':['CA-Far North'],
-  'Modoc':['CA-Far North'], 'Plumas':['CA-Far North'], 'Shasta':['CA-Far North'],
-  'Siskiyou':['CA-Far North'], 'Tehama':['CA-Far North'], 'Trinity':['CA-Far North'],
-  'Fresno':['CA-Central Valley'], 'Kings':['CA-Central Valley'], 'Madera':['CA-Central Valley'],
-  'Mariposa':['CA-Central Valley'], 'Merced':['CA-Central Valley'], 'Tulare':['CA-Central Valley'],
-  'San Joaquin':['CA-San Joaquin'], 'Stanislaus':['CA-San Joaquin'], 'Amador':['CA-San Joaquin'],
-  'Calaveras':['CA-San Joaquin'], 'Tuolumne':['CA-San Joaquin'],
-  'Riverside':['CA-Inland Empire'], 'San Bernardino':['CA-Inland Empire'],
-  'Orange':['CA-Orange County'],
-  'San Diego':['CA-San Diego'], 'Imperial':['CA-San Diego'],
-  'Kern':['CA-Kern'], 'Inyo':['CA-Kern'], 'Mono':['CA-Kern'],
+  'Los Angeles':['US-CA-LA'],
+  'Alameda':['US-CA-Bay Area'], 'Contra Costa':['US-CA-Bay Area'], 'Marin':['US-CA-Bay Area'],
+  'San Francisco':['US-CA-Bay Area'], 'San Mateo':['US-CA-Bay Area'],
+  'Napa':['US-CA-Bay Area','US-CA-North Bay'], 'Solano':['US-CA-Bay Area','US-CA-North Bay'],
+  'Sonoma':['US-CA-Bay Area','US-CA-North Bay'],
+  'Santa Clara':['US-CA-Bay Area','US-CA-Santa Clara & Central Coast'],
+  'Santa Cruz':['US-CA-Santa Clara & Central Coast'], 'San Benito':['US-CA-Santa Clara & Central Coast'],
+  'Monterey':['US-CA-Santa Clara & Central Coast','US-CA-Central Coast'],
+  'San Luis Obispo':['US-CA-Central Coast'],
+  'Santa Barbara':['US-CA-Central Coast','US-CA-Santa Barbara'],
+  'Ventura':['US-CA-Central Coast','US-CA-Ventura'],
+  'Sacramento':['US-CA-Sacramento'], 'Yolo':['US-CA-Sacramento'], 'Placer':['US-CA-Sacramento'],
+  'El Dorado':['US-CA-Sacramento'], 'Sutter':['US-CA-Sacramento'], 'Yuba':['US-CA-Sacramento'],
+  'Alpine':['US-CA-Sacramento'], 'Nevada':['US-CA-Sacramento'], 'Sierra':['US-CA-Sacramento'],
+  'Colusa':['US-CA-Sacramento'],
+  'Del Norte':['US-CA-North Coast'], 'Humboldt':['US-CA-North Coast'],
+  'Mendocino':['US-CA-North Coast'], 'Lake':['US-CA-North Coast'],
+  'Butte':['US-CA-Far North'], 'Glenn':['US-CA-Far North'], 'Lassen':['US-CA-Far North'],
+  'Modoc':['US-CA-Far North'], 'Plumas':['US-CA-Far North'], 'Shasta':['US-CA-Far North'],
+  'Siskiyou':['US-CA-Far North'], 'Tehama':['US-CA-Far North'], 'Trinity':['US-CA-Far North'],
+  'Fresno':['US-CA-Central Valley'], 'Kings':['US-CA-Central Valley'], 'Madera':['US-CA-Central Valley'],
+  'Mariposa':['US-CA-Central Valley'], 'Merced':['US-CA-Central Valley'], 'Tulare':['US-CA-Central Valley'],
+  'San Joaquin':['US-CA-San Joaquin'], 'Stanislaus':['US-CA-San Joaquin'], 'Amador':['US-CA-San Joaquin'],
+  'Calaveras':['US-CA-San Joaquin'], 'Tuolumne':['US-CA-San Joaquin'],
+  'Riverside':['US-CA-Inland Empire'], 'San Bernardino':['US-CA-Inland Empire'],
+  'Orange':['US-CA-Orange County'],
+  'San Diego':['US-CA-San Diego'], 'Imperial':['US-CA-San Diego'],
+  'Kern':['US-CA-Kern'], 'Inyo':['US-CA-Kern'], 'Mono':['US-CA-Kern'],
 };
 // Only these types are place-bound. A book is a book anywhere.
 const LOCAL_TYPES = new Set(['organization','provider','community','event']);
@@ -611,11 +613,11 @@ function matches(rec, opts={}){
   // videos are unaffected, and statewide, national and global entries stay.
   if (S.county && LOCAL_TYPES.has(rec.resource_type)){
     const reg = rec.region || '';
-    if (reg.startsWith('CA-')){
+    if (reg.startsWith('US-CA-')){
       const mine = COUNTY_AREAS[S.county] || [];
       if (!mine.includes(reg)) return false;
-    } else if (reg && reg !== 'CA' && !/^(US|us|usa|global)$/.test(reg)) {
-      return false;   // another country's local body
+    } else if (reg && reg !== 'US-CA' && reg !== 'US' && reg !== 'GLOBAL') {
+      return false;   // another state's or country's local body
     }
   }
   if (!skipFacets){
@@ -767,8 +769,8 @@ function renderList(list){
   // Ordering carries the house stance: autistic-authored and affirming first.
   // Once a county is chosen, local beats national — surfacing the resource a
   // family can actually walk into is the whole point of picking a county.
-  const local = r => S.county && (r.region || '').startsWith('CA-') ? -4
-               : S.county && r.region === 'CA' ? -2 : 0;
+  const local = r => S.county && (r.region || '').startsWith('US-CA-') ? -4
+               : S.county && r.region === 'US-CA' ? -2 : 0;
   const rank = r => local(r) + (r.autistic_authored ? 0 : 1) + (r.stance === 'affirming' ? 0 : 1);
   el.innerHTML = [...list].sort((a,b) => rank(a)-rank(b)).slice(0,60).map(cardHTML).join('');
 }
@@ -846,7 +848,7 @@ function wire(){
     return;
   }
   const n = S.all.length;
-  const ca = S.all.filter(r => (r.region||'').startsWith('CA')).length;
+  const ca = S.all.filter(r => (r.region||'').startsWith('US-CA')).length;
   const au = S.all.filter(r => r.autistic_authored).length;
   const fr = S.all.filter(r => r.access === 'free').length;
   document.getElementById('heroStats').textContent =

@@ -44,25 +44,6 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 
 NUCC_PAGE = "https://www.nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40/csv-mainmenu-57"
 
-# Matched against the NUCC taxonomy DESCRIPTION, not against codes typed from
-# memory. Getting a code wrong silently filters out a whole profession.
-DISCIPLINE_PATTERNS = {
-    "slp":       r"speech.language pathologist",
-    "audiology": r"\baudiologist\b",
-    "ot":        r"occupational therapist",
-    "pt":        r"\bphysical therapist\b",
-    "psych":     r"\bpsychologist\b",
-    "psychiatry":r"psychiatr",
-    "dev-peds":  r"developmental.{0,3}behavioral pediatric|neurodevelopmental",
-    "peds":      r"^pediatrics$|pediatrician",
-    "neurology": r"neurolog",
-    "lmft":      r"marriage.{0,3}(and|&).{0,3}family therapist",
-    "lcsw":      r"social worker",
-    "counselor": r"counselor|counsellor",
-    "bcba":      r"behavior analyst",
-    "clinic":    r"clinic/center|community.based|home health|developmental disabilit",
-}
-
 def need(mod):
     try:
         return __import__(mod)
@@ -89,20 +70,143 @@ def fetch_taxonomy():
     out.write_bytes(requests.get(url, timeout=120).content)
     print(f"  wrote {out}")
 
+# ------------------------------------------------------------------ relevance
+# Autism relevance, in three tiers.
+#
+# The first cut of this file matched taxonomy *descriptions* with regexes. That
+# was wrong in a way worth recording: r"neurolog" matched Neurological Surgery,
+# r"clinic/center" matched dialysis and dental clinics, and the result was
+# 396,156 California rows — essentially every licensed provider in the state.
+# A directory of everyone is a directory of no one.
+#
+# So relevance is now an explicit code table, and every code below is checked
+# against the NUCC file at load time. An unknown code is a hard error, never a
+# silent omission — the failure mode of the old approach was that a whole
+# profession could vanish and nothing would say so.
+#
+# Tier 1 — the taxonomy itself names developmental disability, autism, or early
+#   intervention work. Relevance needs no further evidence.
+# Tier 2 — a discipline families are routinely referred to for autism, but the
+#   taxonomy says nothing about autism. Listable, labelled honestly.
+# Tier 3 — general mental health and general clinics. Held from publication
+#   until something else says they actually work with autistic clients.
+
+TIER1 = {
+    "2080P0006X": "dev-peds",      # Pediatrics / Developmental - Behavioral Pediatrics
+    "2080P0008X": "dev-peds",      # Pediatrics / Neurodevelopmental Disabilities
+    "2084P0005X": "dev-peds",      # Psychiatry & Neurology / Neurodevelopmental Disabilities
+    "103TM1800X": "psych-idd",     # Psychologist / Intellectual & Developmental Disabilities
+    "222Q00000X": "dev-therapy",   # Developmental Therapist
+    "252Y00000X": "early-int",     # Early Intervention Provider Agency
+    "251C00000X": "day-program",   # Day Training, Developmentally Disabled Services
+    "261QD1600X": "clinic-dd",     # Clinic/Center / Developmental Disabilities
+    "385HR2060X": "respite",       # Respite Care / IDD, Child
+    "315P00000X": "residential",   # Intermediate Care Facility, Intellectual Disabilities
+    "320600000X": "residential",   # Residential Treatment Facility, I/DD
+    "320900000X": "residential",   # Community Based Residential Treatment, I/DD
+    # Behaviour-analytic practice is community-contested, not excluded. It is
+    # tier 1 because in California it is funded through the regional centres and
+    # the insurance mandate specifically for autism — relevance is not in doubt.
+    # The stance flag, not the tier, is what carries the criticism.
+    "103K00000X": "bcba",          # Behavior Analyst
+    "106E00000X": "bcba",          # Assistant Behavior Analyst
+    "106S00000X": "bcba",          # Behavior Technician
+}
+
+TIER2 = {
+    "235Z00000X": "slp",           # Speech-Language Pathologist
+    "2355S0801X": "slp",           # Specialist/Technologist / Speech-Language Assistant
+    "261QH0700X": "clinic-speech", # Clinic/Center / Hearing and Speech
+    "225X00000X": "ot",            # Occupational Therapist
+    "225XP0200X": "ot",            # OT / Pediatrics
+    "225XF0002X": "ot",            # OT / Feeding, Eating & Swallowing
+    "225XM0800X": "ot",            # OT / Mental Health
+    "224Z00000X": "ot",            # Occupational Therapy Assistant
+    "224ZF0002X": "ot",            # OTA / Feeding, Eating & Swallowing
+    "2251P0200X": "pt-peds",       # Physical Therapist / Pediatrics  (general PT excluded)
+    "231H00000X": "audiology",     # Audiologist
+    "231HA2400X": "audiology",     # Audiologist / Assistive Technology Practitioner
+    "231HA2500X": "audiology",     # Audiologist / Assistive Technology Supplier
+    "103TC2200X": "psych-child",   # Psychologist / Clinical Child & Adolescent
+    "103TS0200X": "psych-school",  # Psychologist / School
+    "103G00000X": "neuropsych",    # Clinical Neuropsychologist
+    "103GC0700X": "neuropsych",    # Clinical Neuropsychologist / Clinical
+    "2084P0804X": "child-psychiatry",   # Psychiatry & Neurology / Child & Adolescent Psychiatry
+    "2084N0402X": "child-neurology",    # Neurology w/ Special Qualifications in Child Neurology
+    "163WP0807X": "child-psych-np",     # RN / Psychiatric-Mental Health, Child & Adolescent
+    "364SP0807X": "child-psych-cns",    # CNS / Psychiatric-Mental Health, Child & Adolescent
+    "364SP0810X": "child-psych-cns",    # CNS / Psychiatric-Mental Health, Child & Family
+    "261QM0855X": "clinic-child-mh",    # Clinic/Center / Adolescent and Children Mental Health
+    "225CA2400X": "assistive-tech",     # Rehab Counselor / Assistive Technology Practitioner
+    "225CA2500X": "assistive-tech",     # Rehab Counselor / Assistive Technology Supplier
+    "385HR2055X": "respite",            # Respite Care / Mental Illness, Child
+}
+
+TIER3 = {
+    "103T00000X": "psych",
+    "103TC0700X": "psych",
+    "103TB0200X": "psych",
+    "103TF0000X": "psych",
+    "103TP2700X": "psych",
+    "103TH0100X": "psych",
+    "106H00000X": "lmft",
+    "1041C0700X": "lcsw",
+    "104100000X": "lcsw",
+    "101YM0800X": "counselor",
+    "101Y00000X": "counselor",
+    "101YP2500X": "counselor",
+    "2084P0800X": "psychiatry",
+    "251S00000X": "clinic-behavioral",
+    "261QM0801X": "clinic-mh",
+    "208000000X": "peds",
+}
+
+# Deliberately NOT here, and why — so nobody re-adds them by pattern later:
+# general Physical Therapist (225100000X), Addiction Counselor (101YA0400X),
+# Hospice (251G00000X), Home Health (251E00000X), dental, dialysis, ambulatory
+# surgical, Neurological Surgery (207T00000X), general Neurology (2084N0400X),
+# Psychiatric Technician (167G00000X), substance-use facilities. Each of these
+# was pulled in by the old regexes and none of them belongs in an autism
+# directory.
+
+TIERS = [("1", TIER1), ("2", TIER2), ("3", TIER3)]
+
+
 def load_taxonomy():
+    """Return {code: (tier, discipline)}, verifying every code against NUCC.
+
+    Codes are declared explicitly above rather than matched by regex, so the
+    one thing that can go wrong is a typo or a retired code. That is exactly
+    what this checks, loudly, before anything downstream depends on it.
+    """
     f = WORK / "nucc_taxonomy.csv"
     if not f.exists():
         sys.exit("Run --fetch-taxonomy first.")
-    keep = {}
+    known = {}
     with open(f, newline="", encoding="utf-8-sig") as fh:
         for row in csv.DictReader(fh):
             code = (row.get("Code") or "").strip()
-            desc = " ".join(filter(None, [row.get("Classification"), row.get("Specialization"),
-                                          row.get("Grouping")])).lower()
-            for disc, pat in DISCIPLINE_PATTERNS.items():
-                if re.search(pat, desc):
-                    keep.setdefault(code, set()).add(disc)
-    print(f"  {len(keep)} taxonomy codes matched our disciplines")
+            if code:
+                known[code] = "{} / {}".format(
+                    (row.get("Classification") or "").strip(),
+                    (row.get("Specialization") or "").strip() or "-")
+
+    keep, missing = {}, []
+    for tier, table in TIERS:
+        for code, disc in table.items():
+            if code not in known:
+                missing.append((tier, code, disc))
+                continue
+            keep[code] = (tier, disc)
+    if missing:
+        for tier, code, disc in missing:
+            print(f"  !! tier {tier} code {code} ({disc}) is not in this NUCC release")
+        sys.exit("  Refusing to run on a code table that no longer matches NUCC.\n"
+                 "  Re-run --fetch-taxonomy, then look each missing code up before editing.")
+
+    by_tier = Counter(t for t, _ in keep.values())
+    print(f"  {len(keep)} taxonomy codes verified against NUCC "
+          f"(tier 1: {by_tier['1']}, tier 2: {by_tier['2']}, tier 3: {by_tier['3']})")
     return keep
 
 # ------------------------------------------------------------------ NPPES
@@ -116,11 +220,14 @@ def fetch_npi(explicit_url=None):
     requests = need("requests")
     keep_codes = load_taxonomy()
 
-    url = explicit_url or discover_monthly_url(requests)
+    # Discovery is deliberately after this check: with the archive already on
+    # disk there is nothing to look up, and reaching for the network anyway
+    # means a re-filter fails on machines that cannot reach CMS.
     zpath = WORK / "nppes_monthly.zip"
     if zpath.exists():
         print(f"  reusing {zpath.name} ({zpath.stat().st_size/1e9:.2f} GB) — delete it to re-download")
     else:
+        url = explicit_url or discover_monthly_url(requests)
         print(f"  downloading {url.rsplit('/', 1)[-1]}")
         print("  this is around a gigabyte and will take a while")
         with requests.get(url, stream=True, timeout=3600,
@@ -135,6 +242,7 @@ def fetch_npi(explicit_url=None):
 
     out = WORK / "npi_ca.csv"
     kept = seen = 0
+    tier_counts = Counter()
     with zipfile.ZipFile(zpath) as z:
         name = next(n for n in z.namelist()
                     if n.lower().endswith(".csv")
@@ -145,7 +253,7 @@ def fetch_npi(explicit_url=None):
         print(f"  reading {name}")
         cols = ["npi", "npi_type", "name", "credentials", "organization", "address",
                 "city", "state", "zip", "phone", "taxonomies", "disciplines",
-                "license_no", "license_state"]
+                "tier", "license_no", "license_state"]
         with z.open(name) as raw, open(out, "w", newline="", encoding="utf-8") as fh:
             rdr = csv.DictReader(io.TextIOWrapper(raw, encoding="utf-8", errors="replace"))
             w = csv.DictWriter(fh, fieldnames=cols)
@@ -158,19 +266,24 @@ def fetch_npi(explicit_url=None):
                 if state.upper() != "CA":
                     continue
 
-                taxes, discs, lic, licst = [], set(), "", ""
+                taxes, discs, tiers, lic, licst = [], set(), set(), "", ""
                 for i in range(1, 16):
                     code = (row.get(f"Healthcare Provider Taxonomy Code_{i}") or "").strip()
-                    if not code:
+                    if not code or code not in keep_codes:
                         continue
-                    if code in keep_codes:
+                    tier, disc = keep_codes[code]
+                    if code not in taxes:      # NPPES repeats the same code across slots
                         taxes.append(code)
-                        discs |= keep_codes[code]
-                        if not lic:
-                            lic   = (row.get(f"Provider License Number_{i}") or "").strip()
-                            licst = (row.get(f"Provider License Number State Code_{i}") or "").strip()
+                    discs.add(disc)
+                    tiers.add(tier)
+                    if not lic:
+                        lic   = (row.get(f"Provider License Number_{i}") or "").strip()
+                        licst = (row.get(f"Provider License Number State Code_{i}") or "").strip()
                 if not discs:
                     continue
+                # A provider is placed at their strongest claim to relevance: a
+                # psychologist who also holds the I/DD specialisation is tier 1.
+                best_tier = min(tiers)
 
                 ent = (row.get("Entity Type Code") or "").strip()
                 org = (row.get("Provider Organization Name (Legal Business Name)") or "").strip()
@@ -194,11 +307,16 @@ def fetch_npi(explicit_url=None):
                     "phone":        (row.get("Provider Business Practice Location Address Telephone Number") or "").strip(),
                     "taxonomies":   ";".join(taxes),
                     "disciplines":  ";".join(sorted(discs)),
+                    "tier":         best_tier,
                     "license_no":   lic,
                     "license_state": licst,
                 })
                 kept += 1
+                tier_counts[best_tier] += 1
     print(f"  scanned {seen:,} NPI records, kept {kept:,} California rows -> {out}")
+    for t in ("1", "2", "3"):
+        print(f"    tier {t}: {tier_counts[t]:,}")
+    print("  tier 3 is held from publication until an autism signal corroborates it.")
 
 
 def discover_monthly_url(requests):

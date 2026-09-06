@@ -456,6 +456,43 @@ const LA_CENTERS = [
 ];
 const DDS_LOOKUP = 'https://www.dds.ca.gov/rc/listings/';
 
+// A county can belong to more than one of the sub-regions used in the data.
+// Statewide "CA" rows always apply. Note the data also contains a lowercase
+// "ca" meaning Canada — the comparisons below are case-sensitive on purpose.
+const COUNTY_AREAS = {
+  'Los Angeles':['CA-LA'],
+  'Alameda':['CA-Bay Area'], 'Contra Costa':['CA-Bay Area'], 'Marin':['CA-Bay Area'],
+  'San Francisco':['CA-Bay Area'], 'San Mateo':['CA-Bay Area'],
+  'Napa':['CA-Bay Area','CA-North Bay'], 'Solano':['CA-Bay Area','CA-North Bay'],
+  'Sonoma':['CA-Bay Area','CA-North Bay'],
+  'Santa Clara':['CA-Bay Area','CA-Santa Clara & Central Coast'],
+  'Santa Cruz':['CA-Santa Clara & Central Coast'], 'San Benito':['CA-Santa Clara & Central Coast'],
+  'Monterey':['CA-Santa Clara & Central Coast','CA-Central Coast'],
+  'San Luis Obispo':['CA-Central Coast'],
+  'Santa Barbara':['CA-Central Coast','CA-Santa Barbara'],
+  'Ventura':['CA-Central Coast','CA-Ventura'],
+  'Sacramento':['CA-Sacramento'], 'Yolo':['CA-Sacramento'], 'Placer':['CA-Sacramento'],
+  'El Dorado':['CA-Sacramento'], 'Sutter':['CA-Sacramento'], 'Yuba':['CA-Sacramento'],
+  'Alpine':['CA-Sacramento'], 'Nevada':['CA-Sacramento'], 'Sierra':['CA-Sacramento'],
+  'Colusa':['CA-Sacramento'],
+  'Del Norte':['CA-North Coast'], 'Humboldt':['CA-North Coast'],
+  'Mendocino':['CA-North Coast'], 'Lake':['CA-North Coast'],
+  'Butte':['CA-Far North'], 'Glenn':['CA-Far North'], 'Lassen':['CA-Far North'],
+  'Modoc':['CA-Far North'], 'Plumas':['CA-Far North'], 'Shasta':['CA-Far North'],
+  'Siskiyou':['CA-Far North'], 'Tehama':['CA-Far North'], 'Trinity':['CA-Far North'],
+  'Fresno':['CA-Central Valley'], 'Kings':['CA-Central Valley'], 'Madera':['CA-Central Valley'],
+  'Mariposa':['CA-Central Valley'], 'Merced':['CA-Central Valley'], 'Tulare':['CA-Central Valley'],
+  'San Joaquin':['CA-San Joaquin'], 'Stanislaus':['CA-San Joaquin'], 'Amador':['CA-San Joaquin'],
+  'Calaveras':['CA-San Joaquin'], 'Tuolumne':['CA-San Joaquin'],
+  'Riverside':['CA-Inland Empire'], 'San Bernardino':['CA-Inland Empire'],
+  'Orange':['CA-Orange County'],
+  'San Diego':['CA-San Diego'], 'Imperial':['CA-San Diego'],
+  'Kern':['CA-Kern'], 'Inyo':['CA-Kern'], 'Mono':['CA-Kern'],
+};
+// Only these types are place-bound. A book is a book anywhere.
+const LOCAL_TYPES = new Set(['organization','provider','community','event']);
+
+
 const RC_STEPS = [
   { h:'Under 3? Ask for an Early Start intake.',
     p:'This is your first call after a concern is raised — no diagnosis and no doctor’s referral needed. Early Start is California’s IDEA Part C program and the regional center runs the intake.' },
@@ -480,7 +517,11 @@ function renderCounties(){
     o.value = c; o.textContent = c;
     sel.appendChild(o);
   });
-  sel.addEventListener('change', () => showRC(sel.value));
+  sel.addEventListener('change', () => {
+    S.county = sel.value || null;
+    showRC(sel.value);
+    if (S.all) renderAll();
+  });
 }
 
 function showRC(county){
@@ -532,6 +573,7 @@ const S = {
   stage: null,
   needs: new Set(),
   query: '',
+  county: null,
   tab: 'books',
   facets: { age_band:new Set(), access:new Set(), stance:new Set() },
 };
@@ -563,6 +605,17 @@ function matches(rec, opts={}){
       const q = S.query.trim().toLowerCase();
       const hay = `${rec.title} ${rec.creator||''} ${rec.summary||''} ${rec.why_it_helps||''}`.toLowerCase();
       if (!(q.length > 2 && hay.includes(q))) return false;
+    }
+  }
+  // A chosen county only narrows place-bound resources. Books, printables and
+  // videos are unaffected, and statewide, national and global entries stay.
+  if (S.county && LOCAL_TYPES.has(rec.resource_type)){
+    const reg = rec.region || '';
+    if (reg.startsWith('CA-')){
+      const mine = COUNTY_AREAS[S.county] || [];
+      if (!mine.includes(reg)) return false;
+    } else if (reg && reg !== 'CA' && !/^(US|us|usa|global)$/.test(reg)) {
+      return false;   // another country's local body
     }
   }
   if (!skipFacets){
@@ -711,9 +764,12 @@ function renderList(list){
       </div>`;
     return;
   }
-  // Affirming and autistic-authored first — the house stance, made visible in
-  // the ordering rather than only in the labels.
-  const rank = r => (r.autistic_authored ? 0 : 1) + (r.stance === 'affirming' ? 0 : 1);
+  // Ordering carries the house stance: autistic-authored and affirming first.
+  // Once a county is chosen, local beats national — surfacing the resource a
+  // family can actually walk into is the whole point of picking a county.
+  const local = r => S.county && (r.region || '').startsWith('CA-') ? -4
+               : S.county && r.region === 'CA' ? -2 : 0;
+  const rank = r => local(r) + (r.autistic_authored ? 0 : 1) + (r.stance === 'affirming' ? 0 : 1);
   el.innerHTML = [...list].sort((a,b) => rank(a)-rank(b)).slice(0,60).map(cardHTML).join('');
 }
 
@@ -728,14 +784,17 @@ function renderActive(){
   S.needs.forEach(t => bits.push(`<span class="pill-active">${esc(needLabel(t))}</span>`));
   Object.entries(S.facets).forEach(([k,set]) => set.forEach(v =>
     bits.push(`<span class="pill-active">${esc((k==='age_band'?AGE_LABEL:k==='access'?ACCESS_LABEL:STANCE_LABEL)[v]||v)}</span>`)));
+  if (S.county) bits.push(`<span class="pill-active">${esc(S.county)} County</span>`);
   if (S.query.trim()) bits.push(`<span class="pill-active">&ldquo;${esc(S.query.trim())}&rdquo;</span>`);
-  const clearable = S.stage || S.needs.size || S.query.trim() ||
+  const clearable = S.stage || S.needs.size || S.query.trim() || S.county ||
     Object.values(S.facets).some(s=>s.size);
   if (clearable) bits.push(`<button class="btn-clear" id="clearAll">Clear all</button>`);
   el.innerHTML = bits.join('');
   const c = document.getElementById('clearAll');
   if (c) c.addEventListener('click', () => {
-    S.stage = null; S.needs.clear(); S.query = '';
+    S.stage = null; S.needs.clear(); S.query = ''; S.county = null;
+    document.getElementById('countySelect').value = '';
+    showRC('');
     Object.values(S.facets).forEach(s => s.clear());
     document.getElementById('searchInput').value = '';
     renderStages(); renderChips(); renderAll();

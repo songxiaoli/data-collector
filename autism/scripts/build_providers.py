@@ -404,6 +404,7 @@ def join():
         for r in csv.DictReader(fh):
             lic = dca.get(norm_lic(r["license_no"])) if r["license_no"] else None
             if lic: matched += 1
+            tier = int(r.get("tier") or 3)
             slug = "prov-" + (r["npi"] or norm_name(r["name"]).replace(" ", "-"))[:60]
             out.append({
                 "slug": slug, "npi": r["npi"] or None,
@@ -418,6 +419,12 @@ def join():
                 "license_no": r["license_no"] or None,
                 "license_board": (lic or {}).get("board") or None,
                 "license_status": (lic or {}).get("status") or None,
+                "relevance_tier": tier,
+                # Tier 3 is general mental health with no autism signal at all.
+                # It is carried so a regional-centre match can promote it later,
+                # but it does not go out: a parent searching an autism directory
+                # and finding every therapist in the state has learned nothing.
+                "publish_status": None if tier <= 2 else "hold-needs-autism-signal",
                 # everything operational stays null until a human confirms it
                 "listing_status": "listed",
                 "confidence": "high" if lic else "medium",
@@ -428,6 +435,10 @@ def join():
     print(f"  {len(out):,} providers, {matched:,} with a matched licence "
           f"({matched/max(1,len(out))*100:.0f}%) -> {WORK/'providers.json'}")
     print("  disciplines:", dict(Counter(d for p in out for d in p["disciplines"]).most_common(10)))
+    tiers = Counter(p["relevance_tier"] for p in out)
+    held = sum(1 for p in out if p["publish_status"])
+    print(f"  tiers: 1={tiers[1]:,}  2={tiers[2]:,}  3={tiers[3]:,}")
+    print(f"  {len(out)-held:,} publishable, {held:,} held pending an autism signal")
 
 # ------------------------------------------------------------------ crosscheck
 def crosscheck():
@@ -499,7 +510,7 @@ def do_import():
     rows = json.loads((WORK/"providers.json").read_text())
     print(f"  {len(rows):,} rows to upsert")
     for i in range(0, len(rows), 100):
-        c.table("providers").upsert(rows[i:i+100], on_conflict="slug").execute()
+        c.table("autism_providers").upsert(rows[i:i+100], on_conflict="slug").execute()
         if (i//100) % 10 == 0: print(f"    {min(i+100,len(rows)):,}/{len(rows):,}")
     print("  done")
 

@@ -1,0 +1,799 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autism Resource Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+/* ── TOKENS ───────────────────────────────────────────────
+   Inherited from the SEL finder. Only --primary forks: this
+   section's accent is the gold infinity, the emblem autistic
+   people chose in place of the blue puzzle piece.
+   ───────────────────────────────────────────────────────── */
+:root {
+  --ground:      #F2EDE4;
+  --surface:     #FDFAF6;
+  --card:        #FFFFFF;
+  --ink:         #1B2B1E;
+  --ink-2:       #4A5E4F;
+  --ink-3:       #7F9485;
+  --sel:         #2C5F45;
+  --primary:     #8C6410;
+  --primary-h:   #6E4E0C;
+  --accent:      #C89A2B;
+  --wash:        #F6EDD8;
+  --wash-line:   #E0C88A;
+  --border:      #DDD7CA;
+  --chip-bg:     #E8E1D5;
+  --chip-fg:     #3A5040;
+  --tag-bg:      #EAE6DB;
+  --tag-fg:      #5D6B5E;
+  --note-fg:     #5A5449;
+  --skel-base:   #E4DDD1;
+  --skel-shine:  #EDE8E0;
+  --shadow:      0 1px 3px rgba(27,43,30,.07), 0 6px 20px rgba(27,43,30,.05);
+  --shadow-hov:  0 2px 8px rgba(27,43,30,.1), 0 12px 32px rgba(27,43,30,.08);
+  --r: 12px; --r-sm: 8px; --r-pill: 999px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:#0F1610; --surface:#141C15; --card:#1A2419;
+    --ink:#DDD6C8; --ink-2:#A8B9AC; --ink-3:#6B8271;
+    --sel:#5B9A76; --primary:#D9A63F; --primary-h:#E8B855; --accent:#D9A63F;
+    --wash:#2A2313; --wash-line:#4A3D1C;
+    --border:#233027; --chip-bg:#1C2B1F; --chip-fg:#9CC7AB;
+    --tag-bg:#1E2A20; --tag-fg:#93AC99; --note-fg:#B0A88F;
+    --skel-base:#1E2C21; --skel-shine:#253423;
+    --shadow:0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+    --shadow-hov:0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+  --ground:#0F1610; --surface:#141C15; --card:#1A2419;
+  --ink:#DDD6C8; --ink-2:#A8B9AC; --ink-3:#6B8271;
+  --sel:#5B9A76; --primary:#D9A63F; --primary-h:#E8B855; --accent:#D9A63F;
+  --wash:#2A2313; --wash-line:#4A3D1C;
+  --border:#233027; --chip-bg:#1C2B1F; --chip-fg:#9CC7AB;
+  --tag-bg:#1E2A20; --tag-fg:#93AC99; --note-fg:#B0A88F;
+  --skel-base:#1E2C21; --skel-shine:#253423;
+  --shadow:0 1px 3px rgba(0,0,0,.4), 0 6px 20px rgba(0,0,0,.3);
+  --shadow-hov:0 2px 8px rgba(0,0,0,.5), 0 12px 32px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Source Sans 3",system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.55}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;font-weight:700;letter-spacing:-.025em;margin:0}
+a{color:var(--primary);text-decoration:none}
+a:hover{color:var(--primary-h)}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* ── HEADER + PRODUCT SWITCHER ───────────────────────────── */
+.site-header{background:var(--surface);border-bottom:1px solid var(--border)}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:14px 0 12px;gap:16px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-by{font-size:11px;letter-spacing:.18em;font-weight:600;color:var(--chip-fg);text-transform:uppercase}
+.site-nav{display:flex;align-items:center;gap:20px;font-size:14px;color:var(--chip-fg)}
+.site-nav a{color:var(--chip-fg)}
+.nav-cta{background:var(--sel);color:#fff!important;padding:8px 16px;border-radius:var(--r-sm);font-weight:600;font-size:13px}
+.switcher{display:flex;align-items:flex-end;gap:0}
+.switch-tab{padding:11px 20px 12px;font-size:15px;color:var(--ink-3);border-bottom:2px solid transparent;
+  display:flex;align-items:center;gap:7px;white-space:nowrap}
+.switch-tab:first-child{padding-left:0}
+.switch-tab.active{color:var(--ink);font-weight:600;border-bottom-color:var(--primary)}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.hero{text-align:center;padding:46px 0 0}
+.hero-stats{font-size:12px;letter-spacing:.1em;color:var(--primary);font-weight:600;margin-bottom:16px}
+.hero-hl{font-size:clamp(30px,5vw,50px);line-height:1.08;max-width:16ch;margin:0 auto}
+.hero-sub{font-size:17px;color:var(--ink-2);max-width:60ch;margin:15px auto 0}
+.role-bar{display:inline-flex;gap:4px;background:var(--chip-bg);padding:4px;border-radius:var(--r-pill);margin-top:26px}
+.role-btn{background:none;border:0;font:inherit;font-size:14px;color:var(--chip-fg);
+  padding:9px 22px;border-radius:var(--r-pill);cursor:pointer;min-height:40px}
+.role-btn.active{background:var(--surface);color:var(--ink);font-weight:600}
+
+/* ── STAGE STRIP ─────────────────────────────────────────── */
+.stages-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;gap:12px;flex-wrap:wrap}
+.stages-head h2{font-size:22px}
+.stages-hint{font-size:13px;color:var(--ink-2)}
+.stage-strip{position:relative;margin-top:4px}
+.stage-rail{position:absolute;top:6px;left:8%;right:8%;height:2px;
+  background:linear-gradient(90deg,var(--wash-line),var(--accent) 45%,var(--wash-line))}
+.stage-row{position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0}
+.stage-btn{background:none;border:0;font:inherit;cursor:pointer;padding:0 6px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;color:var(--ink-2);min-height:44px}
+.stage-dot{width:13px;height:13px;border-radius:var(--r-pill);background:var(--ground);
+  box-shadow:0 0 0 2px var(--accent),0 0 0 6px var(--ground);flex:none}
+.stage-btn.active .stage-dot{background:var(--accent)}
+.stage-label{font-size:13px;line-height:1.3}
+.stage-btn.active .stage-label{color:var(--ink);font-weight:700}
+.stage-count{font-size:12px;color:var(--primary);font-weight:600}
+
+/* ── SEARCH + CHIPS ──────────────────────────────────────── */
+.finder{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-top:40px}
+.search-row{display:flex;gap:12px;flex-wrap:wrap}
+.search-input{flex:1 1 280px;background:var(--ground);border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:14px 16px;font:inherit;font-size:15px;color:var(--ink);min-height:48px}
+.search-input::placeholder{color:var(--ink-3)}
+.btn-primary{background:var(--primary);color:#fff;border:0;font:inherit;font-size:14px;font-weight:600;
+  padding:14px 26px;border-radius:var(--r-sm);cursor:pointer;min-height:48px;white-space:nowrap}
+.btn-primary:hover{background:var(--primary-h)}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{background:var(--chip-bg);color:var(--chip-fg);border:0;font:inherit;font-size:13px;
+  padding:9px 15px;border-radius:var(--r-pill);cursor:pointer;min-height:38px}
+.chip:hover{background:var(--wash)}
+.chip.active{background:var(--primary);color:#fff}
+
+/* ── CALIFORNIA RIBBON ───────────────────────────────────── */
+.ca-band{background:var(--wash);border:1px solid var(--wash-line);border-radius:var(--r);
+  padding:22px 26px;margin-top:22px;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.ca-eyebrow{font-size:11px;letter-spacing:.12em;font-weight:700;color:var(--primary);text-transform:uppercase}
+.ca-band h3{font-size:21px;margin-top:6px}
+.ca-band p{font-size:14px;color:var(--ink-2);margin:6px 0 0;max-width:60ch}
+.ca-controls{display:flex;gap:10px;flex-wrap:wrap}
+.ca-select{background:var(--surface);border:1px solid var(--wash-line);border-radius:var(--r-sm);
+  padding:13px 14px;font:inherit;font-size:14px;color:var(--ink);min-height:46px;min-width:170px}
+.rc-result{margin-top:18px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:22px 24px;width:100%}
+.rc-result h4{font-family:"Playfair Display",Georgia,serif;font-size:22px;margin:6px 0 0;letter-spacing:-.02em}
+.rc-serves{font-size:13.5px;color:var(--ink-2);margin-top:7px}
+.rc-steps{margin-top:18px;border-top:1px solid var(--border)}
+.rc-step{display:grid;grid-template-columns:32px 1fr;gap:14px;padding:15px 0;border-bottom:1px solid var(--border)}
+.rc-num{width:28px;height:28px;border-radius:var(--r-pill);border:1.5px solid var(--primary);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.rc-step.first .rc-num{background:var(--primary);color:#fff}
+.rc-step h5{margin:0;font-size:15.5px;font-weight:600}
+.rc-step p{margin:4px 0 0;font-size:14px;color:var(--ink-2)}
+.rc-caveat{margin-top:16px;font-size:13.5px;color:var(--note-fg);border-left:2px solid var(--wash-line);padding-left:12px}
+
+/* ── RESULT TABS ─────────────────────────────────────────── */
+.results{margin-top:48px}
+.results-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.results-head h2{font-size:24px}
+.active-filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.pill-active{background:var(--wash);border:1px solid var(--wash-line);border-radius:var(--r-pill);
+  padding:6px 14px;font-size:13px;color:var(--primary);font-weight:600}
+.btn-clear{background:none;border:0;font:inherit;font-size:13px;color:var(--primary);font-weight:600;cursor:pointer;padding:6px}
+.tabs{display:flex;gap:26px;border-bottom:1px solid var(--border);margin-top:20px;overflow-x:auto}
+.tab{background:none;border:0;font:inherit;font-size:15px;color:var(--ink-2);cursor:pointer;
+  padding:12px 2px;border-bottom:2px solid transparent;display:flex;align-items:center;gap:7px;white-space:nowrap;min-height:44px}
+.tab.active{color:var(--ink);font-weight:700;border-bottom-color:var(--primary)}
+.tab-count{font-size:12px;color:var(--ink-3);font-weight:400}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:36px;margin-top:24px}
+@media (max-width:860px){.layout{grid-template-columns:1fr}}
+
+/* ── FILTER RAIL ─────────────────────────────────────────── */
+.facet{margin-bottom:24px}
+.facet-label{font-size:11px;letter-spacing:.1em;font-weight:700;color:var(--ink-2);text-transform:uppercase;margin-bottom:9px}
+.facet-opt{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink-2);
+  cursor:pointer;padding:6px 0;min-height:36px}
+.facet-box{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--ink-3);flex:none}
+.facet-opt.on{color:var(--ink);font-weight:600}
+.facet-opt.on .facet-box{background:var(--primary);border-color:var(--primary)}
+.facet-n{margin-left:auto;font-size:12px;color:var(--ink-3);font-weight:400}
+.legend{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:15px 16px}
+.legend-title{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--primary);
+  letter-spacing:.04em;margin-bottom:7px;text-transform:uppercase}
+.legend p{margin:0;font-size:12.5px;color:var(--ink-2)}
+
+/* ── RESOURCE CARDS ──────────────────────────────────────── */
+.res-list{display:flex;flex-direction:column;gap:14px}
+.res-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  padding:20px 22px;display:flex;gap:20px;align-items:flex-start}
+.res-card:hover{box-shadow:var(--shadow-hov)}
+.res-main{flex:1;min-width:0}
+.res-src{font-size:10px;letter-spacing:.12em;color:var(--primary);font-weight:700;text-transform:uppercase}
+.res-title{font-family:"Playfair Display",Georgia,serif;font-size:19px;font-weight:700;
+  letter-spacing:-.02em;line-height:1.25;margin:8px 0 0}
+.res-title a{color:var(--ink)}
+.res-title a:hover{color:var(--primary)}
+.res-by{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+.res-why{font-size:14px;color:var(--ink-2);margin:9px 0 0}
+.res-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{background:var(--tag-bg);color:var(--tag-fg);font-size:11px;padding:3px 9px;border-radius:var(--r-pill)}
+.res-note{font-size:13px;color:var(--note-fg);border-left:2px solid var(--border);
+  padding-left:12px;margin:10px 0 0}
+.res-side{flex:none;width:172px;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+@media (max-width:640px){
+  .res-card{flex-direction:column;gap:12px}
+  .res-side{width:auto;flex-direction:row;flex-wrap:wrap;align-items:flex-start}
+}
+
+/* Stance labels. Same size, same shape, none of them red.
+   The house rule is include-and-label, never bury: a contested
+   label is information, not a warning. */
+.stance{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+  letter-spacing:.03em;padding:4px 10px;border-radius:var(--r-pill);white-space:nowrap}
+.stance-dot{width:7px;height:7px;border-radius:var(--r-pill);flex:none}
+.st-affirming{background:var(--wash);color:var(--primary)}
+.st-affirming .stance-dot{background:var(--primary)}
+.st-neutral{background:var(--tag-bg);color:var(--tag-fg)}
+.st-neutral .stance-dot{border:1.5px solid var(--tag-fg)}
+.st-contested{background:var(--tag-bg);color:var(--note-fg)}
+.st-contested .stance-dot{border:1.5px solid var(--note-fg)}
+.st-portrayal-debated{background:var(--tag-bg);color:var(--note-fg)}
+.st-portrayal-debated .stance-dot{border:1.5px solid var(--note-fg)}
+.st-unreviewed{background:var(--tag-bg);color:var(--ink-3)}
+.st-unreviewed .stance-dot{border:1.5px dashed var(--ink-3)}
+.authored{display:inline-flex;align-items:center;gap:5px;color:var(--primary);
+  font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.res-access{font-size:12px;color:var(--ink-3)}
+
+/* ── STATES ──────────────────────────────────────────────── */
+.skel{background:linear-gradient(90deg,var(--skel-base) 25%,var(--skel-shine) 50%,var(--skel-base) 75%);
+  background-size:200% 100%;animation:sh 1.4s linear infinite;border-radius:var(--r);height:118px}
+@keyframes sh{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}}
+.empty-state{text-align:center;padding:48px 20px;color:var(--ink-2)}
+.empty-state h3{font-size:20px;margin-bottom:8px}
+.site-footer{margin-top:64px;border-top:1px solid var(--border);padding:24px 0 48px;
+  font-size:13px;color:var(--ink-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+</style>
+
+<header class="site-header">
+  <div class="wrap">
+    <div class="header-top">
+      <div class="logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4.5 12c0-2 1.6-3.6 3.6-3.6 3.6 0 4.2 7.2 7.8 7.2 2 0 3.6-1.6 3.6-3.6s-1.6-3.6-3.6-3.6c-3.6 0-4.2 7.2-7.8 7.2C6.1 15.6 4.5 14 4.5 12z"/>
+        </svg>
+        <span class="logo-by">Power Plus Partner</span>
+      </div>
+      <nav class="site-nav">
+        <a href="/therapists">Therapists</a>
+        <a href="/assess" class="nav-cta">Free assessment</a>
+      </nav>
+    </div>
+    <nav class="switcher" aria-label="Choose a library">
+      <a href="/" class="switch-tab">SEL Resource Finder</a>
+      <a href="/autism" class="switch-tab active" aria-current="page">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4.5 12c0-2 1.6-3.6 3.6-3.6 3.6 0 4.2 7.2 7.8 7.2 2 0 3.6-1.6 3.6-3.6s-1.6-3.6-3.6-3.6c-3.6 0-4.2 7.2-7.8 7.2C6.1 15.6 4.5 14 4.5 12z"/>
+        </svg>
+        Autism Library
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <p class="hero-stats" id="heroStats">494 RESOURCES · 101 CALIFORNIA-SPECIFIC · 93 AUTISTIC-AUTHORED · 290 FREE</p>
+    <h1 class="hero-hl">Autism support, sorted by where you are.</h1>
+    <p class="hero-sub">Tell us what you are dealing with and where you are in the process. We point you at what is useful now &mdash; and say plainly who made it and what the autistic community has said about it.</p>
+    <div class="role-bar" role="group" aria-label="I am a…">
+      <button class="role-btn active" data-role="parent">Parent</button>
+      <button class="role-btn" data-role="educator">Educator</button>
+      <button class="role-btn" data-role="clinician">Clinician</button>
+    </div>
+  </section>
+
+  <section style="margin-top:46px">
+    <div class="stages-head">
+      <h2>Where are you right now?</h2>
+      <span class="stages-hint">Pick a stage &mdash; many resources serve more than one</span>
+    </div>
+    <div class="stage-strip">
+      <div class="stage-rail" aria-hidden="true"></div>
+      <div class="stage-row" id="stageRow" role="group" aria-label="Stage"></div>
+    </div>
+  </section>
+
+  <section class="finder">
+    <div class="search-row">
+      <input type="text" class="search-input" id="searchInput"
+        placeholder="My 6-year-old melts down every school morning…"
+        aria-label="Describe what you are dealing with">
+      <button class="btn-primary" id="searchBtn">Find resources</button>
+    </div>
+    <div class="chip-row" id="needChips"></div>
+  </section>
+
+  <section class="ca-band">
+    <div style="flex:1;min-width:260px">
+      <div class="ca-eyebrow">California</div>
+      <h3>Find your Regional Center</h3>
+      <p>California runs autism services through 21 Regional Centers, assigned by where you live. Pick your county and we will tell you which one is yours and what to do first &mdash; the first step differs depending on whether your child is under three.</p>
+    </div>
+    <div class="ca-controls">
+      <label class="visually-hidden" for="countySelect" style="position:absolute;left:-9999px">County</label>
+      <select class="ca-select" id="countySelect">
+        <option value="">Choose your county…</option>
+      </select>
+    </div>
+    <div id="rcResult" hidden></div>
+  </section>
+
+  <section class="results" id="results">
+    <div class="results-head">
+      <h2 id="resultsTitle">Start here</h2>
+    </div>
+    <div class="active-filters" id="activeFilters"></div>
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div class="layout">
+      <aside id="facets" aria-label="Filters"></aside>
+      <div>
+        <div class="res-list" id="resList"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer wrap">
+  <span>Every entry is labeled, nothing is buried. Sources verified September 2026.</span>
+  <span><a href="/">SEL Resource Finder</a></span>
+</footer>
+
+<script>
+const SB  = 'https://nhdswigpkiwbgtxugtmw.supabase.co';
+const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZHN3aWdwa2l3Ymd0eHVndG13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyMjQ5NTAsImV4cCI6MjEwMzgwMDk1MH0.MCKdc8uhnLVkc8tO8mtDm504zCYRp0azfcMj0a_yXIM';
+const H   = { 'apikey': KEY, 'Authorization': `Bearer ${KEY}` };
+
+const INF = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4.5 12c0-2 1.6-3.6 3.6-3.6 3.6 0 4.2 7.2 7.8 7.2 2 0 3.6-1.6 3.6-3.6s-1.6-3.6-3.6-3.6c-3.6 0-4.2 7.2-7.8 7.2C6.1 15.6 4.5 14 4.5 12z"/></svg>';
+
+// ── STAGES: matching axis 2 ───────────────────────────────
+const STAGES = [
+  { id:'suspecting',      label:'Something<br>feels different' },
+  { id:'assessment',      label:'Getting<br>assessed' },
+  { id:'newly-diagnosed', label:'Newly<br>diagnosed' },
+  { id:'school-years',    label:'School<br>years' },
+  { id:'teen-years',      label:'Teen<br>years' },
+  { id:'adulthood',       label:'Adulthood<br>ahead' },
+];
+
+// ── NEEDS: matching axis 1 ────────────────────────────────
+const NEEDS = [
+  { tag:'meltdowns-shutdowns',  label:'Meltdowns & shutdowns' },
+  { tag:'transitions-routines', label:'Transitions & routines' },
+  { tag:'iep-504',              label:'IEP & school' },
+  { tag:'sensory-processing',   label:'Sensory' },
+  { tag:'nonspeaking-aac',      label:'Nonspeaking & AAC' },
+  { tag:'sleep',                label:'Sleep' },
+  { tag:'toileting',            label:'Toileting' },
+  { tag:'feeding-eating',       label:'Feeding' },
+  { tag:'friendship-peers',     label:'Friendship' },
+  { tag:'puberty-body',         label:'Puberty' },
+  { tag:'safety-elopement',     label:'Wandering & safety' },
+  { tag:'caregiver-burnout',    label:'Caregiver burnout' },
+];
+
+// ── Free text → need tags. Same shape as the SEL finder's RULES. ──
+const RULES = [
+  { re:/meltdown|melt down|shutdown|shut down|tantrum|explod|dysregulat/i, tags:['meltdowns-shutdowns','self-regulation'] },
+  { re:/transition|routine|schedule|change of plan|switch(ing)? (tasks|activit)/i, tags:['transitions-routines'] },
+  { re:/\biep\b|\b504\b|school district|special ed|classroom|teacher|aide\b/i, tags:['iep-504','school-advocacy','classroom-strategies'] },
+  { re:/sensory|noise|loud|texture|overwhelm|overstimul|light sensit|clothes|seams/i, tags:['sensory-processing','self-regulation'] },
+  { re:/nonspeak|non-speak|non ?verbal|\baac\b|doesn'?t talk|not talking|no words|communicat/i, tags:['nonspeaking-aac','speech-language'] },
+  { re:/speech|language|echolal|repeat(s|ing)? (what|phrases)|scripting/i, tags:['speech-language','echolalia'] },
+  { re:/sleep|bedtime|night ?wak|insomnia|won'?t sleep/i, tags:['sleep'] },
+  { re:/toilet|potty|pee|poop|accident/i, tags:['toileting'] },
+  { re:/eat|food|feed|picky|mealtim|chew|swallow/i, tags:['feeding-eating'] },
+  { re:/friend|lonely|peer|play ?date|social skill|left out/i, tags:['friendship-peers','social-communication'] },
+  { re:/bully|bullied|teas|excluded|mean kids/i, tags:['bullying','friendship-peers'] },
+  { re:/pubert|body chang|period|menstru|hygien|shav|deodorant|sex ed/i, tags:['puberty-body'] },
+  { re:/wander|elope|runs? (off|away)|bolt|door|lost|drown/i, tags:['safety-elopement'] },
+  { re:/burn ?out|exhaust|overwhelmed|can'?t cope|no support|respite|i'?m tired/i, tags:['caregiver-burnout','masking-burnout'] },
+  { re:/diagnos|assess|evaluat|wait ?list|referral|screening/i, tags:['seeking-diagnosis','just-diagnosed'] },
+  { re:/just (found out|told|diagnosed)|new(ly)? diagnos|what now|where (do i|to) start/i, tags:['just-diagnosed','understanding-autism'] },
+  { re:/mask|masking|camouflag|fitting in|pretend/i, tags:['masking-burnout','identity-self-esteem'] },
+  { re:/anxi|worri|panic|scared|afraid/i, tags:['anxiety'] },
+  { re:/depress|\bsad\b|hopeless|withdraw/i, tags:['depression-mood'] },
+  { re:/stim|flap|rock|spin|fidget/i, tags:['stimming','self-regulation'] },
+  { re:/sibling|brother|sister/i, tags:['siblings'] },
+  { re:/adult|college|job|employ|independen|transition to|after (high )?school|18/i, tags:['transition-planning','daily-living-skills'] },
+  { re:/insur|medi-?cal|medicaid|fund|pay for|afford|regional center/i, tags:['insurance-funding'] },
+  { re:/\badhd\b|epileps|seizure|gi\b|stomach|co-?occur/i, tags:['co-occurring'] },
+  { re:/explain|tell (my|the|his|her)|grandparent|relatives|classmates/i, tags:['explaining-to-others'] },
+  { re:/dress|brush teeth|shower|chores|life skill|daily living/i, tags:['daily-living-skills'] },
+  { re:/identity|self.?esteem|confiden|who (i|he|she|they) (am|is|are)/i, tags:['identity-self-esteem'] },
+];
+
+// ── TABS: resource_type → group ───────────────────────────
+const TABS = [
+  { id:'books',     label:'Books',               types:['book'] },
+  { id:'tools',     label:'Tools & printables',  types:['printable','tool','app'] },
+  { id:'videos',    label:'Videos',              types:['video','creator'] },
+  { id:'services',  label:'Services',            types:['organization','provider'] },
+  { id:'courses',   label:'Courses',             types:['course','event'] },
+  { id:'community', label:'Community',           types:['community'] },
+];
+
+const STANCE_LABEL = {
+  'affirming':'Affirming', 'neutral':'Neutral',
+  'contested':'Contested — see note', 'portrayal-debated':'Portrayal debated',
+  'unreviewed':'Not yet reviewed',
+};
+const AGE_LABEL = { early:'0–5 early', elementary:'6–11 elementary', teen:'12–18 teen', adult:'18+ adult', all:'All ages' };
+const ACCESS_LABEL = { free:'Free', freemium:'Free tier', paid:'Paid', subscription:'Subscription', insurance:'Insurance', varies:'Varies' };
+</script>
+<script>
+// ── CALIFORNIA REGIONAL CENTERS ───────────────────────────
+// County assignments reproduced from the California DDS directory
+// (dds.ca.gov/rc/listings), fetched 2026-09-06. Los Angeles County is
+// assigned by ZIP and health district across seven centers, not by county,
+// so it is handled separately rather than guessed at.
+const RC = [
+  { name:'Alta California Regional Center', url:'https://www.altaregional.org/',
+    counties:['Alpine','Colusa','El Dorado','Nevada','Placer','Sacramento','Sierra','Sutter','Yolo','Yuba'] },
+  { name:'Central Valley Regional Center', url:'https://www.cvrc.org/',
+    counties:['Fresno','Kings','Madera','Mariposa','Merced','Tulare'] },
+  { name:'Far Northern Regional Center', url:'https://www.farnorthernrc.org/',
+    counties:['Butte','Glenn','Lassen','Modoc','Plumas','Shasta','Siskiyou','Tehama','Trinity'] },
+  { name:'Golden Gate Regional Center', url:'https://www.ggrc.org/',
+    counties:['Marin','San Francisco','San Mateo'] },
+  { name:'Inland Regional Center', url:'https://www.inlandrc.org/',
+    counties:['Riverside','San Bernardino'] },
+  { name:'Kern Regional Center', url:'https://www.kernrc.org/',
+    counties:['Inyo','Kern','Mono'] },
+  { name:'North Bay Regional Center', url:'https://nbrc.net/',
+    counties:['Napa','Solano','Sonoma'] },
+  { name:'Redwood Coast Regional Center', url:'https://redwoodcoastrc.org/',
+    counties:['Del Norte','Humboldt','Lake','Mendocino'] },
+  { name:'Regional Center of Orange County', url:'https://www.rcocdd.com/',
+    counties:['Orange'] },
+  { name:'Regional Center of the East Bay', url:'https://rceb.org/',
+    counties:['Alameda','Contra Costa'] },
+  { name:'San Andreas Regional Center', url:'https://www.sanandreasregional.org/',
+    counties:['Monterey','San Benito','Santa Clara','Santa Cruz'] },
+  { name:'San Diego Regional Center', url:'https://www.sdrc.org/',
+    counties:['Imperial','San Diego'] },
+  { name:'Tri-Counties Regional Center', url:'https://www.tri-counties.org/',
+    counties:['San Luis Obispo','Santa Barbara','Ventura'] },
+  { name:'Valley Mountain Regional Center', url:'https://www.vmrc.net/',
+    counties:['Amador','Calaveras','San Joaquin','Stanislaus','Tuolumne'] },
+];
+// The seven Los Angeles County centers, by the health districts DDS names.
+const LA_CENTERS = [
+  { name:'Eastern Los Angeles Regional Center', url:'https://www.elarc.org/',      area:'Alhambra, East Los Angeles, Northeast and Whittier health districts' },
+  { name:'Frank D. Lanterman Regional Center',  url:'https://lanterman.org/',      area:'Central, Glendale, Hollywood-Wilshire and Pasadena health districts' },
+  { name:'Harbor Regional Center',              url:'https://www.harborrc.org/',   area:'Bellflower, Harbor, Long Beach and Torrance health districts' },
+  { name:'North Los Angeles County Regional Center', url:'https://www.nlacrc.org/', area:'East Valley, San Fernando and West Valley health districts — the San Fernando, Santa Clarita and Antelope Valleys' },
+  { name:'San Gabriel/Pomona Regional Center',  url:'https://www.sgprc.org/',      area:'El Monte, Monrovia, Pomona and Glendora' },
+  { name:'South Central Los Angeles Regional Center', url:'https://www.sclarc.org/', area:'Compton, San Antonio, South, Southeast and Southwest health districts' },
+  { name:'Westside Regional Center',            url:'https://www.westsiderc.org/', area:'Inglewood and Santa Monica-West health districts' },
+];
+const DDS_LOOKUP = 'https://www.dds.ca.gov/rc/listings/';
+
+const RC_STEPS = [
+  { h:'Under 3? Ask for an Early Start intake.',
+    p:'This is your first call after a concern is raised — no diagnosis and no doctor’s referral needed. Early Start is California’s IDEA Part C program and the regional center runs the intake.' },
+  { h:'3 or older? Apply for Lanterman Act eligibility.',
+    p:'The regional center assesses eligibility and assigns a service coordinator. DDS states there is no charge for the diagnosis and eligibility assessment itself.' },
+  { h:'Request a school assessment — in writing, separately.',
+    p:'The school district process is independent of the regional center and runs on its own legal clock. Put the request in writing and date it; that date starts the timeline.' },
+  { h:'Once eligible, the door opens wider.',
+    p:'Respite, behavioral services, day and employment programs, and the Self-Determination Program all run through the regional center’s Individual Program Plan.' },
+];
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+const ALL_COUNTIES = [...new Set([...RC.flatMap(r=>r.counties), 'Los Angeles'])].sort();
+
+function renderCounties(){
+  const sel = document.getElementById('countySelect');
+  ALL_COUNTIES.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change', () => showRC(sel.value));
+}
+
+function showRC(county){
+  const box = document.getElementById('rcResult');
+  if (!county) { box.hidden = true; box.innerHTML=''; return; }
+  const steps = RC_STEPS.map((s,i)=>`
+    <div class="rc-step${i===0?' first':''}">
+      <div class="rc-num">${i+1}</div>
+      <div><h5>${esc(s.h)}</h5><p>${esc(s.p)}</p></div>
+    </div>`).join('');
+
+  if (county === 'Los Angeles') {
+    box.innerHTML = `
+      <div class="rc-result">
+        <div class="ca-eyebrow">Los Angeles County</div>
+        <h4>Seven centers serve this county</h4>
+        <p class="rc-serves">Los Angeles is assigned by <strong>ZIP code and health district</strong>, not by city name — some cities appear on two centers’ own lists. Check your ZIP against the state directory rather than matching your city, because the wrong intake costs weeks.</p>
+        <div class="rc-steps">
+          ${LA_CENTERS.map(c=>`
+            <div class="rc-step">
+              <div class="rc-num">·</div>
+              <div><h5><a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.name)}</a></h5>
+                   <p>${esc(c.area)}</p></div>
+            </div>`).join('')}
+        </div>
+        <p style="margin-top:16px"><a href="${DDS_LOOKUP}" target="_blank" rel="noopener">Look up your ZIP in the official DDS directory →</a></p>
+        <div class="rc-steps" style="margin-top:22px">${steps}</div>
+      </div>`;
+  } else {
+    const rc = RC.find(r => r.counties.includes(county));
+    if (!rc) { box.hidden = true; return; }
+    box.innerHTML = `
+      <div class="rc-result">
+        <div class="ca-eyebrow">Your regional center</div>
+        <h4><a href="${esc(rc.url)}" target="_blank" rel="noopener">${esc(rc.name)}</a></h4>
+        <p class="rc-serves">Serves ${rc.counties.map(c=>c===county?`<strong>${esc(c)}</strong>`:esc(c)).join(', ')}.</p>
+        <div class="rc-steps">${steps}</div>
+        <p class="rc-caveat">County coverage is reproduced from the California Department of Developmental Services regional center directory. Confirm current contact details on the center’s own site before you call.</p>
+      </div>`;
+  }
+  box.hidden = false;
+}
+</script>
+<script>
+// ── STATE ─────────────────────────────────────────────────
+const S = {
+  all: null,          // every shippable row, fetched once (494 rows)
+  role: 'parent',
+  stage: null,
+  needs: new Set(),
+  query: '',
+  tab: 'books',
+  facets: { age_band:new Set(), access:new Set(), stance:new Set() },
+};
+
+// RLS already hides anything held back, so no publish_status filter here.
+async function fetchAll(){
+  const r = await fetch(`${SB}/rest/v1/autism_resources?select=*&limit=1000`, { headers:H });
+  if (!r.ok) throw new Error(`Supabase ${r.status}`);
+  return r.json();
+}
+
+function extractTags(text){
+  const hits = new Set();
+  RULES.forEach(r => { if (r.re.test(text)) r.tags.forEach(t => hits.add(t)); });
+  return [...hits];
+}
+
+// ── FILTERING ─────────────────────────────────────────────
+function matches(rec, opts={}){
+  const skipFacets = opts.skipFacets;
+  if (!(rec.audience||[]).includes(S.role)) return false;
+  if (S.stage && !(rec.stages||[]).includes(S.stage)) return false;
+
+  const wanted = new Set([...S.needs, ...extractTags(S.query)]);
+  if (wanted.size){
+    const recNeeds = rec.needs || [];
+    if (!recNeeds.some(n => wanted.has(n))) {
+      // fall back to a text match so a query we have no rule for still works
+      const q = S.query.trim().toLowerCase();
+      const hay = `${rec.title} ${rec.creator||''} ${rec.summary||''} ${rec.why_it_helps||''}`.toLowerCase();
+      if (!(q.length > 2 && hay.includes(q))) return false;
+    }
+  }
+  if (!skipFacets){
+    const f = S.facets;
+    if (f.age_band.size && !(rec.age_band||[]).some(a => f.age_band.has(a))) return false;
+    if (f.access.size   && !f.access.has(rec.access)) return false;
+    if (f.stance.size   && !f.stance.has(rec.stance)) return false;
+  }
+  return true;
+}
+
+function scoped(){ return (S.all||[]).filter(r => matches(r)); }
+function scopedNoFacets(){ return (S.all||[]).filter(r => matches(r,{skipFacets:true})); }
+function tabTypes(id){ return TABS.find(t=>t.id===id).types; }
+function inTab(list, id){ const t = tabTypes(id); return list.filter(r => t.includes(r.resource_type)); }
+
+// ── RENDER: stages ────────────────────────────────────────
+function renderStages(){
+  const row = document.getElementById('stageRow');
+  row.innerHTML = STAGES.map(s => {
+    const n = (S.all||[]).filter(r =>
+      (r.audience||[]).includes(S.role) && (r.stages||[]).includes(s.id)).length;
+    return `<button class="stage-btn${S.stage===s.id?' active':''}" data-stage="${s.id}"
+              aria-pressed="${S.stage===s.id}">
+        <span class="stage-dot"></span>
+        <span class="stage-label">${s.label}</span>
+        <span class="stage-count">${n} resources</span>
+      </button>`;
+  }).join('');
+  row.querySelectorAll('.stage-btn').forEach(b =>
+    b.addEventListener('click', () => {
+      S.stage = (S.stage === b.dataset.stage) ? null : b.dataset.stage;
+      renderStages(); renderAll();
+    }));
+}
+
+// ── RENDER: need chips ────────────────────────────────────
+function renderChips(){
+  const row = document.getElementById('needChips');
+  row.innerHTML = NEEDS.map(n =>
+    `<button class="chip${S.needs.has(n.tag)?' active':''}" data-tag="${n.tag}"
+       aria-pressed="${S.needs.has(n.tag)}">${esc(n.label)}</button>`).join('');
+  row.querySelectorAll('.chip').forEach(b =>
+    b.addEventListener('click', () => {
+      const t = b.dataset.tag;
+      S.needs.has(t) ? S.needs.delete(t) : S.needs.add(t);
+      renderChips(); renderAll();
+    }));
+}
+
+// ── RENDER: tabs, facets ──────────────────────────────────
+function renderTabs(list){
+  const el = document.getElementById('tabs');
+  el.innerHTML = TABS.map(t => {
+    const n = inTab(list, t.id).length;
+    return `<button class="tab${S.tab===t.id?' active':''}" data-tab="${t.id}" role="tab"
+              aria-selected="${S.tab===t.id}">${esc(t.label)}<span class="tab-count">${n}</span></button>`;
+  }).join('');
+  el.querySelectorAll('.tab').forEach(b =>
+    b.addEventListener('click', () => { S.tab = b.dataset.tab; renderAll(); }));
+}
+
+function facetBlock(key, label, order, labels, pool){
+  const counts = {};
+  pool.forEach(r => {
+    const vals = Array.isArray(r[key]) ? r[key] : [r[key]];
+    vals.filter(Boolean).forEach(v => counts[v] = (counts[v]||0)+1);
+  });
+  const opts = order.filter(v => counts[v]).map(v => {
+    const on = S.facets[key].has(v);
+    return `<div class="facet-opt${on?' on':''}" data-facet="${key}" data-val="${v}"
+              role="checkbox" tabindex="0" aria-checked="${on}">
+        <span class="facet-box"></span><span>${esc(labels[v]||v)}</span>
+        <span class="facet-n">${counts[v]}</span></div>`;
+  }).join('');
+  return opts ? `<div class="facet"><div class="facet-label">${label}</div>${opts}</div>` : '';
+}
+
+function renderFacets(){
+  const pool = inTab(scopedNoFacets(), S.tab);
+  const el = document.getElementById('facets');
+  el.innerHTML =
+    facetBlock('age_band','Age band',['all','early','elementary','teen','adult'],AGE_LABEL,pool) +
+    facetBlock('access','Access',['free','freemium','paid','subscription','insurance','varies'],ACCESS_LABEL,pool) +
+    facetBlock('stance','Stance',['affirming','neutral','contested','portrayal-debated','unreviewed'],STANCE_LABEL,pool) +
+    `<div class="legend">
+       <div class="legend-title">${INF} What the labels mean</div>
+       <p>Nothing is hidden here. A contested label is not a warning — it means the autistic
+          community has a documented objection, and we say who made it so you can weigh it yourself.</p>
+     </div>`;
+  const toggle = d => {
+    const k = d.dataset.facet, v = d.dataset.val;
+    S.facets[k].has(v) ? S.facets[k].delete(v) : S.facets[k].add(v);
+    renderAll();
+  };
+  el.querySelectorAll('.facet-opt').forEach(d => {
+    d.addEventListener('click', () => toggle(d));
+    d.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(d); }
+    });
+  });
+}
+</script>
+<script>
+// ── RENDER: cards ─────────────────────────────────────────
+function needLabel(tag){
+  const n = NEEDS.find(x => x.tag === tag);
+  return n ? n.label : tag.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function cardHTML(r){
+  const link = r.url || r.secondary_url;
+  const title = link
+    ? `<a href="${esc(link)}" target="_blank" rel="noopener">${esc(r.title)}</a>`
+    : esc(r.title);
+  const by = [r.creator, r.publisher, r.year].filter(Boolean).join(' · ');
+  const tags = (r.needs||[]).slice(0,3).map(t => `<span class="tag">${esc(needLabel(t))}</span>`).join('');
+  const stance = `<span class="stance st-${esc(r.stance)}"><span class="stance-dot"></span>${esc(STANCE_LABEL[r.stance]||r.stance)}</span>`;
+  const authored = r.autistic_authored
+    ? `<span class="authored">${INF} Autistic-authored</span>` : '';
+  const access = r.access ? `<span class="res-access">${esc(ACCESS_LABEL[r.access]||r.access)}</span>` : '';
+  // The stance note is shown in full whenever there is one — burying it would
+  // defeat the point of having it.
+  const note = r.stance_note && r.stance !== 'affirming'
+    ? `<p class="res-note">${esc(r.stance_note)}</p>` : '';
+  return `
+    <article class="res-card">
+      <div class="res-main">
+        ${r.source_authority ? `<div class="res-src">${esc(String(r.source_authority).split(';')[0].slice(0,64))}</div>` : ''}
+        <h3 class="res-title">${title}</h3>
+        ${by ? `<div class="res-by">${esc(by)}</div>` : ''}
+        ${r.why_it_helps ? `<p class="res-why">${esc(r.why_it_helps)}</p>` : ''}
+        ${tags ? `<div class="res-tags">${tags}</div>` : ''}
+        ${note}
+      </div>
+      <div class="res-side">${stance}${authored}${access}</div>
+    </article>`;
+}
+
+function renderList(list){
+  const el = document.getElementById('resList');
+  if (!list.length){
+    el.innerHTML = `<div class="empty-state">
+        <h3>Nothing matches that yet</h3>
+        <p>Try a different stage, drop a filter, or describe the situation in your own words.</p>
+      </div>`;
+    return;
+  }
+  // Affirming and autistic-authored first — the house stance, made visible in
+  // the ordering rather than only in the labels.
+  const rank = r => (r.autistic_authored ? 0 : 1) + (r.stance === 'affirming' ? 0 : 1);
+  el.innerHTML = [...list].sort((a,b) => rank(a)-rank(b)).slice(0,60).map(cardHTML).join('');
+}
+
+function renderActive(){
+  const el = document.getElementById('activeFilters');
+  const bits = [];
+  bits.push(`<span class="pill-active">${S.role[0].toUpperCase()+S.role.slice(1)}</span>`);
+  if (S.stage){
+    const s = STAGES.find(x=>x.id===S.stage);
+    bits.push(`<span class="pill-active">${s.label.replace(/<br>/g,' ')}</span>`);
+  }
+  S.needs.forEach(t => bits.push(`<span class="pill-active">${esc(needLabel(t))}</span>`));
+  Object.entries(S.facets).forEach(([k,set]) => set.forEach(v =>
+    bits.push(`<span class="pill-active">${esc((k==='age_band'?AGE_LABEL:k==='access'?ACCESS_LABEL:STANCE_LABEL)[v]||v)}</span>`)));
+  if (S.query.trim()) bits.push(`<span class="pill-active">&ldquo;${esc(S.query.trim())}&rdquo;</span>`);
+  const clearable = S.stage || S.needs.size || S.query.trim() ||
+    Object.values(S.facets).some(s=>s.size);
+  if (clearable) bits.push(`<button class="btn-clear" id="clearAll">Clear all</button>`);
+  el.innerHTML = bits.join('');
+  const c = document.getElementById('clearAll');
+  if (c) c.addEventListener('click', () => {
+    S.stage = null; S.needs.clear(); S.query = '';
+    Object.values(S.facets).forEach(s => s.clear());
+    document.getElementById('searchInput').value = '';
+    renderStages(); renderChips(); renderAll();
+  });
+}
+
+function renderAll(){
+  const list = scoped();
+  document.getElementById('resultsTitle').textContent =
+    (S.stage || S.needs.size || S.query.trim()) ? `${list.length} matches` : 'Start here';
+  renderActive();
+  renderTabs(list);
+  renderFacets();
+  renderList(inTab(list, S.tab));
+}
+
+// ── BOOT ──────────────────────────────────────────────────
+function showSkeletons(){
+  document.getElementById('resList').innerHTML =
+    Array.from({length:4}, () => '<div class="skel"></div>').join('');
+}
+
+function wire(){
+  document.querySelectorAll('.role-btn').forEach(b =>
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.role-btn').forEach(x => {
+        x.classList.toggle('active', x === b);
+      });
+      S.role = b.dataset.role;
+      renderStages(); renderAll();
+    }));
+
+  const input = document.getElementById('searchInput');
+  const run = () => { S.query = input.value; renderAll(); };
+  document.getElementById('searchBtn').addEventListener('click', run);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+}
+
+(async function init(){
+  renderCounties();
+  wire();
+  showSkeletons();
+  try {
+    S.all = await fetchAll();
+  } catch (e) {
+    document.getElementById('resList').innerHTML =
+      `<div class="empty-state"><h3>Could not load the library</h3>
+        <p>The resource database did not respond. Refresh in a moment.</p></div>`;
+    return;
+  }
+  const n = S.all.length;
+  const ca = S.all.filter(r => (r.region||'').startsWith('CA')).length;
+  const au = S.all.filter(r => r.autistic_authored).length;
+  const fr = S.all.filter(r => r.access === 'free').length;
+  document.getElementById('heroStats').textContent =
+    `${n} RESOURCES · ${ca} CALIFORNIA-SPECIFIC · ${au} AUTISTIC-AUTHORED · ${fr} FREE`;
+  renderStages();
+  renderChips();
+  renderAll();
+})();
+</script>

@@ -15,6 +15,7 @@ numpy==1.26.4
 # Storage
 sqlalchemy==2.0.30
 pymongo==4.7.2
+supabase==2.15.1
 
 # Utilities
 python-dotenv==1.0.1

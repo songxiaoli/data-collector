@@ -85,7 +85,15 @@ RC_SOURCES = {
     "westside": dict(name="Westside Regional Center", fmt="pdf",
                      url="https://westsiderc.org/wp-content/uploads/2026/03/WRC-SERVICE-PROVIDER-DIRECTORY-Updated-3.26.2026.pdf"),
     "sdrc":     dict(name="San Diego Regional Center", fmt="pdf",
-                     url="https://www.sdrc.org/_files/ugd/8a8ffe_72b7309de1bb4318bc5d5b6bc28b6400.pdf"),
+                     url="https://www.sdrc.org/_files/ugd/8a8ffe_72b7309de1bb4318bc5d5b6bc28b6400.pdf",
+                     note="word-layout PDF, service categories in words rather than codes"),
+    "sarc":     dict(name="San Andreas Regional Center", fmt="csv",
+                     url="https://sanandreasregional.org/wp-content/uploads/provider-directory/sarc-provider-directory-2026-07-13.csv"),
+    "harbor":   dict(name="Harbor Regional Center", fmt="pdf",
+                     url="https://www.harborrc.org/wp-content/uploads/2025/09/service_provider_resource_list_9.10.25.pdf"),
+    "ggrc":     dict(name="Golden Gate Regional Center", fmt="pdf",
+                     url="https://www.ggrc.org/wp-content/uploads/2026/03/Service_Provider_Directory_3-26.pdf",
+                     note="category words rather than service codes"),
 
     "acrc":     dict(name="Alta California Regional Center", fmt=None, url=None),
     "cvrc":     dict(name="Central Valley Regional Center", fmt=None, url=None),
@@ -93,8 +101,6 @@ RC_SOURCES = {
                      note="site returns 403 to any non-browser request"),
     "farnorthern": dict(name="Far Northern Regional Center", fmt=None, url=None,
                      note="bot-detection challenge; must be downloaded by hand"),
-    "ggrc":     dict(name="Golden Gate Regional Center", fmt=None, url=None),
-    "harbor":   dict(name="Harbor Regional Center", fmt=None, url=None),
     "kern":     dict(name="Kern Regional Center", fmt=None, url=None),
     "lanterman": dict(name="Frank D. Lanterman Regional Center", fmt=None, url=None,
                      note="bot-detection challenge; must be downloaded by hand"),
@@ -102,7 +108,6 @@ RC_SOURCES = {
     "nlacrc":   dict(name="North Los Angeles County Regional Center", fmt=None, url=None),
     "redwood":  dict(name="Redwood Coast Regional Center", fmt=None, url=None,
                      note="site returns 403 to any non-browser request"),
-    "sarc":     dict(name="San Andreas Regional Center", fmt=None, url=None),
     "sclarc":   dict(name="South Central Los Angeles Regional Center", fmt=None, url=None),
     "tcrc":     dict(name="Tri-Counties Regional Center", fmt=None, url=None),
     "vmrc":     dict(name="Valley Mountain Regional Center", fmt=None, url=None),
@@ -136,13 +141,18 @@ def fetch(only=None):
 
 # ---------------------------------------------------------------- parse
 HDR_KEYS = {
-    "vendor_no": ("VENDOR#", "VENDOR NO", "VENDOR NUMBER", "VENDOR ID"),
-    "category":  ("SVC CATEGORY", "SERVICE CATEGORY"),
+    "vendor_no": ("VENDOR#", "VENDOR NO", "VENDOR NUMBER", "VENDOR ID",
+                  "VENDOR #", "RESOURCE #", "RESOURCE NUMBER"),
+    "category":  ("SVC CATEGORY", "SERVICE CATEGORY", "SRV CATEGORY",
+                  "SERVICE TYPE(S)", "DESCRIPTION"),
     "name":      ("VENDOR NAME", "PROVIDER NAME", "SERVICE PROVIDER", "COMPANY NAME",
-                  "RESOURCE NAME"),
-    "code":      ("SVC CODE", "SERVICE CODE", "SERV CODE"),
+                  "RESOURCE NAME", "SERVICE PROVIDER NAME"),
+    # "SEVICE CODE" is not a typo here: it is Harbor RC's own column heading,
+    # and matching what a file actually says beats matching what it should say.
+    "code":      ("SVC CODE", "SERVICE CODE", "SERV CODE", "SEVICE CODE",
+                  "SERVICE CODE(S)", "SRV CODE"),
     "sub":       ("SUB CODE", "SUB-CODE", "SUBCODE"),
-    "address":   ("ADDRESS", "STREET"),
+    "address":   ("ADDRESS", "STREET", "MAILING ADDRESS", "PHYSICAL ADDRESS"),
     "city":      ("CITY",),
     "zip":       ("ZIP CODE", "ZIPCODE", "ZIP"),
     "phone":     ("PHONE NUMBER", "PHONE", "TELEPHONE"),
@@ -192,6 +202,13 @@ def parse_xlsx(path):
                     for f, i in idx.items()})
     return out
 
+def parse_csv(path):
+    with open(path, newline="", encoding="utf-8-sig", errors="replace") as fh:
+        rdr = csv.reader(fh)
+        idx = _map_header(next(rdr))
+        return [{f: (r[i].strip() if i < len(r) else "") for f, i in idx.items()}
+                for r in rdr]
+
 def parse_pdf(path):
     pdfplumber = need("pdfplumber")
     out, idx = [], None
@@ -231,7 +248,8 @@ def parse(only=None):
             print(f"  {key:11s} not downloaded — run --fetch")
             continue
         try:
-            rows = parse_xlsx(path) if src["fmt"] == "xlsx" else parse_pdf(path)
+            rows = {"xlsx": parse_xlsx, "csv": parse_csv,
+                    "pdf": parse_pdf}[src["fmt"]](path)
         except Exception as e:
             print(f"  {key:11s} PARSE FAILED: {type(e).__name__}: {e}")
             continue

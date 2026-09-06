@@ -669,6 +669,7 @@ a{color:var(--primary);}
         </select>
         <button class="online-toggle" id="onlineToggle">Online only</button>
         <button class="online-toggle active" id="childFocusToggle">Child-focused</button>
+        <button class="online-toggle" id="slidingScaleToggle">💰 Sliding scale</button>
       </div>
       <div class="spec-chips" id="specChips"></div>
       <div class="therapist-grid" id="therapistGrid"></div>
@@ -1515,6 +1516,7 @@ let activeSpec = '';
 let onlineOnly = false;
 let childFocusOnly = true;
 let ageFilter = '';
+let slidingScaleOnly = false;
 
 async function initTherapistsTab() {
   if (tLoaded) return;
@@ -1550,6 +1552,9 @@ function wireTherapistControls() {
   document.getElementById('childFocusToggle').addEventListener('click', function() {
     childFocusOnly = !childFocusOnly; this.classList.toggle('active', childFocusOnly); this.setAttribute('aria-pressed', childFocusOnly); applyTFilters();
   });
+  document.getElementById('slidingScaleToggle').addEventListener('click', function() {
+    slidingScaleOnly = !slidingScaleOnly; this.classList.toggle('active', slidingScaleOnly); this.setAttribute('aria-pressed', slidingScaleOnly); applyTFilters();
+  });
 }
 
 function renderSpecChips() {
@@ -1575,6 +1580,7 @@ function applyTFilters() {
   if (onlineOnly) f = f.filter(t => t.online);
   if (ageFilter)  f = f.filter(t => (t.client_age||'').includes(ageFilter));
   if (childFocusOnly) f = f.filter(t => (t.child_focus_score||0) >= 5);
+  if (slidingScaleOnly) f = f.filter(t => (t.fees||'').toLowerCase().includes('sliding scale') || (t.source||'').includes('open_path'));
   document.getElementById('resultsCount').textContent = f.length + ' therapists';
   document.getElementById('resultsLabel').textContent = (city||ins||onlineOnly||activeSpec) ? 'Matching therapists' : 'Child-focused therapists';
   renderTherapists(f);

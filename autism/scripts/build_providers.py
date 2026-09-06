@@ -448,6 +448,102 @@ def load_dca(path):
 def norm_lic(s): return re.sub(r"[^A-Z0-9]", "", (s or "").upper())
 def norm_name(s): return re.sub(r"[^a-z ]", "", (s or "").lower()).strip()
 
+# ------------------------------------------------------------------ RC match
+# Regional centre vendor lists are the autism-relevance signal; NPPES is the
+# identity spine. Neither carries the other's key, so they are matched on what
+# both actually print: phone number, then name plus postcode, then name plus
+# city. Phone first because a ten-digit number is the only field in either
+# source that is close to unique and hard to typo into another real value.
+RC_FILE = WORK / "rc_vendors.json"
+
+def norm_phone(s):
+    d = re.sub(r"\D", "", s or "")
+    if len(d) == 11 and d.startswith("1"):
+        d = d[1:]
+    return d if len(d) == 10 and d[0] != "0" else ""
+
+# Business suffixes carry no identifying information and are written a dozen
+# ways, so they come off before matching. Without this, "ABC THERAPY, INC." and
+# "ABC Therapy Inc" are different organisations.
+SUFFIX = re.compile(r"\b(inc|llc|llp|lp|corp|corporation|company|co|ltd|pc|pa|"
+                    r"apc|group|services|service|center|centre|the|dba)\b")
+def norm_org(s):
+    s = re.sub(r"[^a-z0-9 ]", " ", (s or "").lower())
+    s = SUFFIX.sub(" ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+def load_rc():
+    """Index the regional centre vendors three ways, and collapse to one entry
+    per organisation carrying every service code it bills."""
+    if not RC_FILE.exists():
+        print("  no rc_vendors.json — run parse_rc_vendors.py --parse first")
+        return {}, {}, {}, []
+    rows = json.loads(RC_FILE.read_text())
+    # Only vendors billing a service code we have verified as autism-relevant.
+    # A regional centre vendors everything it buys — care homes, transport,
+    # funeral services — so "is an RC vendor" on its own is not an autism
+    # signal, and treating it as one promoted hundreds of unrelated rows.
+    rows = [r for r in rows if r["autism_direct"] or r["autism_support"]]
+    orgs = {}
+    for r in rows:
+        k = (r["rc"], r["vendor_no"] or r["name"])
+        o = orgs.setdefault(k, {
+            "rc": r["rc"], "rc_name": r["rc_name"], "vendor_no": r["vendor_no"],
+            "name": r["name"], "address": r["address"], "city": r["city"],
+            "zip": r["zip"], "phone": r["phone"],
+            "codes": set(), "services": set(),
+            "autism_direct": False, "autism_support": False,
+        })
+        o["codes"].add(r["service_code"])
+        if r["service_name"]:
+            o["services"].add(r["service_name"])
+        o["autism_direct"] |= r["autism_direct"]
+        o["autism_support"] |= r["autism_support"]
+
+    by_phone, by_name_zip, by_name_city = {}, {}, {}
+    for o in orgs.values():
+        n = norm_org(o["name"])
+        p = norm_phone(o["phone"])
+        if p:            by_phone.setdefault(p, []).append(o)
+        if n and o["zip"]:  by_name_zip.setdefault((n, o["zip"]), []).append(o)
+        if n and o["city"]: by_name_city.setdefault((n, o["city"].lower()), []).append(o)
+    print(f"  {len(orgs):,} distinct regional centre vendors indexed "
+          f"({sum(1 for o in orgs.values() if o['autism_direct']):,} autism-directed)")
+    return by_phone, by_name_zip, by_name_city, list(orgs.values())
+
+def _shares_token(a, b):
+    ta, tb = set(norm_org(a).split()), set(norm_org(b).split())
+    return bool(ta & tb)
+
+def rc_match(row, by_phone, by_name_zip, by_name_city):
+    """Return (matched vendors, how) — most reliable key that hits, or ([], None).
+
+    Phone alone is not enough for an individual. Clinicians list their employer's
+    switchboard, so a single agency number matched three unrelated therapists who
+    merely worked there. A phone hit therefore has to be corroborated by a shared
+    name token, unless both sides are organisations, where the switchboard IS the
+    organisation's number.
+
+    name+city was dropped. It matched "COUNTY OF RIVERSIDE" to "COUNTY OF
+    RIVERSIDE" — true, useless, and the same for every large employer in the
+    state. A postcode narrows it to one site.
+    """
+    names = [n for n in (row.get("organization"), row.get("name")) if n]
+    p = norm_phone(row.get("phone"))
+    if p and p in by_phone:
+        cands = by_phone[p]
+        if row.get("npi_type") == "organization":
+            return cands, "phone"
+        ok = [v for v in cands if any(_shares_token(v["name"], n) for n in names)]
+        if ok:
+            return ok, "phone+name"
+    for nm in names:
+        n = norm_org(nm)
+        if n and row.get("zip") and (n, row["zip"]) in by_name_zip:
+            return by_name_zip[(n, row["zip"])], "name+zip"
+    return [], None
+
+# ------------------------------------------------------------------ join
 def join():
     npi_f, dca_f = WORK/"npi_ca.csv", WORK/"dca_licenses.csv"
     if not npi_f.exists(): sys.exit("Run --fetch-npi first.")
@@ -460,12 +556,34 @@ def join():
     else:
         print("  no DCA file — licence status will be blank. Run --load-dca to fix.")
 
-    out, matched = [], 0
+    by_phone, by_name_zip, by_name_city, rc_all = load_rc()
+    seen_rc = set()
+
+    out, matched, rc_hits, promoted = [], 0, 0, 0
     with open(npi_f, newline="", encoding="utf-8") as fh:
         for r in csv.DictReader(fh):
             lic = dca.get(norm_lic(r["license_no"])) if r["license_no"] else None
             if lic: matched += 1
             tier = int(r.get("tier") or 3)
+
+            vendors, how = rc_match(r, by_phone, by_name_zip, by_name_city)
+            if vendors:
+                rc_hits += 1
+                for v in vendors:
+                    seen_rc.add((v["rc"], v["vendor_no"] or v["name"]))
+                # A regional centre paying this provider for an autism-directed
+                # service is a stronger claim to relevance than any taxonomy
+                # code, so it overrides the tier rather than merely annotating
+                # it. This is the whole reason tier 3 was carried instead of
+                # discarded at the NPPES stage.
+                if any(v["autism_direct"] for v in vendors):
+                    if tier > 1:
+                        tier = 1
+                        promoted += 1
+                elif tier > 2:          # respite-only vendors: relevant, not clinical
+                    tier = 2
+                    promoted += 1
+
             slug = "prov-" + (r["npi"] or norm_name(r["name"]).replace(" ", "-"))[:60]
             out.append({
                 "slug": slug, "npi": r["npi"] or None,
@@ -481,6 +599,10 @@ def join():
                 "license_board": (lic or {}).get("board") or None,
                 "license_status": (lic or {}).get("status") or None,
                 "relevance_tier": tier,
+                "rc_vendor": bool(vendors),
+                "rc_names": sorted({v["rc_name"] for v in vendors}),
+                "rc_vendor_no": (vendors[0]["vendor_no"] or None) if vendors else None,
+                "services": sorted({sv for v in vendors for sv in v["services"]}),
                 # Tier 3 is general mental health with no autism signal at all.
                 # It is carried so a regional-centre match can promote it later,
                 # but it does not go out: a parent searching an autism directory
@@ -490,14 +612,60 @@ def join():
                 "listing_status": "listed",
                 "confidence": "high" if lic else "medium",
                 "sources": [{"field": "identity", "source": "CMS NPPES monthly file"}]
-                           + ([{"field": "license_status", "source": "CA DCA licensee file"}] if lic else []),
+                           + ([{"field": "license_status", "source": "CA DCA licensee file"}] if lic else [])
+                           + ([{"field": "autism_relevance", "source": f"regional centre vendor list ({how})",
+                                "detail": sorted({c for v in vendors for c in v["codes"]})}] if vendors else []),
             })
-    (WORK/"providers.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
-    print(f"  {len(out):,} providers, {matched:,} with a matched licence "
-          f"({matched/max(1,len(out))*100:.0f}%) -> {WORK/'providers.json'}")
+    print(f"  {len(out):,} providers from NPPES, {matched:,} with a matched licence "
+          f"({matched/max(1,len(out))*100:.0f}%)")
     print("  disciplines:", dict(Counter(d for p in out for d in p["disciplines"]).most_common(10)))
+    # Regional centre vendors that matched no NPI are not noise. Respite
+    # agencies, day programmes and family home agencies are paid by the state
+    # to serve autistic people and mostly have no reason to hold an NPI, since
+    # they bill the regional centre rather than a health plan. Dropping them
+    # would lose exactly the non-clinical services families ask for most.
+    rc_only = 0
+    for v in rc_all:
+        if (v["rc"], v["vendor_no"] or v["name"]) in seen_rc:
+            continue
+        if not (v["autism_direct"] or v["autism_support"]):
+            continue
+        out.append({
+            "slug": "rc-" + re.sub(r"[^a-z0-9]+", "-",
+                                   f"{v['rc']}-{v['vendor_no'] or v['name']}".lower())[:60],
+            "npi": None, "npi_type": "organization", "name": v["name"],
+            "credentials": None, "organization": v["name"],
+            "address": v["address"] or None, "city": v["city"] or None,
+            "county": None, "state": "CA", "zip": v["zip"] or None,
+            "phone": v["phone"] or None,
+            "taxonomies": [], "disciplines": [],
+            "relevance_tier": 1 if v["autism_direct"] else 2,
+            "rc_vendor": True, "rc_names": [v["rc_name"]],
+            "rc_vendor_no": v["vendor_no"] or None,
+            "services": sorted(v["services"]),
+            "license_no": None, "license_board": None, "license_status": None,
+            "publish_status": None,
+            "listing_status": "listed",
+            # No NPI and no licence file behind these rows — the regional centre
+            # vendoring them is the entire evidence, so confidence says so.
+            "confidence": "medium",
+            "sources": [{"field": "autism_relevance",
+                         "source": f"{v['rc_name']} vendor list",
+                         "detail": sorted(v["codes"])}],
+        })
+        rc_only += 1
+
+    # Written only now, after the RC-only vendors are appended. Writing before
+    # the append silently produced a file 850 rows short of what the summary
+    # claimed — the counts were right and the file was wrong.
+    (WORK/"providers.json").write_text(json.dumps(out, indent=1), encoding="utf-8")
+    print(f"  -> {WORK/'providers.json'}")
+
     tiers = Counter(p["relevance_tier"] for p in out)
     held = sum(1 for p in out if p["publish_status"])
+    print(f"  regional centre matches: {rc_hits:,} NPI rows matched a vendor, "
+          f"{promoted:,} promoted a tier")
+    print(f"  {rc_only:,} vendors added that hold no NPI (respite, day programmes, family homes)")
     print(f"  tiers: 1={tiers[1]:,}  2={tiers[2]:,}  3={tiers[3]:,}")
     print(f"  {len(out)-held:,} publishable, {held:,} held pending an autism signal")
 
@@ -563,17 +731,29 @@ def load_key():
                 return line.split("=", 1)[1].strip().strip("'\"")
     return None
 
-def do_import():
+def do_import(start=0, limit=None):
     key = load_key()
     if not key: sys.exit("No SUPABASE_SERVICE_KEY in the environment or .env")
     from supabase import create_client
     c = create_client(SUPABASE_URL, key)
-    rows = json.loads((WORK/"providers.json").read_text())
-    print(f"  {len(rows):,} rows to upsert")
-    for i in range(0, len(rows), 100):
+    allrows = json.loads((WORK/"providers.json").read_text())
+    # Unmatched tier 3 stays on disk. It is 200,000+ general therapists with no
+    # autism signal of any kind; it exists so a future regional centre list can
+    # promote a row, not so it can sit in the database being invisible. Keeping
+    # it local means the table can be read and reasoned about by a person.
+    rows = [r for r in allrows if r["publish_status"] is None or r.get("rc_vendor")]
+    total = len(rows)
+    print(f"  {total:,} of {len(allrows):,} rows to upsert "
+          f"({len(allrows)-total:,} unmatched tier-3 rows kept local)")
+    # Upserts are keyed on slug and therefore idempotent, so an interrupted run
+    # is resumed by re-running from the last reported offset rather than from
+    # zero. The shell this runs in is capped at three minutes.
+    end = total if limit is None else min(total, start + limit)
+    print(f"  writing rows {start:,} to {end:,}")
+    for i in range(start, end, 100):
         c.table("autism_providers").upsert(rows[i:i+100], on_conflict="slug").execute()
-        if (i//100) % 10 == 0: print(f"    {min(i+100,len(rows)):,}/{len(rows):,}")
-    print("  done")
+        if (i//100) % 20 == 0: print(f"    at {i:,}", flush=True)
+    print(f"  done through {end:,}" + ("" if end >= total else f" — resume with --from {end}"))
 
 # ------------------------------------------------------------------ main
 if __name__ == "__main__":
@@ -581,6 +761,10 @@ if __name__ == "__main__":
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--fetch-taxonomy", action="store_true")
     ap.add_argument("--fetch-npi", action="store_true")
+    ap.add_argument("--from", dest="start", type=int, default=0,
+                    metavar="N", help="resume an interrupted --import at row N")
+    ap.add_argument("--limit", type=int, default=None,
+                    metavar="N", help="upsert at most N rows this run")
     ap.add_argument("--npi-url", metavar="URL",
                     help="skip discovery and download this monthly ZIP directly")
     ap.add_argument("--load-dca", metavar="CSV")
@@ -593,5 +777,5 @@ if __name__ == "__main__":
     if a.load_dca:       load_dca(a.load_dca)
     if a.join:           join()
     if a.crosscheck:     crosscheck()
-    if a.do_import:      do_import()
+    if a.do_import:      do_import(a.start, a.limit)
     if not any(vars(a).values()): ap.print_help()

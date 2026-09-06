@@ -394,7 +394,11 @@ const RULES = [
 const TABS = [
   { id:'books',     label:'Books',               types:['book'] },
   { id:'tools',     label:'Tools & printables',  types:['printable','tool','app'] },
-  { id:'videos',    label:'Videos',              types:['video','creator'] },
+  // Listen is its own tab rather than folded into Watch. Audio fits a moment
+  // nothing else does — driving to therapy, doing dishes, awake at 2am — and
+  // hiding it inside "Videos" would lose exactly the thing that makes it useful.
+  { id:'listen',    label:'Listen',              types:['podcast'] },
+  { id:'watch',     label:'Watch',               types:['video','creator'] },
   { id:'services',  label:'Services',            types:['organization','provider'] },
   { id:'courses',   label:'Courses',             types:['course','event'] },
   { id:'community', label:'Community',           types:['community'] },

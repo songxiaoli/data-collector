@@ -111,7 +111,20 @@ RC_SOURCES = {
                      note="bot-detection challenge; must be downloaded by hand"),
     "nbrc":     dict(name="North Bay Regional Center", fmt="xlsx",
                      url="https://www.nbrc.net/wp-content/uploads/2025/10/Copy-of-NBRC-Vendors-2023-24-1-1.xlsx"),
-    "nlacrc":   dict(name="North Los Angeles County Regional Center", fmt=None, url=None),
+    # One of the densest catchments in the state, and no file. Six routes tried,
+    # recorded so nobody spends another afternoon on it: 1,771 service_provider
+    # records sit at /wp-json/wp/v2/service_provider and every one has an empty
+    # title, empty content and empty ACF; the taxonomy archives render nothing;
+    # the search form's GET parameters are not server-rendered; the theme ships
+    # no AJAX endpoint. What IS public is the service_code taxonomy with counts,
+    # so the shape of what North LA funds is knowable even though who it funds
+    # is not: 805 Infant Development 112, 612 Behavior Analyst 51, 862 In-Home
+    # Respite 48, 615 Behavior Management Assistant 42, 116 Early Start
+    # therapeutic 21, 616 Behavior Technician 11, 117 the same therapeutic
+    # service at three and over 5. Twenty-one against five is the age-three drop
+    # again, on a sixteenth centre, from a REST count rather than a parsed PDF.
+    "nlacrc":   dict(name="North Los Angeles County Regional Center", fmt=None, url=None,
+                     note="no file published; identifying fields absent from every public interface"),
     "redwood":  dict(name="Redwood Coast Regional Center", fmt="pdf",
                      url="https://redwoodcoastrc.org/wp-content/uploads/2026/03/2026-March-Vendor-List-updated.pdf",
                      note="category words rather than service codes"),

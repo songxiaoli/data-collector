@@ -229,6 +229,106 @@ svg text{font-family:"Work Sans", system-ui, sans-serif}
 </section>
 
 <section>
+  <h2>How they connect to each other &mdash; and mostly don’t</h2>
+  <figure style="margin-bottom:26px">
+    <svg viewBox="0 0 960 680" role="img"
+      aria-label="A map of who is connected to whom. The family sits in the centre and every organisation connects only to the family; the organisations are not connected to each other, except one notice the regional centre sends the school district before the child is two years and nine months.">
+      <defs>
+        <marker id="rm-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dgink"/></marker>
+        <marker id="rm-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="wf"/></marker>
+      </defs>
+
+      <!-- the one direct institution-to-institution link -->
+      <path d="M130,84 C130,26 300,20 470,20 C640,20 830,26 830,84"
+            class="dginks" stroke-width="1.4" fill="none" stroke-dasharray="6 4" opacity=".7"
+            marker-end="url(#rm-a)"/>
+      <text x="470" y="14" text-anchor="middle" class="dgink" font-size="11.5" opacity=".8">one notice, before 2y9m &mdash; the only direct link here</text>
+
+      <!-- payers -->
+      <g class="dgink">
+        <rect x="40" y="84" width="180" height="58" rx="3" class="dgbox"/>
+        <text x="130" y="108" text-anchor="middle" font-size="14.5" font-weight="600">Regional centre</text>
+        <text x="130" y="128" text-anchor="middle" font-size="11.5" opacity=".72">pays until 3, then last</text>
+
+        <rect x="390" y="84" width="180" height="58" rx="3" class="dgbox"/>
+        <text x="480" y="108" text-anchor="middle" font-size="14.5" font-weight="600">Your health plan</text>
+        <text x="480" y="128" text-anchor="middle" font-size="11.5" opacity=".72">main payer after 3</text>
+
+        <rect x="740" y="84" width="180" height="58" rx="3" class="dgbox"/>
+        <text x="830" y="108" text-anchor="middle" font-size="14.5" font-weight="600">School district</text>
+        <text x="830" y="128" text-anchor="middle" font-size="11.5" opacity=".72">school needs only</text>
+
+        <rect x="740" y="440" width="180" height="58" rx="3" class="dgbox"/>
+        <text x="830" y="464" text-anchor="middle" font-size="14.5" font-weight="600">The county</text>
+        <text x="830" y="484" text-anchor="middle" font-size="11.5" opacity=".72">can pay you directly</text>
+
+        <rect x="20" y="270" width="180" height="58" rx="3" class="dgbox"/>
+        <text x="110" y="294" text-anchor="middle" font-size="14.5" font-weight="600">Family Resource Center</text>
+        <text x="110" y="314" text-anchor="middle" font-size="11.5" opacity=".72">free &middot; ends at 36 months</text>
+
+        <rect x="760" y="270" width="180" height="58" rx="3" class="dgbox"/>
+        <text x="850" y="294" text-anchor="middle" font-size="14.5" font-weight="600">Free legal help</text>
+        <text x="850" y="314" text-anchor="middle" font-size="11.5" opacity=".72">advice &middot; limited cases</text>
+      </g>
+
+      <!-- the gap between the two payers who never speak -->
+      <line x1="228" y1="113" x2="382" y2="113" class="ws" stroke-width="1.4" stroke-dasharray="5 5" opacity=".8"/>
+      <g class="ws" stroke-width="2.2">
+        <line x1="298" y1="105" x2="314" y2="121"/>
+        <line x1="314" y1="105" x2="298" y2="121"/>
+      </g>
+      <text x="306" y="148" text-anchor="middle" class="wf" font-size="11.5" font-weight="600">no line</text>
+
+      <!-- spokes into the family -->
+      <g class="dginks" stroke-width="1.5" fill="none" opacity=".75">
+        <path d="M160,142 C200,190 260,235 336,268" marker-end="url(#rm-a)"/>
+        <path d="M480,142 L480,256" marker-end="url(#rm-a)"/>
+        <path d="M800,142 C760,190 700,235 624,268" marker-end="url(#rm-a)"/>
+        <path d="M200,299 L324,299" marker-end="url(#rm-a)"/>
+        <path d="M760,299 L636,299" marker-end="url(#rm-a)"/>
+        <path d="M760,455 C700,430 660,370 636,332" marker-end="url(#rm-a)"/>
+      </g>
+      <g class="dgink" font-size="11.5" opacity=".82">
+        <text x="196" y="203" text-anchor="start">a plan</text>
+        <text x="468" y="212" text-anchor="end">a refusal, in writing</text>
+        <text x="792" y="196" text-anchor="end">60 days from your signature</text>
+        <text x="262" y="290" text-anchor="middle">explains it</text>
+        <text x="698" y="290" text-anchor="middle">your rights</text>
+        <text x="716" y="376" text-anchor="middle">only if you ask</text>
+      </g>
+
+      <!-- the family -->
+      <rect x="330" y="256" width="300" height="86" rx="3" class="wf"/>
+      <text x="480" y="292" text-anchor="middle" class="on" font-size="20" font-weight="700">YOU</text>
+      <text x="480" y="316" text-anchor="middle" class="on" font-size="12" opacity=".9">every line here runs through this box</text>
+
+      <!-- down to the work -->
+      <path d="M480,342 L480,444" class="ws" stroke-width="2" fill="none" marker-end="url(#rm-w)"/>
+      <text x="466" y="400" text-anchor="end" class="wf" font-size="11.5" font-weight="600">you find them, you call them</text>
+
+      <rect x="340" y="450" width="280" height="58" rx="3" class="dgbox"/>
+      <text x="480" y="474" text-anchor="middle" class="dgink" font-size="14.5" font-weight="600">Your provider</text>
+      <text x="480" y="494" text-anchor="middle" class="dgink" font-size="11.5" opacity=".72">paid by whoever agreed &mdash; never by you</text>
+
+      <path d="M480,508 L480,564" class="dginks" stroke-width="1.5" fill="none" marker-end="url(#rm-a)"/>
+      <rect x="390" y="570" width="180" height="50" rx="3" class="af"/>
+      <text x="480" y="601" text-anchor="middle" class="on" font-size="15" font-weight="600">Your child</text>
+
+      <text x="480" y="652" text-anchor="middle" class="dgink" font-size="12" opacity=".7">Nothing in this picture checks, afterwards, whether the therapy actually happened.</text>
+    </svg>
+    <figcaption><b>Every organisation connects to you, and almost none of them connect to each
+    other.</b> The clearest example is the pair at the top: after your child turns three, the
+    regional centre will not pay until your health plan has refused in writing &mdash; and the two
+    of them have no way to send that letter to each other. <b>You are the post office.</b> The one
+    real link in the picture is a single notice the regional centre must send your school district
+    before your child is two years and nine months. Everything else that looks like coordination is
+    you, doing it.</figcaption>
+  </figure>
+</section>
+
+<section>
   <h2>The ones who pay</h2>
 
   <div class="party">

@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Where California's autism system leaks: what the law assigns at each handoff, what the state's own numbers show happens instead, and what would close it.">
+<link rel="canonical" href="https://powerpluspartner.com/autism/guides/system-gaps">
+<meta property="og:title" content="The Handoffs Nobody Owns">
+<meta property="og:description" content="Where California's autism system leaks: what the law assigns at each handoff, what the state's own numbers show happens instead, and what would close it.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Power Plus Partner">
+<style>
+:root{color-scheme:light dark}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+.ppp-bar{max-width:1000px; margin:0 auto; padding:16px 22px 0;
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+  font:600 10.5px/1 Manrope, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing:.14em; text-transform:uppercase}
+.ppp-bar a{color:inherit; opacity:.5; text-decoration:none}
+.ppp-bar a:hover{opacity:1}
+</style>
+<title>The Handoffs Nobody Owns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --paper:#EDEFF2; --card:#FFFFFF; --sunk:#E3E7EB; --rule:#D2D8DE; --rule-2:#B4BDC6;
+  --ink:#14181D; --ink-2:#464E58; --ink-3:#79828D;
+  --steel:#2E5C7E; --steel-soft:#DDE8EF;
+  --gap:#A8422A; --gap-soft:#F4E2DC;
+  --measure:68ch;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12151A; --card:#1A1F26; --sunk:#20262E; --rule:#2C333C; --rule-2:#3E4750;
+    --ink:#E6E9ED; --ink-2:#A8B1BB; --ink-3:#78828D;
+    --steel:#7FB0D4; --steel-soft:#16262F;
+    --gap:#E08B6E; --gap-soft:#31201A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12151A; --card:#1A1F26; --sunk:#20262E; --rule:#2C333C; --rule-2:#3E4750;
+  --ink:#E6E9ED; --ink-2:#A8B1BB; --ink-3:#78828D;
+  --steel:#7FB0D4; --steel-soft:#16262F;
+  --gap:#E08B6E; --gap-soft:#31201A;
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); margin:0;
+  font:400 16.5px/1.62 "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px; margin:0 auto; padding:0 24px 96px}
+.col{max-width:var(--measure)}
+
+a{color:var(--steel)}
+:focus-visible{outline:2px solid var(--gap); outline-offset:3px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important}}
+
+/* ── masthead ─────────────────────────────────────── */
+.mast{padding:52px 0 8px; border-bottom:1px solid var(--rule); margin-bottom:34px}
+.eyebrow{font:600 10.5px/1 "Public Sans",sans-serif; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--gap); margin:0 0 18px}
+h1{font:400 clamp(34px,6vw,54px)/1.04 Newsreader, Georgia, serif;
+  letter-spacing:-.02em; margin:0 0 20px; max-width:15ch; text-wrap:balance}
+.thesis{font:400 21px/1.48 Newsreader, Georgia, serif; color:var(--ink);
+  max-width:56ch; margin:0 0 22px}
+.standfirst{color:var(--ink-2); max-width:var(--measure); margin:0 0 30px; font-size:16px}
+.dateline{font:500 11.5px/1 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing:.06em; color:var(--ink-3); text-transform:uppercase; margin:0 0 34px}
+
+/* ── section heads ────────────────────────────────── */
+h2{font:600 11.5px/1 "Public Sans",sans-serif; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ink-3); margin:64px 0 20px; padding-bottom:11px; border-bottom:1px solid var(--rule)}
+h3{font:400 25px/1.24 Newsreader, Georgia, serif; margin:0 0 12px; letter-spacing:-.01em}
+p{margin:0 0 15px}
+p:last-child{margin-bottom:0}
+strong{font-weight:600}
+
+/* ── the finding ──────────────────────────────────── */
+.finding{background:var(--card); border:1px solid var(--rule); border-left:3px solid var(--gap);
+  padding:26px 30px; margin:0 0 8px; max-width:var(--measure)}
+.finding p{color:var(--ink-2)}
+.finding p:first-child{font:400 19px/1.5 Newsreader,Georgia,serif; color:var(--ink)}
+cite{font-style:normal; font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:.85em; color:var(--ink-3); letter-spacing:-.01em}
+
+/* ── figures ──────────────────────────────────────── */
+figure{margin:38px 0 0; padding:0}
+.figbox{background:var(--card); border:1px solid var(--rule); padding:26px 24px 20px;
+  overflow-x:auto}
+figure svg{display:block; width:100%; height:auto; min-width:640px; color:var(--ink)}
+figcaption{margin-top:14px; font-size:14.5px; line-height:1.55; color:var(--ink-2);
+  max-width:var(--measure)}
+figcaption b{color:var(--ink); font-weight:600}
+
+/* ── seams ────────────────────────────────────────── */
+.seam{border-top:1px solid var(--rule); padding:32px 0 4px}
+.seam:first-of-type{border-top:0}
+.seam-head{display:flex; gap:16px; align-items:baseline; margin-bottom:14px}
+.seam-n{font:500 12px/1 "IBM Plex Mono",monospace; color:var(--gap);
+  letter-spacing:.04em; padding-top:9px; white-space:nowrap}
+.seam-head h3{margin:0}
+.rows{display:grid; gap:0; max-width:var(--measure); border:1px solid var(--rule);
+  background:var(--card)}
+.row{display:grid; grid-template-columns:132px 1fr; gap:20px;
+  padding:16px 20px; border-top:1px solid var(--rule)}
+.row:first-child{border-top:0}
+.row > .k{font:600 10.5px/1.5 "Public Sans",sans-serif; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--ink-3); padding-top:3px}
+.row > .v{font-size:15.5px; line-height:1.58; color:var(--ink-2); min-width:0}
+.row > .v p{margin-bottom:9px}
+.row.do{background:var(--sunk)}
+.row.do > .k{color:var(--gap)}
+.row.do > .v{color:var(--ink)}
+@media (max-width:620px){
+  .row{grid-template-columns:1fr; gap:6px}
+}
+
+/* ── figure/number emphasis ───────────────────────── */
+.num{font-family:"IBM Plex Mono", ui-monospace, monospace; font-weight:500;
+  font-variant-numeric:tabular-nums; color:var(--ink)}
+
+/* ── tables ───────────────────────────────────────── */
+.tablewrap{overflow-x:auto; max-width:var(--measure); border:1px solid var(--rule);
+  background:var(--card)}
+table{border-collapse:collapse; width:100%; font-size:15px}
+th,td{text-align:left; padding:11px 18px; border-top:1px solid var(--rule)}
+thead th{border-top:0; font:600 10.5px/1.4 "Public Sans",sans-serif; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
+td.n{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;
+  white-space:nowrap; color:var(--ink)}
+tr.turn td{background:var(--gap-soft)}
+
+/* ── cross-cutting cards ──────────────────────────── */
+.cross{display:grid; gap:14px; grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.xc{background:var(--card); border:1px solid var(--rule); padding:22px 24px}
+.xc h4{font:400 20px/1.3 Newsreader,Georgia,serif; margin:0 0 10px}
+.xc p{font-size:15px; line-height:1.56; color:var(--ink-2)}
+
+/* ── tiers ────────────────────────────────────────── */
+.tier{border-left:3px solid var(--rule-2); padding:2px 0 2px 22px; margin-bottom:30px;
+  max-width:var(--measure)}
+.tier.now{border-left-color:var(--gap)}
+.tier h4{font:600 11px/1 "Public Sans",sans-serif; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 10px}
+.tier.now h4{color:var(--gap)}
+.tier ul{margin:0; padding-left:19px}
+.tier li{margin-bottom:9px; color:var(--ink-2); font-size:15.5px; line-height:1.55}
+.tier li b{color:var(--ink); font-weight:600}
+
+/* ── not measured ─────────────────────────────────── */
+.nm{max-width:var(--measure); border:1px solid var(--rule); background:var(--card)}
+.nm li{list-style:none; border-top:1px solid var(--rule); padding:13px 20px;
+  font-size:15.5px; line-height:1.55; color:var(--ink-2)}
+.nm li:first-child{border-top:0}
+.nm ul{margin:0; padding:0}
+.nm b{color:var(--ink); font-weight:600}
+
+footer{margin-top:70px; padding-top:22px; border-top:1px solid var(--rule);
+  font-size:13.5px; line-height:1.65; color:var(--ink-3); max-width:var(--measure)}
+footer p{margin-bottom:12px}
+
+/* ── svg paint: tokens only, so both themes resolve ── */
+svg .gs{stroke:var(--gap)}
+svg .gf{fill:var(--gap)}
+svg .ss{stroke:var(--steel)}
+svg .sf{fill:var(--steel)}
+svg .on{fill:var(--card)}          /* text sitting on a filled accent bar */
+svg .ink{fill:currentColor}
+svg .inks{stroke:currentColor}
+svg text{font-family:"Public Sans", ui-sans-serif, system-ui, sans-serif}
+svg .mono{font-family:"IBM Plex Mono", ui-monospace, monospace}
+</style>
+</head>
+<body>
+
+<nav class="ppp-bar" aria-label="Site">
+  <a href="/autism">Power Plus Partner</a>
+  <a href="/autism/guides">All guides</a>
+</nav>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">California · autism services</p>
+  <h1>The Handoffs Nobody Owns</h1>
+  <p class="thesis">Every institution in California&rsquo;s autism system has a beginning and an
+  end. The family is the only party whose responsibility runs the whole length &mdash; and it is
+  the only party that was never assigned the job.</p>
+  <p class="standfirst">This is a map of the seams: the points where one body&rsquo;s duty stops
+  before the next one&rsquo;s starts. For each, what the law actually says, what the state&rsquo;s
+  own numbers show happens instead, who currently stands in the gap, and what could be put there.
+  Every figure is from a primary source and cited; where California does not publish a number,
+  that is recorded as the finding rather than estimated.</p>
+  <p class="dateline">Compiled 7 September 2026 · from California&rsquo;s published files</p>
+</header>
+
+<div class="finding">
+  <p>California already has a law assigning someone to make sure a child actually receives what
+  their plan promised. It is <cite>W&amp;I &sect;4647</cite>: the regional centre service
+  coordinator is responsible for &ldquo;securing&rdquo; the services in the plan and
+  &ldquo;monitoring implementation of the plan to ascertain that objectives have been
+  fulfilled.&rdquo;</p>
+  <p>The same code sets that coordinator&rsquo;s caseload at an average of <span class="num">1:62</span>,
+  with an individual ceiling of <span class="num">79</span> children permitted for up to 60 days
+  <cite>(&sect;4640.6)</cite>. A regional centre that misses the ratio for two consecutive
+  reporting periods receives technical assistance and a plan of correction.</p>
+  <p>So the delivery-assurance job exists, is named in statute, and is given to one person holding
+  sixty-two children &mdash; inside the same agency whose purchasing decision is often the reason
+  the service did not arrive. Everything below follows from that.</p>
+</div>
+
+<figure>
+  <div class="figbox">
+    <svg viewBox="0 0 900 400" role="img"
+      aria-label="Timeline from birth to age 22 showing that the regional centre, school district, health plan and county each cover only part of a child's path, while the family's line runs continuously across all of it.">
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="ink"/>
+        </marker>
+        <marker id="ahg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="gf"/>
+        </marker>
+        <pattern id="faint" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" stroke-width="1.4" opacity=".28"/>
+        </pattern>
+      </defs>
+
+      <!-- seam markers -->
+      <g class="gs" stroke-width="1.2" stroke-dasharray="3 4" opacity=".85">
+        <line x1="196" y1="60" x2="196" y2="330"/>
+        <line x1="330" y1="60" x2="330" y2="330"/>
+        <line x1="828" y1="60" x2="828" y2="330"/>
+      </g>
+      <g class="gf" font-size="11.5" font-weight="600" letter-spacing=".08em">
+        <text x="190" y="48" text-anchor="end">SEAM 1 &middot; ENTRY</text>
+        <text x="338" y="48" text-anchor="start">SEAM 2 &middot; AGE THREE</text>
+        <text x="828" y="48" text-anchor="end">SEAM 6 &middot; AGE 22</text>
+      </g>
+
+      <!-- lanes -->
+      <g class="ink" font-size="12.5">
+        <text x="182" y="97" text-anchor="end">Regional centre</text>
+        <text x="182" y="147" text-anchor="end">School district</text>
+        <text x="182" y="197" text-anchor="end">Health plan</text>
+        <text x="182" y="247" text-anchor="end">County (IHSS)</text>
+        <text x="182" y="303" text-anchor="end" font-weight="700" class="gf">You</text>
+      </g>
+
+      <!-- regional centre -->
+      <rect x="196" y="80" width="134" height="21" class="sf" opacity=".92"/>
+      <rect x="330" y="80" width="498" height="21" fill="url(#faint)" class="ss"
+            stroke-width="1" stroke-dasharray="4 3" opacity=".75"/>
+      <text x="263" y="95" text-anchor="middle" class="on" font-size="11" font-weight="600">Early Start</text>
+      <text x="579" y="95" text-anchor="middle" class="ink" font-size="11">payer of last resort &mdash; needs a denial letter first</text>
+
+      <!-- school district -->
+      <rect x="330" y="130" width="498" height="21" class="sf" opacity=".92"/>
+      <text x="579" y="145" text-anchor="middle" class="on" font-size="11" font-weight="600">IDEA Part B &mdash; school hours, school need</text>
+
+      <!-- health plan -->
+      <rect x="196" y="180" width="134" height="21" fill="url(#faint)" class="ss"
+            stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>
+      <rect x="330" y="180" width="498" height="21" class="sf" opacity=".92"/>
+      <text x="579" y="195" text-anchor="middle" class="on" font-size="11" font-weight="600">SB 946 &mdash; unless the plan is self-funded</text>
+
+      <!-- county -->
+      <line x1="196" y1="240" x2="828" y2="240" class="inks" stroke-width="2"
+            stroke-dasharray="2 6" opacity=".5"/>
+      <text x="512" y="235" text-anchor="middle" class="ink" font-size="11" opacity=".75">only if you know to ask</text>
+
+      <!-- you -->
+      <rect x="196" y="286" width="668" height="24" class="gf"/>
+      <text x="530" y="303" text-anchor="middle" class="on" font-size="12" font-weight="700" letter-spacing=".02em">the only continuous party</text>
+      <path d="M864,298 L884,298" class="gs" stroke-width="3" marker-end="url(#ahg)"/>
+
+      <!-- axis -->
+      <line x1="196" y1="342" x2="864" y2="342" class="inks" stroke-width="1" opacity=".45"/>
+      <g class="inks" stroke-width="1" opacity=".45">
+        <line x1="196" y1="342" x2="196" y2="348"/>
+        <line x1="296" y1="342" x2="296" y2="348"/>
+        <line x1="330" y1="342" x2="330" y2="348"/>
+        <line x1="828" y1="342" x2="828" y2="348"/>
+      </g>
+      <g class="mono ink" font-size="11" opacity=".8">
+        <text x="196" y="366" text-anchor="middle">birth</text>
+        <text x="296" y="366" text-anchor="middle">2y9m</text>
+        <text x="338" y="366" text-anchor="start">age 3</text>
+        <text x="828" y="366" text-anchor="middle">22</text>
+      </g>
+      <text x="296" y="384" text-anchor="middle" class="gf" font-size="10.5" font-weight="600">referral to the district due</text>
+    </svg>
+  </div>
+  <figcaption><b>Solid means the body pays and is responsible. Hatched means it may pay, but only
+  after another payer has refused in writing.</b> The axis is not to scale &mdash; birth to three
+  is given room because that is where the density of duty sits. Every institutional band starts
+  late, ends early, or both. Read the diagram as a question: at any vertical slice, who is
+  accountable for this child receiving something today?</figcaption>
+</figure>
+
+<h2>The seams, in the order a family meets them</h2>
+
+<article class="seam">
+  <div class="seam-head">
+    <span class="seam-n">01</span>
+    <h3>Noticing something, and reaching anyone</h3>
+  </div>
+  <div class="rows">
+    <div class="row"><div class="k">The law says</div><div class="v">
+      <p>Anyone may refer a child to Early Start &mdash; including the parent, with no doctor and no
+      diagnosis. The regional centre must complete assessment and hold the first plan meeting within
+      <span class="num">45 calendar days</span>. Evaluation, assessment and service coordination are
+      free, by federal requirement, at every income level.</p>
+    </div></div>
+    <div class="row"><div class="k">What happens</div><div class="v">
+      <p>Caregivers notice a difference at <span class="num">1.75</span> years, raise it with someone
+      at <span class="num">2.50</span>, and reach a diagnosis at <span class="num">4.20</span>
+      <cite>(Martin et&nbsp;al., Frontiers in Psychiatry 2026)</cite>. Latino children are diagnosed
+      about <span class="num">2.5 years</span> later than white non-Latino children
+      <cite>(Zuckerman, Academic Pediatrics 2014)</cite>.</p>
+      <p>Nothing in that gap is a violation. Screening at 18 and 24 months is a professional
+      recommendation, not a duty with a consequence, and no party is assigned the job of telling a
+      worried parent that the door is already open to them.</p>
+    </div></div>
+    <div class="row"><div class="k">Who stands here now</div><div class="v">
+      <p>Early Start <b>Family Resource Centers</b> &mdash; free, staffed by parents of children with
+      disabilities, and open to a family <b>whether or not the child is eligible for anything</b>.
+      That last clause is the most useful unknown fact in the system.</p>
+      <p>But they are not an entitlement. <cite>Gov. Code &sect;95024</cite> says the lead agency
+      <em>may</em> allocate funds to family resource services out of the federal Part C money
+      <em>remaining</em> after the mandatory components are paid. High priority, discretionary
+      residue. Nothing requires one per catchment.</p>
+    </div></div>
+    <div class="row do"><div class="k">What would close it</div><div class="v">
+      <p>Not a directory &mdash; a sentence, delivered where the worry starts. <b>&ldquo;You can refer
+      your own child today. It costs nothing. They have 45 days.&rdquo;</b> That closes most of this
+      seam on its own. The hard part is distribution: it has to reach a paediatric waiting room and a
+      WhatsApp group, not a website that assumes you already knew to search.</p>
+    </div></div>
+  </div>
+</article>
+
+<article class="seam">
+  <div class="seam-head">
+    <span class="seam-n">02</span>
+    <h3>The third birthday</h3>
+  </div>
+  <div class="rows">
+    <div class="row"><div class="k">The law says</div><div class="v">
+      <p>California is stricter than the federal floor. <cite>17 CCR &sect;52112</cite> requires the
+      regional centre to notify the school district and hold the transition meeting
+      <b>before the child is two years and nine months</b>, with the referral to the district sent by
+      that same date. Federal <cite>34 CFR &sect;303.209</cite> requires the conference not fewer than
+      90 days before the third birthday.</p>
+      <p>At three, the eligibility test changes from a 25% delay in <b>one</b> area to significant
+      limitations in <b>two</b> major life activities (provisional, ages 3&ndash;5) to substantial
+      limitations in <b>three or more</b> for full Lanterman eligibility.</p>
+      <p>And the payer flips. <cite>W&amp;I &sect;4659(d)(1)</cite>: a regional centre
+      <b>&ldquo;shall not purchase medical or dental services for a consumer three years of age or
+      older unless the regional center is provided with documentation of a Medi-Cal, private
+      insurance, or a health care service plan denial.&rdquo;</b></p>
+    </div></div>
+    <div class="row"><div class="k">What happens</div><div class="v">
+      <p>As of February 2025 California had <span class="num">6,929</span> Early Start children still
+      on the books past their third birthday &mdash; a <span class="num">22.5%</span> increase in one
+      year <cite>(DDS Directive D-2025-Early Start-001)</cite>.</p>
+      <p>The US Department of Education rated California&rsquo;s Part C programme
+      <b>&ldquo;Needs Intervention&rdquo;</b> in June 2025, with a score of
+      <span class="num">35.42%</span> &mdash; and <b>zero on both transition indicators, because the
+      data were unreliable</b>. The state cannot currently measure its own handoff.</p>
+      <p>In our own reading of the vendor lists across the regional centres that publish them,
+      <span class="num">628</span> organisations are reachable for birth-to-three therapy and
+      <span class="num">465</span> at three and over &mdash; but only <span class="num">4</span>
+      appear in both. Supply falls 26%; continuity falls to nothing. <b>A family will almost certainly
+      change providers at three</b>, not because supply vanished but because the two workforces are
+      different organisations doing different work under different billing codes.</p>
+    </div></div>
+    <div class="row"><div class="k">Who stands here now</div><div class="v">
+      <p>The service coordinator, on paper. The Family Resource Center does transition support &mdash;
+      and then its own mandate ends, because the FRC serves families of children under 36 months.
+      <b>The one body that has been helping you is aged out on the same day your child is.</b></p>
+    </div></div>
+    <div class="row do"><div class="k">What would close it</div><div class="v">
+      <p>A date, not a database. At two years and six months, tell the family exactly what must
+      already have happened by two years and nine months, who is supposed to have done it, and what
+      one sentence to say if it has not. <b>This is the single place in the whole system where a
+      checklist beats a directory</b>, because no database can answer the question that actually
+      matters &mdash; will the person treating my child still be treating them in four months, and who
+      pays &mdash; and a prompt to ask it in time changes the outcome.</p>
+    </div></div>
+  </div>
+</article>
+
+<article class="seam">
+  <div class="seam-head">
+    <span class="seam-n">03</span>
+    <h3>Between &ldquo;authorised&rdquo; and &ldquo;received&rdquo;</h3>
+  </div>
+  <div class="rows">
+    <div class="row"><div class="k">The law says</div><div class="v">
+      <p><cite>W&amp;I &sect;4647(b)</cite>: &ldquo;The regional center shall assign a service
+      coordinator who shall be responsible for implementing, overseeing, and monitoring each
+      individual program plan.&rdquo; This is the delivery guarantee, and it exists.</p>
+    </div></div>
+    <div class="row"><div class="k">What happens</div><div class="v">
+      <p><b><span class="num">24.7%</span> of regional centre clients aged 3&ndash;21 received
+      <span class="num">$0</span> in purchased services</b> in FY2024&ndash;25 &mdash;
+      <span class="num">66,618</span> of <span class="num">269,992</span> people. For ages birth to
+      two the same figure is <span class="num">3.2%</span>.</p>
+      <p>Statewide, only <span class="num">67%</span> of authorised service dollars were actually
+      spent; for ages 3&ndash;21 it was <span class="num">56.6%</span>
+      <cite>(DDS Annual Purchase of Service Report, FY2024-25)</cite>. That 43-point gap is the
+      measurable footprint of services that exist in a plan and never reach a child.</p>
+      <p>A plan listing a service the child never received is not an edge case. It is a quarter of
+      the school-age caseload.</p>
+    </div></div>
+    <div class="row"><div class="k">Who stands here now</div><div class="v">
+      <p>Nobody, in practice. The person statutorily assigned to monitor implementation is carrying
+      sixty-two children, works for the agency whose purchasing decision is frequently the reason the
+      service did not arrive, and the consequence for a regional centre that breaches the ratio for
+      two consecutive reporting periods is a plan of correction.</p>
+    </div></div>
+    <div class="row do"><div class="k">What would close it</div><div class="v">
+      <p>This is the gap where family-reported data has a value nobody can buy &mdash; and note that
+      the question is <b>not</b> &ldquo;does this provider have an opening.&rdquo; It is
+      <b>&ldquo;did the service written in your plan actually happen?&rdquo;</b> One question, asked
+      of people who already know the answer, about a number the state publishes only in aggregate and
+      a year late.</p>
+      <p>It is also the gap that most demands we talk to families before building anything, because
+      the wrong wording on that question is worse than not asking it.</p>
+    </div></div>
+  </div>
+</article>
+
+<figure>
+  <div class="figbox">
+    <svg viewBox="0 0 900 320" role="img"
+      aria-label="A loop: the family files with a decision body, the body issues a correct order, the order goes back to the same agency that failed to deliver, and the family is the only party that checks whether the service then happened.">
+      <defs>
+        <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="ink"/>
+        </marker>
+        <marker id="ah2g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="gf"/>
+        </marker>
+      </defs>
+
+      <!-- nodes -->
+      <rect x="40" y="112" width="150" height="58" rx="3" fill="none" class="gs" stroke-width="2"/>
+      <text x="115" y="147" text-anchor="middle" class="gf" font-size="15" font-weight="700">You</text>
+
+      <rect x="330" y="34" width="240" height="86" rx="3" fill="none" class="inks"
+            stroke-width="1.4" opacity=".8"/>
+      <text x="450" y="60" text-anchor="middle" class="ink" font-size="14" font-weight="600">A body that decides</text>
+      <g class="mono ink" font-size="10.5" opacity=".7">
+        <text x="450" y="80" text-anchor="middle">OCRA &middot; DRC &middot; DMHC IMR</text>
+        <text x="450" y="96" text-anchor="middle">CDE complaint &middot; due process</text>
+        <text x="450" y="112" text-anchor="middle">&sect;4731 &middot; fair hearing</text>
+      </g>
+
+      <rect x="700" y="112" width="170" height="58" rx="3" fill="none" class="inks"
+            stroke-width="1.4" opacity=".8"/>
+      <text x="785" y="140" text-anchor="middle" class="ink" font-size="14" font-weight="600">The same agency</text>
+      <text x="785" y="157" text-anchor="middle" class="ink" font-size="11.5" opacity=".7">that did not deliver</text>
+
+      <rect x="330" y="212" width="240" height="52" rx="3" fill="none" class="gs"
+            stroke-width="1.4" stroke-dasharray="5 4"/>
+      <text x="450" y="235" text-anchor="middle" class="gf" font-size="14" font-weight="600">Did the service happen?</text>
+      <text x="450" y="253" text-anchor="middle" class="gf" font-size="11.5" opacity=".85">nobody in this loop checks</text>
+
+      <!-- arrows -->
+      <g class="inks" stroke-width="1.6" fill="none" opacity=".8">
+        <path d="M190,138 C248,138 268,96 322,86" marker-end="url(#ah2)"/>
+        <path d="M578,104 C632,116 654,126 692,136" marker-end="url(#ah2)"/>
+      </g>
+      <g class="ink" font-size="11.5" opacity=".8">
+        <text x="252" y="102">you file</text>
+        <text x="634" y="98" text-anchor="middle">an order, correctly decided</text>
+      </g>
+
+      <path d="M785,174 C785,215 640,238 578,238" class="inks" stroke-width="1.6"
+            fill="none" opacity=".55" stroke-dasharray="5 4" marker-end="url(#ah2)"/>
+      <path d="M322,238 C260,238 115,215 115,176" class="gs" stroke-width="2"
+            fill="none" marker-end="url(#ah2g)"/>
+      <text x="132" y="292" class="gf" font-size="11.5" font-weight="600">only you find out &mdash; if you know to look</text>
+    </svg>
+  </div>
+  <figcaption><b>Every complaint route in California ends the same way: an entitlement, correctly
+  determined, handed back to the agency that failed to deliver it.</b> OCRA and Disability Rights
+  California give advice or representation, rationed by capacity. A DMHC review orders the
+  <em>plan</em> to cover it. A CDE complaint produces a corrective action plan the
+  <em>district</em> must carry out. A fair hearing produces a decision the <em>regional centre</em>
+  must carry out. The DDS Ombudsperson facilitates, recommends and reports. None of them delivers a
+  service, and none of them is required to look again afterwards.</figcaption>
+</figure>
+
+<article class="seam" style="margin-top:44px">
+  <div class="seam-head">
+    <span class="seam-n">04</span>
+    <h3>Three payers, no referee</h3>
+  </div>
+  <div class="rows">
+    <div class="row"><div class="k">The law says</div><div class="v">
+      <p><b>The health plan</b> must cover behavioural health treatment for autism
+      <cite>(SB 946 &rarr; Health &amp; Safety Code &sect;1374.73)</cite> &mdash; but the mandate
+      binds plan contracts and insurance policies, and a <b>self-funded employer plan is neither</b>.
+      Federal ERISA preemption puts it out of California&rsquo;s reach entirely
+      <cite>(29 U.S.C. &sect;1144)</cite>. In California,
+      <b><span class="num">41.7%</span> of private-sector enrollees at establishments that offer
+      coverage are in self-insured plans &mdash; <span class="num">58.2%</span> at firms of 1,000 or
+      more</b> <cite>(AHRQ MEPS-IC 2020)</cite>.</p>
+      <p><b>The regional centre</b> may not purchase a service available from a health plan where the
+      family &ldquo;chooses not to pursue that coverage&rdquo; <cite>(W&amp;I &sect;4659(c))</cite>.
+      It <em>may</em> pay a copay or deductible &mdash; but only under
+      <span class="num">400%</span> of the federal poverty level
+      <cite>(&sect;4659.1)</cite>.</p>
+      <p><b>The school district</b> owes only what the child needs to access their education.</p>
+    </div></div>
+    <div class="row"><div class="k">What happens</div><div class="v">
+      <p>Each party can point at another, correctly, under its own statute. There is no arbiter with
+      jurisdiction over all three. The family is the integration layer.</p>
+      <p>Where the dispute is with a health plan there is a real remedy, and it works:
+      of <span class="num">5,204</span> Independent Medical Reviews closed in 2024,
+      <span class="num">51%</span> were overturned by the reviewers and a further
+      <span class="num">22%</span> were reversed by the plan <b>before the review even happened</b>
+      &mdash; about <span class="num">73%</span> of families got the service
+      <cite>(DMHC 2024 Annual Report)</cite>. It is free.</p>
+      <p>But a family must know which regulator covers their plan, and <b>DMHC publishes no way to
+      find out</b>. You discover you filed with the wrong agency by filing with the wrong agency.</p>
+    </div></div>
+    <div class="row"><div class="k">Who stands here now</div><div class="v">
+      <p>DMHC&rsquo;s Help Center, for the plans it regulates &mdash; free, and it recovered
+      <span class="num">$9.3m</span> for members in 2024. It has no jurisdiction over the regional
+      centre or the district, and none at all over a self-funded plan.</p>
+    </div></div>
+    <div class="row do"><div class="k">What would close it</div><div class="v">
+      <p>Two things, both pure information. <b>A three-question triage that tells a family which
+      regulator they are actually under</b> before they spend 30 days in a plan grievance. And this
+      sentence, which may be the most actionable in this entire document:
+      <b>more than one in five denials evaporate the moment an outside reviewer is assigned</b>.
+      Those were services denied to families who, had they not filed, would simply have gone
+      without.</p>
+    </div></div>
+  </div>
+</article>
+
+<article class="seam">
+  <div class="seam-head">
+    <span class="seam-n">05</span>
+    <h3>Knowing that you can say no</h3>
+  </div>
+  <div class="rows">
+    <div class="row"><div class="k">The law says</div><div class="v">
+      <p>Two deadlines, and they are not the same one. <b>60 days</b> from the Notice of Action to
+      appeal at all. <b>30 days, and before the action takes effect</b>, to keep the services running
+      while you appeal <cite>(DDS, Aid Paid Pending fact sheet)</cite>. A family that files on day 35
+      keeps its appeal and loses its services in the meantime.</p>
+      <p>A rights complaint under <cite>W&amp;I &sect;4731</cite> goes to <b>the director of the
+      regional centre being complained about</b>, who has 20 working days to propose a resolution
+      &mdash; and if the family does not escalate, <b>that proposed resolution takes effect on the
+      20th working day by default</b>.</p>
+    </div></div>
+    <div class="row"><div class="k">What happens</div><div class="v">
+      <p>Appeals work. Of <span class="num">427</span> eligibility issues raised, <span class="num">141</span>
+      families were found eligible and <span class="num">86</span> got the assessment they had been
+      refused, against <span class="num">108</span> found ineligible &mdash; roughly
+      <b><span class="num">53%</span> ended with the family getting what had been denied</b>
+      <cite>(DDS Appeal Requests and Resolutions Report, FY2021-22)</cite>.</p>
+      <p>Per-capita appeal rates vary <b><span class="num">19-fold</span> between regional centres</b>
+      &mdash; from <span class="num">0.74</span> to <span class="num">13.91</span> per thousand
+      clients. That is not a difference in who has cause to appeal.</p>
+      <p>Rights complaints rose <span class="num">185%</span> from FY2020-21 to FY2023-24. Hispanic
+      families are <span class="num">43.9%</span> of the caseload and file <span class="num">34%</span>
+      of complaints.</p>
+      <p>And <b>DDS has published no appeal outcomes since FY2021-22</b>, so the success rate that
+      would persuade a family to file is four years old and getting older.</p>
+    </div></div>
+    <div class="row"><div class="k">Who stands here now</div><div class="v">
+      <p>OCRA &mdash; free, one clients&rsquo; rights advocate per regional centre, and independent of
+      it by statute. But OCRA states plainly that it weighs the merits, whether you could
+      self-advocate, and resource availability before taking a case: <b>&ldquo;CRAs can only accept a
+      limited caseload.&rdquo;</b> Most families get advice, not representation. And OCRA is funded by
+      DDS, the department that oversees the centres it argues against.</p>
+    </div></div>
+    <div class="row do"><div class="k">What would close it</div><div class="v">
+      <p>A 19-fold spread is an information gap, not a grievance gap. The fix is not a campaign
+      &mdash; it is <b>getting one date in front of one family in the right fortnight</b>. Everything
+      needed is already public; nothing has assembled it into something a parent reads on the day the
+      letter arrives.</p>
+    </div></div>
+  </div>
+</article>
+
+<article class="seam">
+  <div class="seam-head">
+    <span class="seam-n">06</span>
+    <h3>Twenty-two</h3>
+  </div>
+  <div class="rows">
+    <div class="row"><div class="k">The law says</div><div class="v">
+      <p>Nothing, in the sense that matters. The educational entitlement ends. Adult services are
+      discretionary and rationed. No party inherits the child.</p>
+    </div></div>
+    <div class="row"><div class="k">What happens</div><div class="v">
+      <p><span class="num">26%</span> of autistic young adults received <b>no services at all</b> in
+      their early twenties. <span class="num">58%</span> had ever worked for pay after high school
+      &mdash; against <span class="num">92%</span> for learning disability and <span class="num">84%</span>
+      for speech-language impairment. <span class="num">37%</span> were &ldquo;disconnected&rdquo;:
+      never worked, never continued education, against 7&ndash;8% for those other groups
+      <cite>(Drexel National Autism Indicators Report, 2015)</cite>.</p>
+      <p>The share of families reporting that obtaining services required significant effort rises
+      from <span class="num">50%</span> at age 17 to <b>over <span class="num">70%</span></b> after
+      high school. About <span class="num">80%</span> of California&rsquo;s autism caseload is under
+      22 &mdash; the cliff is the shape of the system, not an event at its edge.</p>
+    </div></div>
+    <div class="row"><div class="k">Who stands here now</div><div class="v">
+      <p>The regional centre remains, for those who hold full Lanterman eligibility. Per-consumer
+      spending at 22+ is where the equity gap is widest in the entire system:
+      <span class="num">$70,269</span> for white consumers against <span class="num">$39,824</span>
+      for Hispanic consumers.</p>
+    </div></div>
+    <div class="row do"><div class="k">What would close it</div><div class="v">
+      <p>Nothing on this page. Everything above is written for a parent, and the person on this
+      side of twenty-two is an autistic adult, not a parent &mdash; a different reader, needing a
+      different thing, from someone who has asked them what it is. It is named here so that its
+      absence is a decision rather than an oversight, and so that anyone building for adults knows
+      that the cliff is <b>where the caseload already is</b>, not a distant edge of it.</p>
+    </div></div>
+  </div>
+</article>
+
+<h2>Four things that run through all of it</h2>
+
+<div class="cross">
+  <div class="xc">
+    <h4>Inequity is manufactured at the seam</h4>
+    <p>While the service is a federal entitlement, California is fair. The moment it becomes
+    discretionary, it is not. This is a property of the design, not a story about individual bias
+    &mdash; and it means the leverage is at the transition, not in the attitudes of staff.</p>
+  </div>
+  <div class="xc">
+    <h4>Language is an identification failure</h4>
+    <p><span class="num">16%</span> of the caseload speaks Spanish at home; Vietnamese, Mandarin and
+    Cantonese are each <b>under 1%</b> &mdash; which is under-identification, not lower incidence.
+    Telehealth, the usual answer to distance, was found to &ldquo;disadvantage those with limited
+    English proficiency&rdquo;: interpreters were hard to integrate and platforms were English-only
+    <cite>(Katakis et al., PLOS Digital Health 2025)</cite>. It solves geography and worsens
+    language.</p>
+  </div>
+  <div class="xc">
+    <h4>The caregiver is not in the system</h4>
+    <p>The system&rsquo;s client is the child. Mothers of autistic children earn
+    <span class="num">56%</span> less than mothers of children with no health limitation and work
+    seven fewer hours a week; there is no significant effect on fathers
+    <cite>(Cidav, Pediatrics 2012)</cite>. <span class="num">31%</span> have a depressive disorder
+    and <span class="num">33%</span> an anxiety disorder <cite>(Schnabel, Autism 2020)</cite>.
+    <span class="num">66%</span> of families report material hardship, and it peaks at ages
+    3&ndash;5 &mdash; exactly when parents know least.</p>
+  </div>
+  <div class="xc">
+    <h4>The largest paid help is the least explained</h4>
+    <p>IHSS Protective Supervision pays a parent to watch a child who cannot assess danger &mdash; up
+    to <span class="num">283</span> hours a month. Counties are <b>required</b> to explain it during
+    assessment, which makes its obscurity a compliance failure rather than a design choice. Appeals
+    take <span class="num">90</span> days, benefits continue during them, and <b>are not treated as
+    an overpayment if the family loses</b>. Almost nobody is told that last part.</p>
+  </div>
+</div>
+
+<h2>What California does not measure about itself</h2>
+
+<div class="nm">
+  <ul>
+    <li><b>How many children lose all services at age three.</b> Not published &mdash; and the
+    state&rsquo;s own transition data were rated unreliable by the federal government, so it could
+    not answer if asked. Do not let anyone put a number on this one.</li>
+    <li><b>Autism or ABA denial rates by health plans.</b> Not published by DMHC, DHCS or CDI.
+    The Independent Medical Review determinations file on the state open-data portal &mdash; every
+    decision since 2001 &mdash; would yield an <em>overturn</em> rate, which is a different and
+    arguably sharper number, but it has no denominator of denials.</li>
+    <li><b>Speech-language and occupational therapy vacancy rates.</b> Not measured by the state
+    workforce agency. The speech-language pathology licence file the state published is an empty
+    archive.</li>
+    <li><b>Regional centre appeal outcomes since FY2021-22.</b> Nothing published since June 2023.</li>
+    <li><b>Hours families spend on administration</b> &mdash; appeals, IEP preparation, prior
+    authorisations, waitlists. Never studied, by anyone. The nearest federal figure does not break
+    out autism.</li>
+  </ul>
+</div>
+
+<h2>What would close them</h2>
+
+<div class="tier now">
+  <h4>Already public &mdash; and assembled nowhere</h4>
+  <ul>
+    <li><b>The referral sentence.</b> You can refer your own child, today, free, and they have 45
+    days.</li>
+    <li><b>The two-years-nine-months alarm.</b> What must have happened by then, and what to say if
+    it has not.</li>
+    <li><b>The 30-day line.</b> The deadline that keeps services running is not the deadline to
+    appeal, and it is the shorter one.</li>
+    <li><b>Which regulator are you under.</b> Three questions, before a family burns 30 days at the
+    wrong door &mdash; and the fact that a fifth of denials fold on filing.</li>
+    <li><b>Protective Supervision, and that appealing it is close to risk-free.</b></li>
+  </ul>
+  <p style="margin-top:12px; font-size:15px; color:var(--ink-2)">Every one of these is a fact
+  California already publishes. Not one of them requires new data, a budget, or anyone&rsquo;s
+  permission. What they require is arriving in front of one family in the right fortnight &mdash;
+  which is a distribution problem, not a research problem, and is the reason a 19-fold spread in
+  appeal rates exists between counties that are subject to identical law.</p>
+</div>
+
+<div class="tier">
+  <h4>Needs someone families will answer honestly</h4>
+  <ul>
+    <li><b>Did the service in your plan actually happen?</b> A quarter of the school-age caseload
+    would answer no, and the state publishes that only in aggregate, a year late.</li>
+    <li><b>Who is taking families this month.</b> No public source carries it and no directory in the
+    country shows a verified version.</li>
+  </ul>
+  <p style="margin-top:12px; font-size:15px; color:var(--ink-2)">Neither can be bought, scraped or
+  inferred. Both depend on families choosing to tell someone &mdash; which means the terms under
+  which they are asked matter more than the software, and are not recoverable once set wrong.</p>
+</div>
+
+<div class="tier">
+  <h4>Only California can do it, and has not</h4>
+  <ul>
+    <li>Publish what happens to children at three, with data the federal government will accept.</li>
+    <li>Publish denial and overturn rates by service category, so autism is separable.</li>
+    <li>Resume publishing appeal outcomes.</li>
+    <li>Fund delivery assurance &mdash; that is, staff <cite>&sect;4647</cite> as if it meant
+    what it says.</li>
+  </ul>
+  <p style="margin-top:12px; font-size:15px; color:var(--ink-2)">Named here because a document that
+  lists only what a small organisation could do quietly implies the rest is nobody&rsquo;s fault.
+  Four of the five things this system does not measure about itself are things it could begin
+  measuring next year.</p>
+</div>
+
+<h2>Who wrote this</h2>
+<p class="col" style="color:var(--ink-2)">Power Plus Partner, a small team in California building
+a free autism resource library. We assembled this because we needed it ourselves: we had spent
+weeks reconstructing from public files a picture that no single document held. Of the list above
+we are working on the first group &mdash; the facts that are already public and assembled
+nowhere &mdash; and are talking to families and Family Resource Centers before building anything
+that asks a family a question.</p>
+<p class="col" style="color:var(--ink-2); margin-top:14px">If you work inside any of the bodies
+named here and something on this page is wrong, that matters more to us than the rest of the page
+being right. Every source is listed below so a mistake can be found.</p>
+
+<footer>
+  <p><b>Sources.</b> California Department of Developmental Services: Annual Purchase of Service
+  Report FY2024-25, Directive D-2025-Early Start-001, Appeal Requests and Resolutions Report
+  FY2021-22, Lanterman Act Appeals Information Packet, Aid Paid Pending fact sheet, and the vendor
+  lists regional centres publish under SB 74. Welfare &amp; Institutions Code &sect;&sect;4640.6,
+  4647, 4659, 4659.1, 4731; Government Code &sect;95024; Health &amp; Safety Code &sect;1374.73;
+  17 CCR &sect;52112; 34 CFR &sect;303.209; 29 U.S.C. &sect;1144. Department of Managed Health Care
+  2024 Annual Report. US Department of Education Part C determination letter, June 2025. AHRQ
+  MEPS-IC 2020. Peer-reviewed work cited inline.</p>
+  <p><b>Two limits on the age-three vendor finding.</b> It covers the regional centres whose vendor
+  lists can be read, not all 21; and it covers only the regional centre funding line. After three,
+  much therapy moves to the school district and to private insurance, neither of which appears in
+  vendor data at all. These numbers show the regional-centre pathway narrowing. They do not show a
+  child losing their therapist.</p>
+  <p><b>What is not verified here.</b> No California source states that behavioural health treatment
+  falls within &ldquo;medical services&rdquo; for &sect;4659(d)(1) purposes &mdash; the practical
+  bar on ABA is assembled from that subdivision plus &sect;4659(c), and that gap is itself worth
+  knowing. The self-insurance share is the most recent California figure published, from 2020. If a
+  date or a deadline here is wrong it matters more than the rest of the document; every source is
+  named above so a mistake can be found.</p>
+</footer>
+
+</div>
+</body>
+</html>

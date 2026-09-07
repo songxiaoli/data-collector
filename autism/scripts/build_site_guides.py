@@ -35,6 +35,7 @@ PAGES = {
     "four-questions":   ("four-questions.html", 720, ("/autism/guides", "All guides")),
     "who-does-what":    ("who-does-what.html",  860, ("/autism/guides", "All guides")),
     "age-three":        ("rc-brief.html",       820, ("/autism/guides", "All guides")),
+    "system-gaps":      ("system-seams.html",  1000, ("/autism/guides", "All guides")),
     # frc-call-sheet.html is deliberately not here. It is our own outreach list —
     # who to ring at six Family Resource Centers and what to open with — not
     # something a family is looking for. It stays a private artifact.
@@ -45,6 +46,7 @@ ARTIFACT_LINKS = {
     "fc235e8e-e647-4c18-8c98-3abc00869a02": "/autism/guides/first-90-days",
     "3ab89f0f-81c0-4030-b662-50fb33c14206": "/autism/guides/four-questions",
     "62cb6a84-44d4-4415-8cbe-9f3ec0be357d": "/autism/guides/who-does-what",
+    "61df2ea5-2cb2-4fba-9be0-f39dea4af947": "/autism/guides/system-gaps",
     "4e4dee9c-422c-4468-af04-0c619d1be435": "/autism/guides/age-three",
 }
 
@@ -85,8 +87,8 @@ BAR = """
 
 META = {
     "index": ("Autism in California: Start Here",
-              "Four short guides for California families: what to do first, what to ask "
-              "providers, who is responsible for what, and what happens at age three."),
+              "Four short guides for California families and two for people who work inside the "
+              "system \u2014 what to do first, what to ask, who is responsible, and where it leaks."),
     "first-90-days": ("The First Ninety Days",
                       "What to do from the day you first wonder, in order, with the words to say "
                       "on each call and the legal deadline each one starts."),
@@ -99,6 +101,9 @@ META = {
     "age-three": ("The Age Three Handoff",
                   "What happens to therapy funding when a California child turns three, counted "
                   "from the vendor lists the regional centres publish."),
+    "system-gaps": ("The Handoffs Nobody Owns",
+                    "Where California's autism system leaks: what the law assigns at each handoff, "
+                    "what the state's own numbers show happens instead, and what would close it."),
     "family-resource-centers": ("Family Resource Centers: Who to Call",
                                 "Six California Family Resource Centers, why each one is worth a "
                                 "call, and a sheet to track what they said."),

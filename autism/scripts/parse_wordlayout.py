@@ -1,9 +1,10 @@
 """
-parse_wordlayout.py -- standalone parsers for seven California regional-centre
+parse_wordlayout.py -- standalone parsers for eight California regional-centre
 vendor directories whose PDFs defeat pdfplumber's ``extract_table()``.
 
     parse(key, path) -> list[dict]
-        key in {"sdrc", "sgprc", "westside", "ggrc", "kern", "redwood", "cvrc"}
+        key in {"sdrc", "sgprc", "westside", "ggrc", "kern", "redwood",
+                "cvrc", "elarc"}
 
 Every returned row is a dict with the keys:
 
@@ -18,7 +19,8 @@ category, which the source itself prints once per group.
 Three sources carry data that maps to no canonical key.  Rather than discard it,
 those rows gain an EXTRA key alongside the nine above:
 
-    redwood, cvrc   "contact"             the source's Contact Name column
+    redwood, cvrc,  "contact"             the source's Contact Name column
+    elarc
     cvrc            "category_truncated"  True when the source clipped the
                                           Services list mid-token
 
@@ -30,12 +32,15 @@ source lacking them.
 -----------------------------------------------------------------------------
 WHY NOT extract_table()
 -----------------------------------------------------------------------------
-Five of the seven PDFs have no ruling lines and no cell boxes; they are plain
+Six of the eight PDFs have no ruling lines and no cell boxes; they are plain
 text laid out in columns by absolute position.  ``extract_table()`` returns
 nothing at all for them (for Redwood it returns whole lines as single cells on
 page 1 and None everywhere else, which is worse than nothing).  CVRC is not a
-table at all: each vendor is a five-line labelled block, parsed by label.  ``extract_text()`` is also unusable, because adjacent
-columns touch: SDRC prints "7603527440EL CENTRO" (phone abutting city) and,
+table at all: each vendor is a five-line labelled block, parsed by label.
+
+``extract_text()`` is also unusable, because adjacent
+columns touch: SDRC prints "7603527440EL CENTRO" (phone abutting city),
+ELARC prints "90604TERROBIN" (ZIP abutting contact) and,
 worse, its long category strings physically overlap the provider-name column,
 so pdfplumber's word grouper interleaves characters from the two columns and
 emits nonsense like "FAAC IPLLITAYCE" (which is "FACILITY" + "AC PLACE"
@@ -68,19 +73,23 @@ module (run it to re-derive them against a new edition of any of these PDFs):
 
 The boundaries are then LATCHED AS MODULE CONSTANTS and reused for every page of
 the document.  This is deliberate and load-bearing: in these files only page 1
-carries a header (SDRC, Kern, Redwood) or the per-page geometry drifts
+carries a header (SDRC, Kern, Redwood, ELARC) or the per-page geometry drifts
 (Westside), so a column map re-derived per page silently mis-assigns or drops
 rows on pages that lack a header or that happen to hold few rows.  An earlier
 version of this pipeline dropped ~95% of SDRC's rows for exactly that reason.
 The maps here are computed once from the whole document and never re-derived
 mid-run.
 
-The companion trap is the y-band.  In SDRC, Kern, Redwood and CVRC the first
-page carries a header or title block and the following pages do NOT, so data on
-pages 2..n begins ABOVE where it begins on page 1 -- on Kern and Redwood at the
-exact baseline the page-1 header occupies.  Choosing the band to clear the
-header therefore deletes the first row(s) of every subsequent page.  In all four
-the band is opened wide and the header removed by CONTENT instead.
+The companion trap is the y-band.  In SDRC, Kern, Redwood, CVRC and ELARC
+the first page carries a header or title block and the following pages do NOT,
+so data on pages 2..n begins ABOVE where it begins on page 1 -- on Kern,
+Redwood and ELARC at the exact baseline the page-1 header occupies.  Choosing
+the band to clear the header therefore deletes the first row(s) of every
+subsequent page.  In all five the band is opened wide and the header removed by
+CONTENT instead.
+
+Seven of the eight publish category WORDS; ELARC alone publishes a numeric DDS
+service code, which it emits in ``category`` exactly as printed.
 
 Because starts are classified (not extents), a boundary only has to fall in the
 gap between two columns' START positions.  Those gaps are wide -- e.g. SDRC's
@@ -128,6 +137,11 @@ PRESENT = {
     # (plus a non-canonical "contact" key -- see parse_cvrc)
     "cvrc":     ("rc", "vendor_no", "name", "category", "address", "city",
                  "zip", "phone", "email"),
+    # ELARC: NAME | VENDOR # | SRVC | ADDRESS | CITY | ZIP | CONTACT | PHONE
+    # The only word-layout source with a NUMERIC service code; it goes in
+    # "category" verbatim.  (plus a non-canonical "contact" key.)
+    "elarc":    ("rc", "vendor_no", "name", "category", "address", "city",
+                 "zip", "phone"),
 }
 
 
@@ -963,6 +977,87 @@ def parse_cvrc(path, pages=None):
     return rows
 
 
+# ==========================================================================
+# 8. ELARC -- Eastern Los Angeles Regional Center (51 pages)
+# ==========================================================================
+#
+# Layout: NAME | VENDOR # | SRVC | ADDRESS | CITY | ZIP | CONTACT | PHONE
+# extract_table() returns nothing.  Every data line is eight runs (seven when
+# the contact is blank: 2213 lines of 8 and 77 of 7 across the document).
+#
+# ELARC is the only word-layout source that publishes a NUMERIC DDS service
+# code rather than category words.  It is emitted in ``category`` exactly as
+# printed -- a bare 2- or 3-digit string, never zero-padded, re-typed as an
+# int, or otherwise reformatted.
+#
+# ZIP and CONTACT abut in the text layer ("90604TERROBIN"), which is why
+# extract_text() is unusable here; run reconstruction separates them.  Their
+# boundary is the tightest in any of these seven files: measured over all 51
+# pages the ZIP run's right edge never exceeds 526.77 and the CONTACT run's
+# start never falls below 528.96, so 528.0 sits in a 2.2pt gap.  The remaining
+# boundaries are the midpoints of the zero-ink intervals at 170-188, 226-235,
+# 255-260, 371-392, 486-501 and 667-686.  SRVC is right-aligned (3-digit codes
+# begin at 239.7, 2-digit at 241.8, all ending at 252.6), so it is classified
+# by where the run begins, like every other column here.
+ELARC_BOUNDS = [179.0, 230.5, 257.5, 381.5, 493.5, 528.0, 676.5]
+
+# y-band.  The page-1 header sits at top=56.8 -- the same baseline where data
+# begins on pages 2-51 -- so the band opens above it and the header is dropped
+# by content.  This is the third file of the seven with that shape.  No footer:
+# every page's ink ends by top=547.9.
+ELARC_YTOP = 40.0
+ELARC_YBOT = 560.0
+
+# NOTE on the "extra leading numeric column" visible on page 1.  It is NOT a
+# column and NOT a page-1 artifact to be stripped: the digits belong to the
+# vendor NAME and share its run at x=52.44.  The directory is sorted
+# alphabetically, so the 17 names that begin with a digit ("1 DRIVING SCHOOL",
+# "2 LOVING HEARTS", "24HR HOMECARE", "360 BEHAVIORAL HEALTH SUP",
+# "5 ELEVEN SPORTS", "986 PHARMACY") all land on page 1 and nowhere else.  The
+# sequence 1, 2, 2, 24, 24 ... is not a row count.  Stripping a leading number
+# here would silently corrupt those 17 vendor names, so nothing is stripped.
+
+
+def parse_elarc(path, pages=None):
+    rows = []
+    with pdfplumber.open(path) as pdf:
+        for _i, page in _pages(pdf, pages):
+            for _top, chars in _lines(page, ELARC_YTOP, ELARC_YBOT, tol=1.5):
+                runs = _runs(chars, gap=0.6)
+                if not runs:
+                    continue
+                cells = {}
+                for x0, _x1, txt in runs:
+                    k = ("name", "vendor_no", "category", "address", "city",
+                         "zip", "contact", "phone")[_bucket(x0, ELARC_BOUNDS)]
+                    cells[k] = cells.get(k, "") + txt
+
+                name = _norm(cells.get("name"))
+                vendor_no = _norm(cells.get("vendor_no"))
+                if name == "NAME":                   # page-1 column header
+                    continue
+                if not name and not vendor_no:
+                    continue
+                # The document's last row has a blank name but a real vendor
+                # number, service code, city and ZIP.  The vendor number
+                # identifies it, so it is kept rather than dropped.
+
+                row = _row(
+                    "elarc",
+                    vendor_no=vendor_no,
+                    name=name,
+                    # The bare DDS code, verbatim.
+                    category=_norm(cells.get("category")),
+                    address=_norm(cells.get("address")),
+                    city=_title_city(cells.get("city")),
+                    zip=_zip(cells.get("zip")),
+                    phone=_phone(cells.get("phone")),
+                )
+                row["contact"] = _norm(cells.get("contact"))
+                rows.append(row)
+    return rows
+
+
 # --------------------------------------------------------------------------
 # Public entry point
 # --------------------------------------------------------------------------
@@ -975,6 +1070,7 @@ PARSERS = {
     "kern": parse_kern,
     "redwood": parse_redwood,
     "cvrc": parse_cvrc,
+    "elarc": parse_elarc,
 }
 
 

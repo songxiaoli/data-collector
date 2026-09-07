@@ -1,0 +1,197 @@
+{
+ "cvrc": {
+  "name": "Central Valley Regional Center",
+  "snapshots": [
+   {
+    "bytes": 1284860,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/cvrc/2026-09-07-a5e55181.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "a5e55181c905b416ad2ac38c1de0012b227c6c6507ada2c0525fe710dab271b0"
+   }
+  ],
+  "url": "https://www.cvrc.org/wp-content/uploads/2020/04/VendServ.pdf"
+ },
+ "elarc": {
+  "name": "Eastern Los Angeles Regional Center",
+  "snapshots": [
+   {
+    "bytes": 717416,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/elarc/2026-09-07-3bd9aae3.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "3bd9aae36381702ddd5d3d63c45bade2341a530fc9c9cce1972d0c4c01cd6160"
+   }
+  ],
+  "url": "https://www.elarc.org/files/assets/mainsite/v/1/transparency/documents/vendor-list-no-parent-vendor.pdf"
+ },
+ "ggrc": {
+  "name": "Golden Gate Regional Center",
+  "snapshots": [
+   {
+    "bytes": 658112,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/ggrc/2026-09-07-681eca84.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "681eca84f9bf820668486464ff35c7cfc58f19aa4057451ea216cc4277f6c99d"
+   }
+  ],
+  "url": "https://www.ggrc.org/wp-content/uploads/2026/03/Service_Provider_Directory_3-26.pdf"
+ },
+ "harbor": {
+  "name": "Harbor Regional Center",
+  "snapshots": [
+   {
+    "bytes": 803240,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/harbor/2026-09-07-48102623.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "48102623680795e076efd111bcb2d173296f412e9a07c33766a35e8c5073a2bc"
+   }
+  ],
+  "url": "https://www.harborrc.org/wp-content/uploads/2025/09/service_provider_resource_list_9.10.25.pdf"
+ },
+ "inland": {
+  "name": "Inland Regional Center",
+  "snapshots": [
+   {
+    "bytes": 582603,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/inland/2026-09-07-e7b6b3f3.xlsx",
+    "last_seen": "2026-09-07",
+    "sha256": "e7b6b3f370f7b9cac924e2b1d82c6327c21e60750fbec0db3f45f5f7e2907bb5"
+   }
+  ],
+  "url": "https://www.inlandrc.org/wp-content/uploads/2026/07/IRC-Vendor-Master-Listing-7-22-26.xlsx"
+ },
+ "kern": {
+  "name": "Kern Regional Center",
+  "snapshots": [
+   {
+    "bytes": 182101,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/kern/2026-09-07-f33f1a90.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "f33f1a9093c7df92435343980f120a16080ef383916b17449ff7dc17337a3a7f"
+   }
+  ],
+  "url": "https://kernrc.org/wp-content/uploads/2024/03/Vendor-List-07292024-v3.pdf"
+ },
+ "nbrc": {
+  "name": "North Bay Regional Center",
+  "snapshots": [
+   {
+    "bytes": 102531,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/nbrc/2026-09-07-b7c1c295.xlsx",
+    "last_seen": "2026-09-07",
+    "sha256": "b7c1c295ba3ffd507960fafe2c9bb56af148442a5101069297e800054ce7a764"
+   }
+  ],
+  "url": "https://www.nbrc.net/wp-content/uploads/2025/10/Copy-of-NBRC-Vendors-2023-24-1-1.xlsx"
+ },
+ "rceb": {
+  "name": "Regional Center of the East Bay",
+  "snapshots": [
+   {
+    "bytes": 2417371,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/rceb/2026-09-07-d2429bea.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "d2429beab9a511351f3b861ab41a6a5a7eac06b0ba0103a86bd1246bd343e6e2"
+   }
+  ],
+  "url": "https://rceb.org/wp-content/uploads/2026/08/SB74ListofVendors-08052026-Qport.pdf"
+ },
+ "rcoc": {
+  "name": "Regional Center of Orange County",
+  "snapshots": [
+   {
+    "bytes": 888614,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/rcoc/2026-09-07-394ee724.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "394ee7241085d980f29b6585371d70801254c3db24e34a188bf332e980fcdf33"
+   }
+  ],
+  "url": "https://www.rcocdd.com/wp-content/uploads/pdf/vendorsearch/Vendor_List_By_Vendorization_Date.pdf"
+ },
+ "redwood": {
+  "name": "Redwood Coast Regional Center",
+  "snapshots": [
+   {
+    "bytes": 234353,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/redwood/2026-09-07-b4af6b92.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "b4af6b92340f480efb905d915f2b0641d42959b64c3853590880341e1b4badd9"
+   }
+  ],
+  "url": "https://redwoodcoastrc.org/wp-content/uploads/2026/03/2026-March-Vendor-List-updated.pdf"
+ },
+ "sarc": {
+  "name": "San Andreas Regional Center",
+  "snapshots": [
+   {
+    "bytes": 208923,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/sarc/2026-09-07-e8713f74.csv",
+    "last_seen": "2026-09-07",
+    "sha256": "e8713f74c4757d309930b6709ece845385e6512ff1c8eb7e7f3e01a12eec8201"
+   }
+  ],
+  "url": "https://sanandreasregional.org/wp-content/uploads/provider-directory/sarc-provider-directory-2026-07-13.csv"
+ },
+ "sclarc": {
+  "name": "South Central Los Angeles Regional Center",
+  "snapshots": [
+   {
+    "bytes": 171013,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/sclarc/2026-09-07-ea48e344.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "ea48e34477efb70269aea968a6e7d2b3c7ce9d5d72f8f430d4a470a788bb399a"
+   }
+  ],
+  "url": "https://sclarc.org/wp-content/uploads/2025/03/CO22021000313329830_zOsR8KHyRDyjCAxhEajL_VendorListforPublishingFeb24FINAL.pdf"
+ },
+ "sdrc": {
+  "name": "San Diego Regional Center",
+  "snapshots": [
+   {
+    "bytes": 574299,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/sdrc/2026-09-07-72bb8c0a.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "72bb8c0a0be2dc0479ca74eb013ac03956bdc0cf8ae3e0a6bbcaabe98c17ba0d"
+   }
+  ],
+  "url": "https://www.sdrc.org/_files/ugd/8a8ffe_72b7309de1bb4318bc5d5b6bc28b6400.pdf"
+ },
+ "sgprc": {
+  "name": "San Gabriel/Pomona Regional Center",
+  "snapshots": [
+   {
+    "bytes": 99076,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/sgprc/2026-09-07-aab46d92.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "aab46d9251bf652c27f405ff3cebc32d2c65a9345357351a75616901bb77dcb2"
+   }
+  ],
+  "url": "https://sgprc.org/wp-content/uploads/2026/06/Provider-Search-050526.pdf"
+ },
+ "westside": {
+  "name": "Westside Regional Center",
+  "snapshots": [
+   {
+    "bytes": 1611185,
+    "date": "2026-09-07",
+    "file": "autism/data/providers/rc/archive/westside/2026-09-07-a43737ef.pdf",
+    "last_seen": "2026-09-07",
+    "sha256": "a43737ef0953b5555e42d1d5334ce618101e13db7f33657a5bbbe53118e027ff"
+   }
+  ],
+  "url": "https://westsiderc.org/wp-content/uploads/2026/03/WRC-SERVICE-PROVIDER-DIRECTORY-Updated-3.26.2026.pdf"
+ }
+}

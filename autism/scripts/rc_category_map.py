@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Map regional-centre category WORDS onto verified DDS service codes.
 
-Five centres publish a numeric service code per vendor row. Seven — San Diego,
-San Gabriel/Pomona, Westside, Golden Gate, Kern, Redwood Coast and Central
-Valley — publish the service as a phrase instead, in their own house
-abbreviations, so 13,908 parsed rows cannot reach the relevance logic until the
-phrases are mapped. Matching upper-cases first, which is what lets Redwood
+Five centres publish a numeric service code per vendor row in a readable table.
+Eight more need the word-layout parser, and seven of those — San Diego, San
+Gabriel/Pomona, Westside, Golden Gate, Kern, Redwood Coast and Central Valley —
+publish the service as a phrase in their own house abbreviations, so their rows
+cannot reach the relevance logic until the phrases are mapped. The eighth,
+Eastern Los Angeles, needs the parser but not the mapping: its column already
+holds the numeric code. Matching upper-cases first, which is what lets Redwood
 Coast's Title Case fall onto the same entries as everyone else's caps.
 
 The mapping is only as trustworthy as the code table behind it, so it is split
@@ -31,6 +33,23 @@ import json, re, collections
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+
+# The same verified code table parse_rc_vendors.py carries, kept here so a
+# centre that already prints the numeric code needs no phrase mapping at all.
+# Verified against the DDS Rate Reform Service Code Crosswalk, 2026-02-05.
+SERVICE_CODES = {
+    "116": "Early Start Specialized Therapeutic Services",
+    "117": "Specialized Therapeutic Services (age 3 and older)",
+    "515": "Behavior Management Program",
+    "612": "Behavior Analyst",
+    "613": "Associate Behavior Analyst",
+    "615": "Behavior Management Assistant",
+    "616": "Behavior Technician - Paraprofessional",
+    "805": "Infant Development Program",
+    "862": "In-Home Respite Services",
+}
+AUTISM_DIRECT  = {"116", "117", "515", "612", "613", "615", "616", "805"}
+AUTISM_SUPPORT = {"862"}
 
 # ── direct: phrase -> (code, canonical name) ──────────────────────────────────
 # Codes verified against the DDS Rate Reform Service Code Crosswalk, 2026-02-05.
@@ -136,7 +155,12 @@ def classify(category):
     return None, None, None
 
 def main():
-    RCNAME = {"sdrc": "San Diego Regional Center",
+    # Eastern LA is a word-layout PDF like the rest, but the column it puts the
+    # service in already holds the DDS numeric code, so it needs no phrase
+    # mapping at all — only the same code table every numeric centre uses.
+    NUMERIC = {"elarc"}
+    RCNAME = {"elarc": "Eastern Los Angeles Regional Center",
+              "sdrc": "San Diego Regional Center",
               "sgprc": "San Gabriel/Pomona Regional Center",
               "westside": "Westside Regional Center",
               "ggrc": "Golden Gate Regional Center",
@@ -154,6 +178,31 @@ def main():
             # of a clipped row is a fragment ("OUT-OF-H", "STAFF OPERATE").
             # Fragments are dropped rather than matched — a fragment that
             # happened to match a real phrase would be a silent misattribution.
+            if key in NUMERIC:
+                code = re.sub(r"\D", "", str(r.get("category") or "")).zfill(3)
+                name = SERVICE_CODES.get(code)
+                if code in AUTISM_DIRECT:    bucket, name = "direct",  name
+                elif code in AUTISM_SUPPORT: bucket, name = "support", name
+                else:
+                    unmapped[code] += 1
+                    continue
+                per[key][bucket] += 1
+                out.append({
+                    "rc": key, "rc_name": rcname,
+                    "vendor_no": r.get("vendor_no") or "",
+                    "name": r.get("name") or "",
+                    "service_code": code, "service_name": name,
+                    "category_raw": str(r.get("category") or ""),
+                    "address": (r.get("address") or "").strip(),
+                    "city": (r.get("city") or "").strip().title(),
+                    "zip": re.sub(r"\D", "", r.get("zip") or "")[:5],
+                    "phone": (r.get("phone") or "").strip(),
+                    "email": (r.get("email") or "").strip(),
+                    "autism_direct":  bucket == "direct",
+                    "autism_support": bucket == "support",
+                    "needs_code_review": False,
+                })
+                continue
             cats = [r.get("category")]
             if key == "cvrc" and r.get("category"):
                 atoms = [a.strip() for a in r["category"].split(",") if a.strip()]
@@ -191,7 +240,7 @@ def main():
 
     (HERE / "rc_vendors_wordlayout.json").write_text(json.dumps(out, indent=1))
 
-    print(f"{len(out):,} rows mapped from 13,908 parsed across seven centres\n")
+    print(f"{len(out):,} rows mapped from 16,198 parsed across eight centres\n")
     print(f"{'centre':10s} {'direct':>8s} {'support':>8s} {'review':>8s}")
     for k in RCNAME:
         p = per[k]

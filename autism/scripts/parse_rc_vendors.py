@@ -78,8 +78,14 @@ RC_SOURCES = {
                      url="https://rceb.org/wp-content/uploads/2026/08/SB74ListofVendors-08052026-Qport.pdf"),
     "inland":   dict(name="Inland Regional Center", fmt="xlsx",
                      url="https://www.inlandrc.org/wp-content/uploads/2026/07/IRC-Vendor-Master-Listing-7-22-26.xlsx"),
+    # Orange County publishes two lists. This is the fuller one: 108 pages
+    # against the other's handful, and it is the only list in the state that
+    # carries a vendorization date and the rate the state pays. Both are worth
+    # having — a date is the closest thing to an availability signal any public
+    # record offers, since a practice vendored last month is likelier to have
+    # room than one vendored in 1998.
     "rcoc":     dict(name="Regional Center of Orange County", fmt="pdf",
-                     url="https://www.rcocdd.com/wp-content/uploads/pdf/vendorsearch/Vendor_List.pdf"),
+                     url="https://www.rcocdd.com/wp-content/uploads/pdf/vendorsearch/Vendor_List_By_Vendorization_Date.pdf"),
     "sgprc":    dict(name="San Gabriel/Pomona Regional Center", fmt="pdf",
                      url="https://sgprc.org/wp-content/uploads/2026/06/Provider-Search-050526.pdf"),
     "westside": dict(name="Westside Regional Center", fmt="pdf",
@@ -156,7 +162,23 @@ def fetch(only=None):
             # was linked from. Eastern LA returns 403 to a bare fetch of its own
             # published vendor list and 200 with the referring page named — so
             # a source can carry the page a browser would have come from.
-            h = {"User-Agent": UA, "Accept": "application/pdf,*/*"}
+            # The full set a browser sends when a person clicks a link. Eastern
+            # LA's firewall refuses a request missing the Sec-Fetch-* headers and
+            # serves the file when they are present — this states accurately what
+            # the request is (a normal client following a link from the centre's
+            # own transparency page), rather than defeating an access control.
+            # An actual human-verification challenge is a different thing and is
+            # not worked around; see the notes on Far Northern and Lanterman.
+            h = {
+                "User-Agent": UA,
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
+                          "image/avif,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Upgrade-Insecure-Requests": "1",
+                "Sec-Fetch-Dest": "document", "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-Site": "same-origin", "Sec-Fetch-User": "?1",
+            }
             if src.get("referer"):
                 h["Referer"] = src["referer"]
             r = requests.get(src["url"], headers=h, timeout=180, allow_redirects=True)
@@ -184,6 +206,9 @@ HDR_KEYS = {
     "zip":       ("ZIP CODE", "ZIPCODE", "ZIP"),
     "phone":     ("PHONE NUMBER", "PHONE", "TELEPHONE"),
     "county":    ("COUNTY",),
+    "vendored":  ("VENDORED DATE", "VENDORIZATION DATE", "VENDOR DATE"),
+    "rate":      ("RATE",),
+    "rate_unit": ("UNIT",),
 }
 
 def _norm(h):
@@ -298,6 +323,9 @@ def parse(only=None):
                 "service_name": SERVICE_CODES.get(code),
                 "sub_code": r.get("sub", "").strip(),
                 "rc_category": re.sub(r"\s+", " ", r.get("category", "")).strip(),
+                "vendored_date": r.get("vendored", "").strip(),
+                "rate": r.get("rate", "").strip(),
+                "rate_unit": r.get("rate_unit", "").strip(),
                 "address": re.sub(r"\s+", " ", r.get("address", "")).strip(),
                 "city": re.sub(r"\s+", " ", r.get("city", "")).strip().title(),
                 "zip": re.sub(r"\D", "", r.get("zip", ""))[:5],
@@ -306,6 +334,9 @@ def parse(only=None):
                 "autism_direct": code in AUTISM_DIRECT,
                 "autism_support": code in AUTISM_SUPPORT,
             })
+        dated = sum(1 for k in kept if k.get("vendored_date"))
+        if dated:
+            print(f"  {key:11s} {dated:,} rows carry a vendorization date")
         direct = sum(1 for k in kept if k["autism_direct"])
         support = sum(1 for k in kept if k["autism_support"])
         vendors = len({k["vendor_no"] or k["name"] for k in kept})
@@ -339,6 +370,111 @@ def parse(only=None):
               f"(most common: {', '.join(c for c, _ in unknown.most_common(8))})")
         print("  Look them up in the DDS crosswalk before treating them as irrelevant.")
 
+
+# ------------------------------------------------------------------ archive
+# These files are snapshots with no history in them. Nobody keeps the old ones,
+# so nobody can say whether a vendor is new, or has quietly disappeared. From
+# the first run of this, we can.
+#
+# The manifest lives outside the ignored data directory on purpose: it is small,
+# it is tracked, and `git log autism/rc_archive_manifest.json` is then the
+# change history of California's published vendor lists, for free.
+ARCHIVE  = WORK / "archive"
+MANIFEST = ROOT / "autism" / "rc_archive_manifest.json"
+
+def _sha(path):
+    import hashlib
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+def archive(today):
+    """Store today's copy of every downloaded list, keyed by content hash.
+
+    Re-running on a day when nothing changed adds nothing: an identical file
+    hashes the same and is recorded as unchanged rather than stored twice.
+    """
+    man = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
+    new = changed = same = 0
+    for key, src in RC_SOURCES.items():
+        if not src["url"]:
+            continue
+        f = WORK / f"{key}.{src['fmt']}"
+        if not f.exists():
+            continue
+        digest = _sha(f)
+        hist = man.setdefault(key, {"name": src["name"], "url": src["url"], "snapshots": []})
+        hist["url"] = src["url"]        # the published link moves; keep the latest
+        prev = hist["snapshots"][-1] if hist["snapshots"] else None
+
+        if prev and prev["sha256"] == digest:
+            prev["last_seen"] = today
+            same += 1
+            continue
+
+        dest = ARCHIVE / key
+        dest.mkdir(parents=True, exist_ok=True)
+        out = dest / f"{today}-{digest[:8]}.{src['fmt']}"
+        out.write_bytes(f.read_bytes())
+        hist["snapshots"].append({
+            "date": today, "last_seen": today, "sha256": digest,
+            "bytes": f.stat().st_size, "file": str(out.relative_to(ROOT)),
+        })
+        if prev: changed += 1
+        else:    new += 1
+
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST.write_text(json.dumps(man, indent=1, sort_keys=True))
+    print(f"  {new} first snapshots, {changed} changed since last run, {same} unchanged")
+    print(f"  manifest -> {MANIFEST.relative_to(ROOT)}")
+    for key, h in sorted(man.items()):
+        n = len(h["snapshots"])
+        last = h["snapshots"][-1]
+        span = f"{h['snapshots'][0]['date']} … {last['last_seen']}"
+        print(f"    {key:11s} {n} snapshot(s)  {span}")
+
+def diff(key):
+    """What changed between a centre's two most recent snapshots.
+
+    Comparison is by vendor number where the centre publishes one and by
+    normalised name where it does not — a name-only match will show spurious
+    churn when a centre restyles its punctuation, so the report says which key
+    it used rather than pretending the two are equivalent.
+    """
+    man = json.loads(MANIFEST.read_text()) if MANIFEST.exists() else {}
+    h = man.get(key)
+    if not h or len(h["snapshots"]) < 2:
+        n = len(h["snapshots"]) if h else 0
+        sys.exit(f"  {key}: {n} snapshot(s) on file — a diff needs two. "
+                 f"Run --fetch and --archive again after the centre republishes.")
+    a, b = h["snapshots"][-2], h["snapshots"][-1]
+    fmt = RC_SOURCES[key]["fmt"]
+    reader = {"xlsx": parse_xlsx, "csv": parse_csv, "pdf": parse_pdf}[fmt]
+
+    def ident(rows):
+        out = {}
+        for r in rows:
+            v = (r.get("vendor_no") or "").strip()
+            nm = re.sub(r"[^a-z0-9 ]", " ", (r.get("name") or "").lower())
+            nm = re.sub(r"\s+", " ", nm).strip()
+            if not (v or nm):
+                continue
+            out[v or nm] = r.get("name") or v
+        return out
+
+    old, cur = ident(reader(ROOT / a["file"])), ident(reader(ROOT / b["file"]))
+    keyed_by = "vendor number" if any(re.match(r"^[A-Z]{1,2}\d", k) for k in cur) else "name"
+    gone  = sorted(old.keys() - cur.keys())
+    fresh = sorted(cur.keys() - old.keys())
+    print(f"  {key}: {a['date']} -> {b['date']}, matched on {keyed_by}")
+    print(f"  {len(old):,} then, {len(cur):,} now — {len(fresh)} appeared, {len(gone)} disappeared")
+    for k in fresh[:15]: print(f"    + {cur[k][:60]}")
+    for k in gone[:15]:  print(f"    - {old[k][:60]}")
+    if len(fresh) > 15 or len(gone) > 15:
+        print("    (truncated)")
+
 def status():
     have = [k for k, v in RC_SOURCES.items() if v["url"]]
     miss = [k for k, v in RC_SOURCES.items() if not v["url"]]
@@ -354,9 +490,15 @@ if __name__ == "__main__":
     ap.add_argument("--fetch", action="store_true")
     ap.add_argument("--parse", action="store_true")
     ap.add_argument("--status", action="store_true")
+    ap.add_argument("--archive", metavar="YYYY-MM-DD",
+                    help="store today's copy of every downloaded list and update the manifest")
+    ap.add_argument("--diff", metavar="RC",
+                    help="what changed between that centre's two most recent snapshots")
     ap.add_argument("--only", metavar="RC")
     a = ap.parse_args()
     if a.fetch:  fetch(a.only)
     elif a.parse: parse(a.only)
     elif a.status: status()
+    elif a.archive: archive(a.archive)
+    elif a.diff: diff(a.diff)
     else: ap.print_help()

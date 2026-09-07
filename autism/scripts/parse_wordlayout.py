@@ -1,26 +1,40 @@
 """
-parse_wordlayout.py -- standalone parsers for four California regional-centre
+parse_wordlayout.py -- standalone parsers for seven California regional-centre
 vendor directories whose PDFs defeat pdfplumber's ``extract_table()``.
 
-    parse(key, path) -> list[dict]      key in {"sdrc", "sgprc", "westside", "ggrc"}
+    parse(key, path) -> list[dict]
+        key in {"sdrc", "sgprc", "westside", "ggrc", "kern", "redwood", "cvrc"}
 
 Every returned row is a dict with the keys:
 
     rc, vendor_no, name, category, address, city, zip, phone, email
 
 A key is OMITTED only when the source directory genuinely has no such column
-(see PER-FILE NOTES below).  A key that exists in the source but is blank on a
-particular row is present with value ``None`` -- nothing is ever guessed or
+(see the per-file sections below).  A key that exists in the source but is blank
+on a particular row is present with value ``None`` -- nothing is ever guessed or
 back-filled from another row, with the single documented exception of SGPRC's
-category, which the source itself prints once per group (see below).
+category, which the source itself prints once per group.
+
+Three sources carry data that maps to no canonical key.  Rather than discard it,
+those rows gain an EXTRA key alongside the nine above:
+
+    redwood, cvrc   "contact"             the source's Contact Name column
+    cvrc            "category_truncated"  True when the source clipped the
+                                          Services list mid-token
+
+CVRC additionally holds a separate Mailing address and Emg#/Fax numbers which
+are NOT extracted; they are noted here so their absence is not mistaken for the
+source lacking them.
 
 
 -----------------------------------------------------------------------------
 WHY NOT extract_table()
 -----------------------------------------------------------------------------
-Three of the four PDFs have no ruling lines and no cell boxes; they are plain
+Five of the seven PDFs have no ruling lines and no cell boxes; they are plain
 text laid out in columns by absolute position.  ``extract_table()`` returns
-nothing at all for them.  ``extract_text()`` is also unusable, because adjacent
+nothing at all for them (for Redwood it returns whole lines as single cells on
+page 1 and None everywhere else, which is worse than nothing).  CVRC is not a
+table at all: each vendor is a five-line labelled block, parsed by label.  ``extract_text()`` is also unusable, because adjacent
 columns touch: SDRC prints "7603527440EL CENTRO" (phone abutting city) and,
 worse, its long category strings physically overlap the provider-name column,
 so pdfplumber's word grouper interleaves characters from the two columns and
@@ -54,11 +68,19 @@ module (run it to re-derive them against a new edition of any of these PDFs):
 
 The boundaries are then LATCHED AS MODULE CONSTANTS and reused for every page of
 the document.  This is deliberate and load-bearing: in these files only page 1
-carries a header (SDRC) or the per-page geometry drifts (Westside), so a column
-map re-derived per page silently mis-assigns or drops rows on pages that lack a
-header or that happen to hold few rows.  An earlier version of this pipeline
-dropped ~95% of SDRC's rows for exactly that reason.  The maps here are computed
-once from the whole document and never re-derived mid-run.
+carries a header (SDRC, Kern, Redwood) or the per-page geometry drifts
+(Westside), so a column map re-derived per page silently mis-assigns or drops
+rows on pages that lack a header or that happen to hold few rows.  An earlier
+version of this pipeline dropped ~95% of SDRC's rows for exactly that reason.
+The maps here are computed once from the whole document and never re-derived
+mid-run.
+
+The companion trap is the y-band.  In SDRC, Kern, Redwood and CVRC the first
+page carries a header or title block and the following pages do NOT, so data on
+pages 2..n begins ABOVE where it begins on page 1 -- on Kern and Redwood at the
+exact baseline the page-1 header occupies.  Choosing the band to clear the
+header therefore deletes the first row(s) of every subsequent page.  In all four
+the band is opened wide and the header removed by CONTENT instead.
 
 Because starts are classified (not extents), a boundary only has to fall in the
 gap between two columns' START positions.  Those gaps are wide -- e.g. SDRC's
@@ -97,6 +119,15 @@ PRESENT = {
     # GGRC: Vendor # | Srv Category | Vendor Name | Address | City | Zip | Phone
     "ggrc":     ("rc", "vendor_no", "name", "category", "address", "city",
                  "zip", "phone"),
+    # Kern: Service Type | Vendor Name | Address | City/State | Zip | Phone
+    "kern":     ("rc", "name", "category", "address", "city", "zip", "phone"),
+    # Redwood Coast: Service Code | Resource Name | Email | Contact | Phone
+    # (plus a non-canonical "contact" key -- see parse_redwood)
+    "redwood":  ("rc", "name", "category", "phone", "email"),
+    # CVRC: five-line blocks; every canonical field except a phone-only e-mail
+    # (plus a non-canonical "contact" key -- see parse_cvrc)
+    "cvrc":     ("rc", "vendor_no", "name", "category", "address", "city",
+                 "zip", "phone", "email"),
 }
 
 
@@ -133,13 +164,35 @@ def _title_city(s):
     return " ".join(out)
 
 
+def _all_zero(s):
+    """True when a numeric field holds only a null placeholder.
+
+    These directories print a blank number in several shapes: SDRC and Kern use
+    a bare "0", CVRC prints "(   )   -   0".  In every case the field contains
+    no non-zero digit, which is the test used here -- a real phone or ZIP
+    always has one.
+    """
+    return not re.search(r"[1-9]", s or "")
+
+
 def _phone(s):
-    """Keep the phone exactly as printed.  '0' is this data's null placeholder
-    (SDRC prints a literal 0 where it holds no number) -> None, not '0'."""
+    """Keep the phone digits exactly as printed; null placeholders -> None."""
     s = _norm(s)
-    if not s or s.strip("0 ()-") == "" and set(s) <= set("0 ()-"):
+    return None if (not s or _all_zero(s)) else s
+
+
+def _zip(s):
+    """Normalise a ZIP.
+
+    CVRC stores ZIP+4 in a field truncated to six characters ("937220" =
+    93722 + the first digit of the +4), so the leading five digits are taken --
+    that is the ZIP5, not a guess.  Kern and SDRC print a clean five-digit ZIP.
+    """
+    s = _norm(s)
+    if not s or _all_zero(s):
         return None
-    return s
+    digits = re.sub(r"\D", "", s)
+    return digits[:5] if len(digits) >= 5 else (s or None)
 
 
 def _lines(page, ytop, ybot, tol=1.5):
@@ -660,6 +713,256 @@ def parse_ggrc(path, pages=None):
     return rows
 
 
+# ==========================================================================
+# 5. Kern -- Kern Regional Center (63 pages)
+# ==========================================================================
+#
+# Layout: Service Type | Vendor Name | Address | City/State | Zip | Phone
+# Structurally a twin of SDRC: no ruling lines, extract_table() returns
+# nothing, every data line is exactly six runs, and the City/State cell packs
+# both ("BAKERSFIELD            CA").
+#
+# Measured over a 13-page sample (see derive_column_map): 597 data rows, each
+# contributing a run starting at exactly 52.56 / 216.48 / 345.12 / 467.28 /
+# 593.28.  The phone is RIGHT-aligned -- 597 rows share the run END 668.10 while
+# its start floats between 627.36 (10 digits) and 664.08 (the bare "0" used for
+# "no number").  Zero-ink intervals fall at 181-215, 328-329, 557-588 and
+# 614-626, and the boundaries below sit in the middle of those; the
+# address/city boundary has no ink-free interval (long addresses overrun) so it
+# is placed midway between the two columns' START positions, which is all that
+# matters when runs are classified by where they begin.
+KERN_BOUNDS = [198.0, 328.5, 420.0, 572.5, 620.0]
+
+# y-band.  The page-1 column header sits at top=56.0 -- the SAME baseline on
+# which data begins on pages 2-63.  A y-cut chosen to clear the header would
+# therefore delete the first row of all 62 following pages (the SDRC trap
+# again), so the band opens above it and the header is dropped by content.
+# The band closes at 560 to exclude the running footer at top=577.3
+# ("Kern Regional Center - Service Provider Directory 07/2024").
+KERN_YTOP = 40.0
+KERN_YBOT = 560.0
+
+
+def parse_kern(path, pages=None):
+    rows = []
+    skipped_nameless = 0
+    with pdfplumber.open(path) as pdf:
+        for _i, page in _pages(pdf, pages):
+            for _top, chars in _lines(page, KERN_YTOP, KERN_YBOT, tol=1.5):
+                runs = _runs(chars, gap=0.6)
+                if not runs:
+                    continue
+                cells = {}
+                for x0, _x1, txt in runs:
+                    k = ("category", "name", "address", "city", "zip",
+                         "phone")[_bucket(x0, KERN_BOUNDS)]
+                    cells[k] = cells.get(k, "") + txt
+
+                cat = _norm(cells.get("category"))
+                if cat == "Service Type":            # page-1 column header
+                    continue
+                if cat and "Regional Center" in cat:  # running footer
+                    continue
+                if not _norm(cells.get("name")):
+                    # A handful of source rows carry a service type and nothing
+                    # else.  They identify no vendor, so they are dropped
+                    # rather than emitted as nameless rows.
+                    skipped_nameless += 1
+                    continue
+
+                # "BAKERSFIELD            CA" -> city + state; keep the city.
+                city = _norm(cells.get("city")) or ""
+                m = re.match(r"^(.*?)\s+([A-Z]{2})$", city)
+                if m:
+                    city = m.group(1)
+
+                rows.append(_row(
+                    "kern",
+                    name=_norm(cells.get("name")),
+                    category=cat,
+                    address=_norm(cells.get("address")),
+                    city=_title_city(city),
+                    zip=_zip(cells.get("zip")),
+                    phone=_phone(cells.get("phone")),
+                ))
+    parse_kern.skipped_nameless = skipped_nameless
+    return rows
+
+
+# ==========================================================================
+# 6. Redwood Coast -- Redwood Coast Regional Center (38 pages)
+# ==========================================================================
+#
+# Layout: Service Code | Resource Name | Email | Contact Name | Phone
+# The "Service Code" column holds WORDS ("Acute Care Hospital", "Adaptive
+# SkillS Trainer" -- the odd capitalisation is the source's), not numbers.
+# extract_table() finds no usable table (it returns whole lines as single
+# cells on page 1 and None elsewhere).
+#
+# Every run in the document starts on one of five anchors -- 19.92, 232.6x,
+# 354.5x, 568.9x and the right-aligned phone ending at 758 -- verified with
+# zero exceptions across all 38 pages.  The zero-ink intervals between them are
+# 226-231, 340-353, 538-567 and 690-704, and the boundaries are their midpoints.
+RWC_BOUNDS = [228.5, 346.5, 552.5, 697.0]
+
+# Same page-1 trap: the header is at top=64.2, which is exactly where data
+# starts on pages 2-38, so it is removed by content rather than by geometry.
+RWC_YTOP = 40.0
+RWC_YBOT = 600.0
+
+
+def parse_redwood(path, pages=None):
+    rows = []
+    with pdfplumber.open(path) as pdf:
+        for _i, page in _pages(pdf, pages):
+            for _top, chars in _lines(page, RWC_YTOP, RWC_YBOT, tol=1.5):
+                runs = _runs(chars, gap=0.6)
+                if not runs:
+                    continue
+                cells = {}
+                for x0, _x1, txt in runs:
+                    k = ("category", "name", "email", "contact",
+                         "phone")[_bucket(x0, RWC_BOUNDS)]
+                    cells[k] = cells.get(k, "") + txt
+
+                cat = _norm(cells.get("category"))
+                if cat == "Service Code":            # page-1 column header
+                    continue
+                if not _norm(cells.get("name")):
+                    continue
+
+                row = _row(
+                    "redwood",
+                    name=_norm(cells.get("name")),
+                    category=cat,
+                    phone=_phone(cells.get("phone")),
+                    email=_norm(cells.get("email")),
+                )
+                # Redwood is the only one of the seven with a Contact Name
+                # column.  It maps to no canonical key, so it is carried as an
+                # extra field rather than discarded.
+                row["contact"] = _norm(cells.get("contact"))
+                rows.append(row)
+    return rows
+
+
+# ==========================================================================
+# 7. CVRC -- Central Valley Regional Center (190 pages)
+# ==========================================================================
+#
+# NOT a column layout at all: each vendor is a five-line BLOCK.
+#
+#   HA0106  A FAMILY AFFAIR CARE IV  MITCHELL, CAROLYN/MARV  1342 PALOMAR ...
+#   Contact: MITCHELL, CAROLYN            Email  <address, when present>
+#   Mailing: 6630 S. LAND PARK DR   SACRAMENTO   CA   958310000
+#   Phone: (916)395-3788      Emg#: (   )   -   0   Fax (   )   -   0
+#   Services: PROGRAM SUPPORT-RES SUPPLEMENTAL, P&I, COMMUNITY CARE FACILITY
+#
+# So the parser is driven by LABELS, not by a column map.  Measured over a
+# 64-page sample the block is perfectly regular: "Contact:", "Mailing:",
+# "Phone:", "Emg#:" and "Services:" each occur exactly once per record, and
+# every one of the 379 record-header lines matches ^[A-Z0-9]{6}$ in its
+# leftmost run.  Field anchors within the block:
+#
+#   header line   66.6 vendor no | 108.7 name part 1 | 256.5 name part 2
+#                 | 363.8 address | 480.9 city | 537.9 ZIP
+#   Contact line  108.7 contact name | 393.9 e-mail (present on ~29% of rows)
+#   Phone line    144.7 phone
+#   Services line 108.7 onwards: the service category words
+#
+# The name occupies two fixed 25-character fields at 108.7 and 256.5, which the
+# source word-wraps across ("*COMMUNITY INTERFACE-FMS " + "FISCAL AGENT").
+# Field 1 is exactly 25 characters on all 287 sampled rows.
+CVRC_YTOP = 15.0
+CVRC_YBOT = 620.0
+CVRC_LABELS = ("Contact:", "Mailing:", "Phone:", "Services:", "Emg#:", "Fax")
+CVRC_SVC_CAP_X = 552.0          # Services text is clipped at this x
+_CVRC_VENDOR_NO = re.compile(r"^[A-Z0-9]{6}$")
+
+
+def _cvrc_at(runs, x, tol=3.0):
+    """Concatenate the runs starting at anchor ``x`` on this line."""
+    hit = [r[2] for r in runs if abs(r[0] - x) <= tol]
+    if not hit:
+        return None
+    v = _norm("".join(hit))
+    # The source writes a bare "." where it holds no contact name.
+    return v if (v and re.search(r"[A-Za-z0-9]", v)) else None
+
+
+def parse_cvrc(path, pages=None):
+    rows = []
+    cur = None
+    with pdfplumber.open(path) as pdf:
+        for _i, page in _pages(pdf, pages):
+            for _top, chars in _lines(page, CVRC_YTOP, CVRC_YBOT, tol=1.5):
+                runs = _runs(chars, gap=0.6)
+                if not runs:
+                    continue
+                head = runs[0][2].strip()
+
+                if head in CVRC_LABELS:
+                    if cur is None:
+                        continue                     # label with no open record
+                    if head == "Contact:":
+                        cur["contact"] = _cvrc_at(runs, 108.7)
+                        cur["email"] = _cvrc_at(runs, 393.9)
+                    elif head == "Phone:":
+                        cur["phone"] = _phone(_cvrc_at(runs, 144.7))
+                    elif head == "Services:":
+                        # Everything right of the label is the service text.
+                        body = [r for r in runs if r[0] > 100]
+                        cur["category"] = _norm("".join(r[2] for r in body))
+                        # The Services field is clipped at a fixed width, and a
+                        # long comma-separated list is cut mid-token
+                        # ("..., STAFF OPERATED-").  The cut is geometric, not
+                        # a character count: right edges cluster at 554-560 and
+                        # nothing lands between 544 and 553, so a line reaching
+                        # CVRC_SVC_CAP_X was truncated by the source.  Flagged
+                        # so a fragment is never mistaken for a category.
+                        cur["category_truncated"] = bool(body) and max(
+                            r[1] for r in body) >= CVRC_SVC_CAP_X
+                    # "Mailing:" holds a second, separate postal address and
+                    # "Emg#:"/"Fax" further numbers; none map to a canonical
+                    # key, and they are deliberately not merged into the
+                    # vendor's own address.
+                    continue
+
+                if runs[0][0] > 80 or not _CVRC_VENDOR_NO.match(head):
+                    # The three-line title block on page 1 lands here, as would
+                    # any unrecognised line.  Never a record.
+                    continue
+
+                # A record header line: open a new record.
+                n1 = _cvrc_at(runs, 108.7) or ""
+                raw1 = "".join(r[2] for r in runs if abs(r[0] - 108.7) <= 3.0)
+                raw2 = "".join(r[2] for r in runs if abs(r[0] - 256.5) <= 3.0)
+                n2 = _norm(raw2) or ""
+                # The 25-character field is word-wrapped, so the two halves
+                # normally rejoin with a space; when field 1 is full to the brim
+                # AND field 2 starts without one, the source split a word and
+                # they rejoin with nothing.
+                if n1 and n2:
+                    glue = "" if (not raw1.endswith(" ")
+                                  and not raw2.startswith(" ")) else " "
+                    name = n1 + glue + n2
+                else:
+                    name = n1 or n2 or None
+
+                cur = _row(
+                    "cvrc",
+                    vendor_no=head,
+                    name=_norm(name),
+                    address=_cvrc_at(runs, 363.8),
+                    city=_title_city(_cvrc_at(runs, 480.9)),
+                    zip=_zip(_cvrc_at(runs, 537.9)),
+                )
+                cur["contact"] = None
+                cur["category_truncated"] = False
+                rows.append(cur)
+    return rows
+
+
 # --------------------------------------------------------------------------
 # Public entry point
 # --------------------------------------------------------------------------
@@ -669,6 +972,9 @@ PARSERS = {
     "sgprc": parse_sgprc,
     "westside": parse_westside,
     "ggrc": parse_ggrc,
+    "kern": parse_kern,
+    "redwood": parse_redwood,
+    "cvrc": parse_cvrc,
 }
 
 

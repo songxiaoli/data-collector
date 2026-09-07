@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Map regional-centre category WORDS onto verified DDS service codes.
 
-Five centres publish a numeric service code per vendor row. Four — San Diego,
-San Gabriel/Pomona, Westside and Golden Gate — publish the service as a phrase
-instead, in their own house abbreviations, so 8,841 rows cannot reach the
-relevance logic until the phrases are mapped.
+Five centres publish a numeric service code per vendor row. Seven — San Diego,
+San Gabriel/Pomona, Westside, Golden Gate, Kern, Redwood Coast and Central
+Valley — publish the service as a phrase instead, in their own house
+abbreviations, so 13,908 parsed rows cannot reach the relevance logic until the
+phrases are mapped. Matching upper-cases first, which is what lets Redwood
+Coast's Title Case fall onto the same entries as everyone else's caps.
 
 The mapping is only as trustworthy as the code table behind it, so it is split
 three ways rather than forced into two:
@@ -52,6 +54,13 @@ DIRECT = {
     "BEHAVIOR MANAGEMENT PROGRAM":                  ("515", "Behavior Management Program"),
     "INFANT DEV PROGRAM":                           ("805", "Infant Development Program"),
     "INFANT DEVELOPMENT PROGRAM":                   ("805", "Infant Development Program"),
+    # Central Valley and Redwood Coast write the same two services in their own
+    # abbreviations. The age bands they print — 0-36 months, 3 and over — are
+    # exactly the definitions of 116 and 117, so these are the same service, not
+    # a similar one.
+    "SPECIZED THERAPTC EARLY ST 0-36MOS":           ("116", "Early Start Specialized Therapeutic Services"),
+    "SPECIALIZED THERAPTC 3&OVER":                  ("117", "Specialized Therapeutic Services (age 3 and older)"),
+    "BEHAVIOR TECHNICIAN PARAPROFESSIONAL":         ("616", "Behavior Technician - Paraprofessional"),
 }
 
 # ── support: family-facing rather than child-treating ─────────────────────────
@@ -67,7 +76,11 @@ SUPPORT = {
     "COORDINATED FAMILY SUPPORT SERVICES": (None, "Coordinated Family Support Services"),
     "COORDINATED FAMILY SUPPORTS":     (None,  "Coordinated Family Support Services"),
     "TRANSLATOR":                      (None,  "Translator"),
+    "TRANSLATOR-LANGUAGES":            (None,  "Translator"),
     "INTERPRETER":                     (None,  "Interpreter"),
+    "INTERPRETER-SIGN LANGUAGE":       (None,  "Interpreter"),
+    "OUT-OF-HOME RESPITE-ACUTE/SUBACUTE": (None, "Out-of-Home Respite Services"),
+    "COORDINATED FAMILY SUPPORT":      (None,  "Coordinated Family Support Services"),
 }
 
 # ── review: autism-relevant, code not in our verified table ───────────────────
@@ -91,6 +104,21 @@ REVIEW = {
     "MUSIC THERAPIST":                           "Music Therapist",
     "SPECIALIZED RECREATIONAL THERAPY":          "Specialized Recreational Therapy",
     "COUNSELING SERVICES":                       "Counseling Services",
+    "INTERDISCIPLINARY ASSESSMENT SERVICE":      "Interdisciplinary Assessment Services",
+    "ADAPTIVE SKILLS TRAINER":                   "Adaptive Skills Training",
+    "CLIENT/PARENT SUPPORT/BEHV INTVNT":         "Client/Parent Support and Behaviour Intervention",
+    "CRISIS TEAM-EVAL/BEHAV INTERVEN":           "Crisis Team — Evaluation and Behaviour Intervention",
+    "INTERDISCP/PSYOPHARM/NEUROLOGY":            "Interdisciplinary / Psychopharmacology / Neurology",
+    "CLINICAL PSYCHOLOGIST-PH.D":                "Clinical Psychologist",
+    "PUBLIC SCHOOL INFANT DEV PROGRAM":          "Infant Development Program (public school)",
+    "PUB SCHOOLS EARLY INTERVENTION":            "Early Intervention (public school)",
+    "SELF-DETERMINATION SUPPORTS":               "Self-Determination Supports",
+    # Two age-band variants that are plainly the therapeutic-services family but
+    # not the bands 116 and 117 are defined over. The second keeps the source's
+    # own misspelling of "Therapeutic", because a phrase we fail to recognise is
+    # dropped in silence rather than raised as an error.
+    "SPECIAL THERAPEUTIC SRVS (4THRU20)":        "Specialized Therapeutic Services (ages 4 to 20)",
+    "SPECIALIZED THERAPUETIC SERVICES (AGES 3 TO 20)": "Specialized Therapeutic Services (ages 3 to 20)",
 }
 
 def _norm(s):
@@ -111,26 +139,46 @@ def main():
     RCNAME = {"sdrc": "San Diego Regional Center",
               "sgprc": "San Gabriel/Pomona Regional Center",
               "westside": "Westside Regional Center",
-              "ggrc": "Golden Gate Regional Center"}
+              "ggrc": "Golden Gate Regional Center",
+              "kern": "Kern Regional Center",
+              "redwood": "Redwood Coast Regional Center",
+              "cvrc": "Central Valley Regional Center"}
     out, per = [], collections.defaultdict(lambda: collections.Counter())
     unmapped = collections.Counter()
 
     for key, rcname in RCNAME.items():
         rows = json.loads((HERE / f"parsed_{key}.json").read_text())
         for r in rows:
-            bucket, code, name = classify(r.get("category"))
-            if bucket is None:
-                if r.get("category"):
-                    unmapped[_norm(r["category"])] += 1
+            # Central Valley packs several comma-separated services into one
+            # field and the source clips it at a fixed width, so the last atom
+            # of a clipped row is a fragment ("OUT-OF-H", "STAFF OPERATE").
+            # Fragments are dropped rather than matched — a fragment that
+            # happened to match a real phrase would be a silent misattribution.
+            cats = [r.get("category")]
+            if key == "cvrc" and r.get("category"):
+                atoms = [a.strip() for a in r["category"].split(",") if a.strip()]
+                if r.get("category_truncated") and len(atoms) > 1:
+                    atoms = atoms[:-1]
+                cats = atoms
+            hit = False
+            for cat in cats:
+                bucket, code, name = classify(cat)
+                if bucket is None:
+                    if cat:
+                        unmapped[_norm(cat)] += 1
+                    continue
+                hit = True
+                break
+            if not hit:
                 continue
             per[key][bucket] += 1
             out.append({
                 "rc": key, "rc_name": rcname,
-                "vendor_no": r.get("vendor_no", "") or "",
-                "name": r.get("name", ""),
+                "vendor_no": r.get("vendor_no") or "",
+                "name": r.get("name") or "",
                 "service_code": code or "",
                 "service_name": name,
-                "category_raw": r.get("category", ""),
+                "category_raw": r.get("category", "") or "",
                 "address": r.get("address", "") or "",
                 "city": (r.get("city") or "").title(),
                 "zip": re.sub(r"\D", "", r.get("zip", "") or "")[:5],
@@ -143,7 +191,7 @@ def main():
 
     (HERE / "rc_vendors_wordlayout.json").write_text(json.dumps(out, indent=1))
 
-    print(f"{len(out):,} rows mapped from 8,841 parsed\n")
+    print(f"{len(out):,} rows mapped from 13,908 parsed across seven centres\n")
     print(f"{'centre':10s} {'direct':>8s} {'support':>8s} {'review':>8s}")
     for k in RCNAME:
         p = per[k]

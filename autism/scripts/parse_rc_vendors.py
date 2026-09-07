@@ -96,19 +96,27 @@ RC_SOURCES = {
                      note="category words rather than service codes"),
 
     "acrc":     dict(name="Alta California Regional Center", fmt=None, url=None),
-    "cvrc":     dict(name="Central Valley Regional Center", fmt=None, url=None),
-    "elarc":    dict(name="Eastern Los Angeles Regional Center", fmt=None, url=None,
-                     note="site returns 403 to any non-browser request"),
+    "cvrc":     dict(name="Central Valley Regional Center", fmt="pdf",
+                     url="https://www.cvrc.org/wp-content/uploads/2020/04/VendServ.pdf",
+                     note="category words; file is dated 2020 and is the current published link"),
+    "elarc":    dict(name="Eastern Los Angeles Regional Center", fmt="pdf",
+                     url="https://www.elarc.org/files/assets/mainsite/v/1/transparency/documents/vendor-list-no-parent-vendor.pdf",
+                     referer="https://www.elarc.org/Transparency/Transparency-Contracts/Vendor-List"),
     "farnorthern": dict(name="Far Northern Regional Center", fmt=None, url=None,
                      note="bot-detection challenge; must be downloaded by hand"),
-    "kern":     dict(name="Kern Regional Center", fmt=None, url=None),
+    "kern":     dict(name="Kern Regional Center", fmt="pdf",
+                     url="https://kernrc.org/wp-content/uploads/2024/03/Vendor-List-07292024-v3.pdf",
+                     note="category words rather than service codes"),
     "lanterman": dict(name="Frank D. Lanterman Regional Center", fmt=None, url=None,
                      note="bot-detection challenge; must be downloaded by hand"),
-    "nbrc":     dict(name="North Bay Regional Center", fmt=None, url=None),
+    "nbrc":     dict(name="North Bay Regional Center", fmt="xlsx",
+                     url="https://www.nbrc.net/wp-content/uploads/2025/10/Copy-of-NBRC-Vendors-2023-24-1-1.xlsx"),
     "nlacrc":   dict(name="North Los Angeles County Regional Center", fmt=None, url=None),
-    "redwood":  dict(name="Redwood Coast Regional Center", fmt=None, url=None,
-                     note="site returns 403 to any non-browser request"),
-    "sclarc":   dict(name="South Central Los Angeles Regional Center", fmt=None, url=None),
+    "redwood":  dict(name="Redwood Coast Regional Center", fmt="pdf",
+                     url="https://redwoodcoastrc.org/wp-content/uploads/2026/03/2026-March-Vendor-List-updated.pdf",
+                     note="category words rather than service codes"),
+    "sclarc":   dict(name="South Central Los Angeles Regional Center", fmt="pdf",
+                     url="https://sclarc.org/wp-content/uploads/2025/03/CO22021000313329830_zOsR8KHyRDyjCAxhEajL_VendorListforPublishingFeb24FINAL.pdf"),
     "tcrc":     dict(name="Tri-Counties Regional Center", fmt=None, url=None),
     "vmrc":     dict(name="Valley Mountain Regional Center", fmt=None, url=None),
 }
@@ -131,8 +139,14 @@ def fetch(only=None):
             continue
         out = WORK / f"{key}.{src['fmt']}"
         try:
-            r = requests.get(src["url"], headers={"User-Agent": UA},
-                             timeout=180, allow_redirects=True)
+            # Some centres refuse a request that arrives without the page it
+            # was linked from. Eastern LA returns 403 to a bare fetch of its own
+            # published vendor list and 200 with the referring page named — so
+            # a source can carry the page a browser would have come from.
+            h = {"User-Agent": UA, "Accept": "application/pdf,*/*"}
+            if src.get("referer"):
+                h["Referer"] = src["referer"]
+            r = requests.get(src["url"], headers=h, timeout=180, allow_redirects=True)
             r.raise_for_status()
             out.write_bytes(r.content)
             print(f"  {key:11s} {len(r.content)/1e6:6.2f} MB -> {out.name}")

@@ -1,0 +1,400 @@
+<title>The First Ninety Days</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Faustina:ital,wght@0,400;0,600;1,400&family=Karla:wght@400;500;600&family=Roboto+Mono:wght@500&display=swap">
+
+<style>
+:root{
+  --paper:#F4F3F0; --card:#FFFFFF; --sunk:#E8E7E2; --rule:#D8D6CF; --rule-2:#BFBCB2;
+  --ink:#1E1D1A; --ink-2:#514E48; --ink-3:#807C73;
+  --accent:#3B3E8C; --accent-soft:#E2E3F2;
+  --now:#8A4A16; --now-soft:#F6E6D6;
+  --ok:#2D6247;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#16161A; --card:#1E1E24; --sunk:#25252C; --rule:#32323B; --rule-2:#44444F;
+    --ink:#EDEBE6; --ink-2:#B4B0A8; --ink-3:#87837B;
+    --accent:#9FA3E8; --accent-soft:#23244A;
+    --now:#DFA469; --now-soft:#33230F;
+    --ok:#6FBF98;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16161A; --card:#1E1E24; --sunk:#25252C; --rule:#32323B; --rule-2:#44444F;
+  --ink:#EDEBE6; --ink-2:#B4B0A8; --ink-3:#87837B;
+  --accent:#9FA3E8; --accent-soft:#23244A;
+  --now:#DFA469; --now-soft:#33230F;
+  --ok:#6FBF98;
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); margin:0;
+  font:400 17px/1.65 Karla, system-ui, sans-serif; -webkit-font-smoothing:antialiased}
+.wrap{max-width:750px; margin:0 auto; padding:38px 22px 80px}
+
+.mast{margin-bottom:8px}
+.kick{font:600 11px/1 Karla,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent); margin:0 0 14px}
+h1{font:400 clamp(32px,6.4vw,48px)/1.06 Faustina, Georgia, serif; margin:0 0 16px;
+  letter-spacing:-.015em; text-wrap:balance}
+.thesis{font:400 20px/1.5 Faustina, Georgia, serif; color:var(--ink); margin:0 0 10px;
+  border-left:3px solid var(--accent); padding-left:16px}
+.dek{margin:16px 0 0; color:var(--ink-2); max-width:62ch}
+
+/* age switch */
+.ages{display:flex; gap:8px; margin:28px 0 0; flex-wrap:wrap}
+.ages button{font:600 14px/1 Karla,sans-serif; cursor:pointer; padding:12px 16px;
+  background:var(--card); color:var(--ink-2); border:1px solid var(--rule-2); border-radius:3px}
+.ages button[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+
+section{margin-top:40px}
+h2{font:600 12px/1 Karla,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 18px; padding-bottom:10px; border-bottom:1px solid var(--rule)}
+
+.step{background:var(--card); border:1px solid var(--rule); border-radius:4px;
+  margin-bottom:16px; overflow:hidden}
+.step-top{padding:20px 22px 6px; display:flex; gap:14px; align-items:baseline; flex-wrap:wrap}
+.when{font:500 11.5px/1 "Roboto Mono",monospace; letter-spacing:.06em;
+  color:var(--accent); background:var(--accent-soft); padding:6px 9px; border-radius:3px;
+  white-space:nowrap}
+.when.now{color:var(--now); background:var(--now-soft)}
+.step h3{font:400 21px/1.32 Faustina,Georgia,serif; margin:0; flex:1 1 240px}
+.step-body{padding:4px 22px 20px}
+.step-body p{margin:0 0 12px; color:var(--ink-2)}
+.step-body p:last-child{margin-bottom:0}
+.step-body b{color:var(--ink); font-weight:600}
+.say{font:400 17px/1.55 Faustina,Georgia,serif; color:var(--ink);
+  background:var(--sunk); border-radius:3px; padding:13px 16px; margin:12px 0}
+.say::before{content:"Say this: "; font-family:Karla,sans-serif; font-size:10.5px;
+  font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3);
+  display:block; margin-bottom:6px}
+
+.clock{margin-top:14px; padding-top:14px; border-top:1px solid var(--rule);
+  display:flex; gap:12px; align-items:flex-start}
+.clock .d{font:500 13px/1.35 "Roboto Mono",monospace; color:var(--now);
+  white-space:nowrap; padding-top:1px}
+.clock .t{font-size:15px; color:var(--ink-2)}
+
+/* inline glossary terms */
+.term{font:inherit; color:var(--accent); background:none; border:0; padding:0;
+  border-bottom:1px dotted var(--accent); cursor:pointer}
+.term:hover{border-bottom-style:solid}
+.def{display:none; margin:10px 0 14px; padding:13px 16px; background:var(--accent-soft);
+  border-radius:3px; font-size:15px; line-height:1.55; color:var(--ink-2)}
+.def.open{display:block}
+.def b{color:var(--ink)}
+
+.warn{background:var(--now-soft); border:1px solid var(--rule); border-left:3px solid var(--now);
+  border-radius:4px; padding:18px 22px; margin-top:16px}
+.warn h3{font:600 15px/1.4 Karla,sans-serif; margin:0 0 8px}
+.warn p{margin:0 0 10px; color:var(--ink-2); font-size:16px}
+.warn p:last-child{margin:0}
+
+.gloss{border-top:1px solid var(--rule); padding-top:6px}
+.gloss dl{margin:0}
+.gloss dt{font:600 15px/1.5 Karla,sans-serif; margin-top:16px}
+.gloss dt span{font:500 11.5px/1 "Roboto Mono",monospace; color:var(--ink-3); margin-left:8px}
+.gloss dd{margin:4px 0 0; color:var(--ink-2); font-size:15.5px}
+
+footer{margin-top:48px; padding-top:18px; border-top:1px solid var(--rule);
+  font-size:13.5px; line-height:1.6; color:var(--ink-3)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+@media print{ .ages,.term{border:0} .def{display:block} }
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="kick">California · from the day you first wonder</p>
+  <h1>The First Ninety Days</h1>
+  <p class="thesis">You do not need a diagnosis to start. You do not need a doctor's referral.
+  You do not need to wait for anything.</p>
+  <p class="dek">Almost everything that goes slowly in the first year goes slowly because a
+  family waited for permission that was never required. This is the order to do things in,
+  what to say, and which clocks start when.</p>
+  <div class="ages" role="group" aria-label="Your child's age">
+    <button data-age="under3" aria-pressed="true">My child is under 3</button>
+    <button data-age="over3" aria-pressed="false">My child is 3 or older</button>
+  </div>
+</header>
+
+<section id="steps"></section>
+
+<section>
+  <h2>Money almost nobody mentions</h2>
+  <div class="step">
+    <div class="step-top"><span class="when">Any time</span>
+      <h3>In-Home Supportive Services, and Protective Supervision inside it</h3></div>
+    <div class="step-body">
+      <p><button class="term" data-t="ihss">IHSS</button> pays someone to help care for your
+      child at home. Most families of autistic children never hear about it, and the part that
+      matters most to them is a category inside it called <b>Protective Supervision</b> — for a
+      child who needs watching because of behaviour that could hurt them, such as running from
+      the house or lack of danger awareness.</p>
+      <div class="def" id="d-ihss"></div>
+      <p>Protective Supervision can be authorised up to <b>283 hours a month</b>. And since
+      <b>19 February 2024</b>, the rules that stopped a parent being paid as their own child's
+      provider no longer apply. Ask your county social services office to assess for IHSS, and
+      use the words "Protective Supervision" explicitly — it is assessed separately and is often
+      not offered unless asked for.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>What every abbreviation means</h2>
+  <div class="gloss"><dl id="glossList"></dl></div>
+</section>
+
+<footer>
+  Timelines here are taken from the state's own published rules: Early Start's 45-day timeline,
+  referral rules and costs from the California Department of Developmental Services Early Start
+  Program FAQ (December 2025); the 15-day, 15-day and 60-day school timelines from California
+  Education Code section 56043 as summarised by Disability Rights California; the 60-day and
+  30-day appeal deadlines from the DDS Lanterman Act Appeals Information Packet; the regional
+  centre's position as payer of last resort from Welfare &amp; Institutions Code section 4659.
+  This is information, not legal advice. Your regional centre's service coordinator, your local
+  Family Resource Center, and Disability Rights California can all tell you how it applies to
+  your child.
+</footer>
+
+</div>
+
+<script>
+const GLOSS = {
+  rc:["Regional Center","21 across California",
+    "A non-profit under contract to the state. It decides whether your child is eligible, writes the plan, assigns you a coordinator, and <b>holds the money</b>. It does not provide therapy itself. Which one serves you is decided by where you live — you cannot choose."],
+  earlystart:["Early Start","birth to 3",
+    "California's early intervention programme for children under three, and the state's version of a federal law called IDEA Part C. <b>Anyone can make a referral — including you.</b> No diagnosis and no doctor's referral are needed, and there is no charge for the evaluation, the assessment, or your service coordinator."],
+  idea:["IDEA","federal law",
+    "The Individuals with Disabilities Education Act. <b>Part C</b> covers birth to three and runs through your regional centre. <b>Part B</b> covers three to twenty-two and runs through your school district. They are two different systems with two different sets of rules, and the handover between them happens at your child's third birthday."],
+  ifsp:["IFSP","under 3",
+    "Individualized Family Service Plan. The written plan for a child under three. It must be developed within <b>45 calendar days</b> of the referral, and it is a plan for the <b>family</b>, not only the child."],
+  iep:["IEP","3 and over",
+    "Individualized Education Program. The written plan your school district must follow once your child qualifies for special education. You are a full member of the team that writes it, and you can call a meeting to change it at any time."],
+  ipp:["IPP","all ages",
+    "Individual Program Plan. The regional centre's plan, separate from the school's IEP. It lists what the regional centre will fund. If a service is on your IPP and you never received it, that is worth raising — a quarter of school-aged regional centre clients received no purchased services at all last year."],
+  lanterman:["Lanterman Act","the law behind it all",
+    "The California law that creates the right to regional centre services. After age three, eligibility under it is much narrower than Early Start: it asks for substantial limitations in <b>three or more</b> areas of life, where Early Start asked for a 25% delay in <b>one</b>."],
+  noa:["Notice of Action","the letter that starts the clock",
+    "The formal letter a regional centre sends when it denies, reduces or ends a service. <b>The date on it is the date your appeal clock starts.</b> If you disagree, do not let it sit."],
+  aidpaid:["Aid paid pending","the 30-day line",
+    "The rule that keeps your existing services running while you appeal. To get it you must file <b>within 30 days of the Notice of Action and before the change takes effect</b>. You have 60 days to appeal at all — but a family who files on day 35 keeps the appeal and loses the services in the meantime."],
+  fairhearing:["Fair hearing","the appeal itself",
+    "A hearing before a neutral judge about a regional centre decision. In the most recent year the state published, <b>eligibility appeals ended with the family getting eligibility or the assessment they had been refused about 53% of the time.</b> Roughly half of those denials were wrong."],
+  frc:["Family Resource Center","47 in California",
+    "A local organisation <b>staffed by parents of children with disabilities</b>. Free. Their listed services include help with the age-three transition and support in languages other than English. They are usually the fastest source of honest local knowledge, and they have no product to sell you."],
+  medical:["Medi-Cal","California's Medicaid",
+    "Public health coverage. Many autistic children qualify through routes their parents never checked, including some regardless of household income. Worth asking about even if you have insurance through work."],
+  ihss:["IHSS","county programme",
+    "In-Home Supportive Services. Pays for help caring for a person at home. <b>Protective Supervision</b> is the category within it for a child who needs watching for safety, and can run to 283 hours a month."],
+  aba:["ABA","the most-funded therapy",
+    "Applied Behavior Analysis. In California both the regional centres and the insurance mandate fund it specifically for autism, so it dominates what is on offer. It is also the therapy the autistic adult community criticises most — historically for being compliance-based and aimed at making children appear non-autistic. Modern practice varies a great deal. Both of those things are true at once, and you are allowed to ask a provider directly how they handle it."],
+  bcba:["BCBA","who designs the programme",
+    "Board Certified Behavior Analyst. A master's-level certification — not a state licence; California does not license behaviour analysts. The BCBA assesses your child and writes the plan, then supervises."],
+  rbt:["RBT","who is actually in the room",
+    "Registered Behavior Technician. Entry-level, about 40 hours of training, works under a BCBA, and is the person your child will actually spend the hours with. Turnover is high. Worth asking how often the BCBA supervises and what happens when a technician leaves."],
+  slp:["SLP","speech","Speech-Language Pathologist. Works on speech, language, and communication — including communication that is not speech, such as devices and sign."],
+  ot:["OT","daily life and sensory",
+    "Occupational Therapist. Works on the practical business of daily life — dressing, eating, handwriting, and sensory needs."],
+  selpa:["SELPA","school district grouping",
+    "Special Education Local Plan Area. A group of school districts that plan special education together. Yours can tell you what programmes exist locally when your own district says it has none."],
+  vendor:["Vendorization","how a provider gets paid",
+    "The approval that lets an organisation bill a regional centre. A vendored provider has been approved and paid by the state for a named service — which tells you what they are funded to do. It does not tell you whether they have an opening."],
+  sb946:["The insurance mandate","SB 946",
+    "California law requiring most health plans to cover behavioural health treatment for autism. Since January 2026 a plan may not force a child who already has a diagnosis to be re-diagnosed in order to keep coverage."],
+  lastresort:["Payer of last resort","why the denial letter matters",
+    "The regional centre generally cannot fund behavioural services for a child aged three or over until private insurance or Medi-Cal has been billed and has refused <b>in writing</b>. Nobody sends that letter for you. Ask on your very first call who has to obtain it."],
+};
+
+const STEPS = {
+  under3: [
+    { when:"TODAY", now:true, h:"Call your regional centre and refer your own child",
+      body:`<p>You do not need a diagnosis, a doctor, or anyone's permission.
+        <button class="term" data-t="earlystart">Early Start</button> takes referrals from
+        <b>anyone</b> — parents included — and there is no charge for the evaluation, the
+        assessment, or your service coordinator.</p>
+        <div class="def" id="d-earlystart"></div>
+        <p>Find your <button class="term" data-t="rc">regional centre</button> by the county you
+        live in. Ask for <b>Early Start intake</b>.</p>
+        <div class="def" id="d-rc"></div>
+        <div class="say">"I would like to make a referral to Early Start for my child. I am the
+        parent. I do not have a diagnosis and I understand I do not need one."</div>
+        <p><b>Write down today's date.</b> Everything that follows is counted from it.</p>`,
+      clock:["45 days","From the referral date, the regional centre must complete the evaluation and assessment and develop your child's <button class=\"term\" data-t=\"ifsp\">IFSP</button>.<div class=\"def\" id=\"d-ifsp\"></div>"] },
+
+    { when:"SAME WEEK", h:"Call your Family Resource Center",
+      body:`<p>Every county has one, and they are <b>staffed by parents of children with
+        disabilities</b>. Free, no referral needed.</p>
+        <p>They will know things no database holds: which providers in your area are actually
+        taking families this month, which coordinator to ask for, and what the local version of
+        each step looks like.</p>
+        <div class="def" id="d-frc"></div>
+        <p>Ask them one question above all: <b>"Do you keep your own list of who's taking new
+        families right now?"</b></p>`,
+      term:"frc" },
+
+    { when:"WHILE YOU WAIT", h:"Start the file, and start writing things down",
+      body:`<p>Get a folder, physical or digital. Into it goes every letter, every assessment,
+        every Notice of Action, and a running note of every phone call — <b>date, who you spoke
+        to, what they said</b>.</p>
+        <p>This is not administration for its own sake. Assessments rely on what you have
+        observed, and a dated note written the week it happened carries more weight a year later
+        than a memory does. It is also what you will need if you ever have to appeal.</p>
+        <p>Write down what you actually see, in ordinary words. Not "he stims" — "he flaps his
+        hands when the room is loud, most days, for about a minute."</p>` },
+
+    { when:"AT THE MEETING", h:"You are a member of the team, not a guest at it",
+      body:`<p>The <button class="term" data-t="ifsp">IFSP</button> is a plan for your family,
+        not only your child. You can bring someone. You can ask for an interpreter. You can say
+        you need time to read it and sign later.</p>
+        <div class="def" id="d-ifsp2"></div>
+        <p><b>Do not sign anything at the table you have not read.</b> Taking it home is normal
+        and nobody will be surprised.</p>` },
+
+    { when:"90 DAYS BEFORE 3", now:true, h:"The transition, which is the hardest month of the first three years",
+      body:`<p>Early Start ends at three. Ninety days before the birthday, you and your service
+        coordinator must create a transition plan — that is the state's own rule.</p>
+        <p>Three things move at once in that month: eligibility narrows from a 25% delay in
+        <b>one</b> area to substantial limitations in <b>three</b>; the payer shifts from the
+        regional centre to your insurer and your school district; and, on the evidence of the
+        vendor lists the centres publish, <b>your provider very probably changes too.</b></p>
+        <div class="def" id="d-lanterman"></div>
+        <p>So ask your current provider, before the birthday and not after:</p>
+        <div class="say">"Will you still be able to see my child after they turn three? If not,
+        who takes over, and who pays?"</div>
+        <p>And put the school district request in writing now — see the "3 or older" list, which
+        applies to you from the birthday onward. As of early 2025 the state counted
+        <b>6,929 children</b> still waiting past their third birthday.</p>`,
+      term:"lanterman" },
+  ],
+  over3: [
+    { when:"TODAY, FIRST CALL", now:true, h:"Ask the regional centre to open an eligibility assessment",
+      body:`<p>After three, the door is the <button class="term" data-t="lanterman">Lanterman
+        Act</button> rather than Early Start, and the bar is higher — substantial limitations in
+        three or more areas of life. You still do not need a diagnosis to <b>ask</b>; the
+        assessment is how a diagnosis often gets made.</p>
+        <div class="def" id="d-lanterman"></div>
+        <p>Find your <button class="term" data-t="rc">regional centre</button> by county and ask
+        for <b>intake</b>.</p>
+        <div class="def" id="d-rc"></div>
+        <div class="say">"I would like to request an eligibility assessment for my child. I would
+        also like to ask whether they qualify for provisional eligibility."</div>
+        <p>Provisional eligibility is a lower bar available between three and five — two areas
+        rather than three. It is not always offered unless you name it.</p>` },
+
+    { when:"TODAY, SECOND THING", now:true, h:"Write to the school district. The date on your letter starts a legal clock",
+      body:`<p>This is separate from the regional centre and runs on its own rules under
+        <button class="term" data-t="idea">IDEA Part B</button>. Do not wait for the regional
+        centre to finish — the two are independent, and waiting costs you months.</p>
+        <div class="def" id="d-idea"></div>
+        <p>Email the district's special education office. Email is better than a phone call
+        because it timestamps itself. Keep the sent copy.</p>
+        <div class="say">"I am requesting a full initial special education assessment for my
+        child under IDEA. Please send me an assessment plan. Today's date is ______."</div>
+        <p>If you are told to try classroom interventions first and wait: a federal
+        <b>Office of Special Education Programs memorandum</b> states that such strategies
+        <b>cannot be used to delay or deny</b> a full individual evaluation. You may say so.</p>`,
+      clock:["15 → 15 → 60 days","The district has <b>15 calendar days</b> from your request to send an assessment plan. You then have <b>at least 15 calendar days</b> to decide whether to sign. From the day you sign, the district has <b>60 calendar days</b> to assess and hold the <button class=\"term\" data-t=\"iep\">IEP</button> meeting. School breaks longer than five days do not count. <b>The 60 days runs from your signature, not from your request</b> — so sign and return promptly.<div class=\"def\" id=\"d-iep\"></div>"] },
+
+    { when:"FIRST CALL, EVERY TIME", h:"Ask who has to get the insurance denial",
+      body:`<p>This is the question almost nobody knows to ask, and it costs the most time when
+        it goes unasked. The regional centre is the
+        <button class="term" data-t="lastresort">payer of last resort</button>.</p>
+        <div class="def" id="d-lastresort"></div>
+        <p>For a child of three or over it generally cannot fund behavioural services until your
+        insurance or <button class="term" data-t="medical">Medi-Cal</button> has been billed and
+        has refused in writing. Families who don't know this lose a month or two bouncing between
+        two systems, each waiting on the other.</p>
+        <div class="def" id="d-medical"></div>
+        <div class="say">"Do you bill the regional centre directly, or do I need an insurance
+        denial first? Who obtains it — you or me?"</div>` },
+
+    { when:"SAME WEEK", h:"Call your Family Resource Center",
+      body:`<p>Free, no referral, and <b>staffed by parents of children with disabilities</b>.
+        They hold the local knowledge no database does.</p>
+        <div class="def" id="d-frc"></div>
+        <p>Ask: <b>"Do you keep your own list of who's taking new families right now?"</b></p>`,
+      term:"frc" },
+
+    { when:"WHILE YOU WAIT", h:"Start the file",
+      body:`<p>Every letter, every assessment, every
+        <button class="term" data-t="noa">Notice of Action</button>, and a dated note of every
+        call — who you spoke to and what they said.</p>
+        <div class="def" id="d-noa"></div>
+        <p>Write what you observe in plain words, the week you observe it. It carries more weight
+        a year later than memory, and it is what an appeal is built from.</p>` },
+
+    { when:"IF YOU ARE TOLD NO", now:true, h:"Two dates, and only one of them keeps your services",
+      body:`<p>A denial arrives as a <button class="term" data-t="noa">Notice of Action</button>.
+        The date on that letter starts both clocks.</p>
+        <div class="def" id="d-noa2"></div>
+        <p><b>60 days</b> to file an appeal at all. But <b>30 days, and before the change takes
+        effect</b>, to keep your existing services running while it is decided — that rule is
+        called <button class="term" data-t="aidpaid">aid paid pending</button>.</p>
+        <div class="def" id="d-aidpaid"></div>
+        <p>A family who files on day 35 keeps the appeal and loses the services in the meantime.
+        <b>Treat 30 days as the real deadline.</b></p>
+        <p>And appeal. In the most recent year the state published its figures,
+        <button class="term" data-t="fairhearing">eligibility appeals</button> ended with the
+        family getting eligibility or the assessment they had been refused about <b>53%</b> of
+        the time.</p>
+        <div class="def" id="d-fairhearing"></div>` },
+  ],
+};
+
+function defHTML(k){
+  const g = GLOSS[k];
+  return `<b>${g[0]}</b> <span style="font-family:'Roboto Mono',monospace;font-size:11.5px;opacity:.7">${g[1]}</span><br>${g[2]}`;
+}
+
+function wireTerms(root){
+  root.querySelectorAll('.term').forEach(b => {
+    b.addEventListener('click', () => {
+      const k = b.dataset.t;
+      // the nearest following definition box for this term, or any box for it
+      let box = b.parentElement.nextElementSibling;
+      if (!box || !box.classList.contains('def')){
+        box = b.closest('.step-body, .step, section').querySelector('.def');
+      }
+      if (!box) return;
+      if (!box.innerHTML.trim()) box.innerHTML = defHTML(k);
+      else if (!box.dataset.k || box.dataset.k !== k) box.innerHTML = defHTML(k);
+      box.dataset.k = k;
+      box.classList.toggle('open');
+    });
+  });
+}
+
+function render(age){
+  document.getElementById('steps').innerHTML =
+    `<h2>${age === 'under3' ? 'Your child is under three' : 'Your child is three or older'}</h2>` +
+    STEPS[age].map(s => `
+      <article class="step">
+        <div class="step-top">
+          <span class="when${s.now ? ' now' : ''}">${s.when}</span>
+          <h3>${s.h}</h3>
+        </div>
+        <div class="step-body">
+          ${s.body}
+          ${s.clock ? `<div class="clock"><span class="d">${s.clock[0]}</span>
+             <span class="t">${s.clock[1]}</span></div>` : ''}
+        </div>
+      </article>`).join('');
+  wireTerms(document.getElementById('steps'));
+}
+
+document.querySelectorAll('.ages button').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.ages button').forEach(x =>
+      x.setAttribute('aria-pressed', String(x === b)));
+    render(b.dataset.age);
+  });
+});
+
+document.getElementById('glossList').innerHTML = Object.entries(GLOSS)
+  .map(([k, g]) => `<dt>${g[0]}<span>${g[1]}</span></dt><dd>${g[2]}</dd>`).join('');
+
+render('under3');
+wireTerms(document);
+</script>

@@ -253,6 +253,20 @@ a:hover{color:var(--primary-h)}
 .empty-state h3{font-size:20px;margin-bottom:8px}
 .site-footer{margin-top:64px;border-top:1px solid var(--border);padding:24px 0 48px;
   font-size:13px;color:var(--ink-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+/* ── GUIDES STRIP ────────────────────────────────────────── */
+.guides{margin-top:34px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:22px 24px}
+.guides-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+  flex-wrap:wrap;margin-bottom:16px}
+.guides-head h2{font-size:19px;margin:0}
+.guides-head p{margin:0;font-size:14px;color:var(--ink-3)}
+.guides-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(215px,1fr))}
+.guide{display:block;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:14px 16px;color:inherit;transition:border-color .12s}
+.guide:hover{border-color:var(--primary)}
+.guide b{display:block;font-size:15px;margin-bottom:4px;color:var(--ink)}
+.guide span{font-size:13.5px;line-height:1.45;color:var(--ink-2)}
+
 </style>
 
 <header class="site-header">
@@ -265,6 +279,7 @@ a:hover{color:var(--primary-h)}
         <span class="logo-by">Power Plus Partner</span>
       </div>
       <nav class="site-nav">
+        <a href="/autism/guides">Guides</a>
         <a href="/therapists">Therapists</a>
         <a href="/assess" class="nav-cta">Free assessment</a>
       </nav>
@@ -291,6 +306,31 @@ a:hover{color:var(--primary-h)}
       <button class="role-btn active" data-role="parent">Parent</button>
       <button class="role-btn" data-role="educator">Educator</button>
       <button class="role-btn" data-role="clinician">Clinician</button>
+    </div>
+  </section>
+
+  <section class="guides">
+    <div class="guides-head">
+      <h2>Before you start calling, four short guides</h2>
+      <p>Free, nothing to sign up for &mdash; <a href="/autism/guides">all four</a></p>
+    </div>
+    <div class="guides-grid">
+      <a class="guide" href="/autism/guides/first-90-days">
+        <b>The First Ninety Days</b>
+        <span>What to do from today, in order, and the legal deadline each call starts.</span>
+      </a>
+      <a class="guide" href="/autism/guides/four-questions">
+        <b>Four Questions First</b>
+        <span>What to ask a provider, in the order that saves the most time.</span>
+      </a>
+      <a class="guide" href="/autism/guides/who-does-what">
+        <b>Who Does What</b>
+        <span>Every party in the system, and what each one must do by law.</span>
+      </a>
+      <a class="guide" href="/autism/guides/age-three">
+        <b>The Age Three Handoff</b>
+        <span>What happens to funded therapy when a child turns three.</span>
+      </a>
     </div>
   </section>
 

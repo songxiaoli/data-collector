@@ -1,0 +1,461 @@
+<title>Four Questions First</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Public+Sans:wght@400;500;600&display=swap">
+
+<script id="app-state" type="application/json">{"calls":[]}</script>
+
+<style>
+:root{
+  --ground:#F4F6F5; --panel:#FFFFFF; --sunk:#E9EDEB; --edge:#D6DCD9;
+  --ink:#1B2422; --ink-2:#4C5A56; --ink-3:#77837F;
+  --accent:#1F6152; --accent-soft:#DCEAE4;
+  --warm:#9A5A1E; --warm-soft:#F6E7D6;
+  --shadow:0 1px 2px rgba(27,36,34,.05), 0 8px 24px -16px rgba(27,36,34,.3);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#121614; --panel:#1A201E; --sunk:#212927; --edge:#2E3835;
+    --ink:#E8EDEB; --ink-2:#AFBAB6; --ink-3:#7E8A86;
+    --accent:#6FC4AC; --accent-soft:#1B3630;
+    --warm:#E0A567; --warm-soft:#33230F;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#121614; --panel:#1A201E; --sunk:#212927; --edge:#2E3835;
+  --ink:#E8EDEB; --ink-2:#AFBAB6; --ink-3:#7E8A86;
+  --accent:#6FC4AC; --accent-soft:#1B3630;
+  --warm:#E0A567; --warm-soft:#33230F;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink); margin:0;
+  font:400 17px/1.62 "Public Sans", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:720px; margin:0 auto; padding:36px 20px 72px}
+
+.mast{margin-bottom:30px}
+.kicker{
+  font:600 11px/1 "Public Sans",sans-serif; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); margin:0 0 14px;
+}
+h1{
+  font:400 clamp(32px,6.5vw,46px)/1.1 "Source Serif 4", Georgia, serif;
+  margin:0 0 14px; letter-spacing:-.015em; text-wrap:balance;
+}
+.dek{margin:0; font-size:17.5px; color:var(--ink-2); max-width:60ch}
+
+section{margin-top:40px}
+h2{
+  font:600 12px/1 "Public Sans",sans-serif; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3);
+  margin:0 0 16px; padding-bottom:11px; border-bottom:1px solid var(--edge);
+}
+
+/* ── order of calls ───────────────────────────────────── */
+.order{display:grid; gap:0; counter-reset:step}
+.step{
+  display:grid; grid-template-columns:30px 1fr; gap:14px;
+  padding:15px 0; border-bottom:1px dashed var(--edge);
+}
+.step:last-child{border-bottom:0}
+.step .dot{
+  width:26px; height:26px; border-radius:50%;
+  background:var(--accent-soft); color:var(--accent);
+  font:600 12px/26px "Public Sans",sans-serif; text-align:center;
+}
+.step b{display:block; font-weight:600; margin-bottom:3px}
+.step p{margin:0; font-size:15.5px; color:var(--ink-2)}
+
+/* ── the questions ────────────────────────────────────── */
+.q{
+  background:var(--panel); border:1px solid var(--edge);
+  border-radius:6px; box-shadow:var(--shadow);
+  margin-bottom:18px; overflow:hidden;
+}
+.q-top{padding:20px 22px 4px}
+.q-n{
+  font:600 11px/1 "Public Sans",sans-serif; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 10px;
+}
+.ask{
+  font:400 21px/1.42 "Source Serif 4", Georgia, serif;
+  margin:0; color:var(--ink); text-wrap:pretty;
+}
+.q-why{padding:14px 22px 20px}
+.q-why p{margin:0 0 10px; font-size:15.5px; color:var(--ink-2)}
+.q-why p:last-child{margin-bottom:0}
+.q-why b{color:var(--ink); font-weight:600}
+.hear{
+  display:grid; gap:8px; margin-top:14px; padding-top:14px;
+  border-top:1px solid var(--edge);
+}
+.hear div{display:grid; grid-template-columns:78px 1fr; gap:12px; font-size:14.5px}
+.hear span:first-child{
+  font:600 10.5px/1.5 "Public Sans",sans-serif; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); padding-top:2px;
+}
+.hear .good span:first-child{color:var(--accent)}
+.hear .flag span:first-child{color:var(--warm)}
+.hear em{font-style:normal; color:var(--ink-2)}
+
+/* ── turning three ────────────────────────────────────── */
+.three{
+  background:var(--warm-soft); border:1px solid var(--edge);
+  border-left:3px solid var(--warm);
+  border-radius:6px; padding:20px 22px;
+}
+.three h3{font:600 15px/1.4 "Public Sans",sans-serif; margin:0 0 8px}
+.three p{margin:0 0 12px; font-size:15.5px; color:var(--ink-2)}
+.three .ask{font-size:19px; margin:12px 0}
+.three p:last-child{margin-bottom:0}
+
+/* ── log ──────────────────────────────────────────────── */
+.log{display:grid; gap:12px}
+.entry{
+  background:var(--panel); border:1px solid var(--edge);
+  border-radius:6px; padding:16px 18px; display:grid; gap:10px;
+}
+.entry-head{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+input[type=text], input[type=date], textarea{
+  font:400 15px/1.5 "Public Sans",sans-serif;
+  background:var(--ground); color:var(--ink);
+  border:1px solid var(--edge); border-radius:4px; padding:9px 11px;
+}
+input[type=text]{flex:1 1 200px; min-width:0}
+input[type=date]{flex:0 0 auto}
+textarea{width:100%; min-height:60px; resize:vertical}
+::placeholder{color:var(--ink-3)}
+.answers{display:grid; gap:7px}
+.ans{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+     font-size:14px; color:var(--ink-2)}
+.ans-btns{display:flex; gap:5px}
+button{font-family:"Public Sans",sans-serif; cursor:pointer}
+button.tri{
+  font-size:12.5px; font-weight:500; padding:6px 11px;
+  background:var(--panel); color:var(--ink-3);
+  border:1px solid var(--edge); border-radius:4px;
+}
+button.tri[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--ground)}
+button.tri[aria-pressed="true"][data-v="yes"]{background:var(--accent); border-color:var(--accent); color:#fff}
+button.tri[aria-pressed="true"][data-v="no"]{background:var(--warm); border-color:var(--warm); color:#fff}
+button.ghost{
+  font-size:14px; font-weight:500; padding:10px 16px; color:var(--ink-2);
+  background:transparent; border:1px dashed var(--edge); border-radius:5px; width:100%;
+}
+button.ghost:hover{border-color:var(--accent); color:var(--accent)}
+button.rm{
+  font-size:12.5px; padding:5px 9px; color:var(--ink-3);
+  background:transparent; border:1px solid transparent; border-radius:4px;
+}
+button.rm:hover{color:var(--warm); border-color:var(--edge)}
+button.save{
+  font-size:15px; font-weight:600; padding:12px 22px;
+  background:var(--accent); color:var(--ground);
+  border:1px solid var(--accent); border-radius:5px;
+}
+button.save:disabled{opacity:.4; cursor:default}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.savebar{
+  position:sticky; bottom:0; margin-top:22px; padding:14px 0 0;
+  display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+  background:linear-gradient(to top, var(--ground) 72%, transparent);
+}
+.savemsg{font-size:14px; color:var(--ink-2)}
+
+footer{
+  margin-top:52px; padding-top:18px; border-top:1px solid var(--edge);
+  font-size:13.5px; line-height:1.6; color:var(--ink-3);
+}
+@media (max-width:520px){
+  .hear div{grid-template-columns:1fr; gap:2px}
+  .step{grid-template-columns:24px 1fr; gap:11px}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="kicker">California · calling about autism services</p>
+  <h1>Four Questions First</h1>
+  <p class="dek">Most of a first phone call gets spent on things that turn out not to matter,
+  and the one question that decides how long everything takes usually never gets asked.
+  These four, in this order, are the ones that change what happens next.</p>
+</header>
+
+<section>
+  <h2>Before you dial anyone</h2>
+  <div class="order">
+    <div class="step"><div class="dot">1</div><div>
+      <b>Call the regional centre before you call providers.</b>
+      <p>Eligibility is what unlocks funding, and it runs on its own clock. Under three, ask for
+      an Early Start intake — no diagnosis and no doctor's referral needed. Three or older, ask
+      to apply for Lanterman eligibility.</p>
+    </div></div>
+    <div class="step"><div class="dot">2</div><div>
+      <b>Put the school request in writing, separately, and date it.</b>
+      <p>The school district process is independent of the regional centre. In California the
+      district has 15 days to respond to a written assessment request and 60 days to complete
+      the assessment. The date on your letter is what starts that clock.</p>
+    </div></div>
+    <div class="step"><div class="dot">3</div><div>
+      <b>Then call providers — with these four questions.</b>
+      <p>Have a pen. You will call more than one, and by the fourth call you will not remember
+      which of them said what.</p>
+    </div></div>
+  </div>
+</section>
+
+<section>
+  <h2>The four questions</h2>
+
+  <article class="q">
+    <div class="q-top">
+      <p class="q-n">Question one · ask it first</p>
+      <p class="ask">&ldquo;Do you bill the regional centre directly, or do I need an insurance
+      denial before they'll fund it?&rdquo;</p>
+    </div>
+    <div class="q-why">
+      <p>This is the question almost nobody knows to ask, and it is the one that costs the most
+      time when it goes unasked. <b>In California the regional centre is the payer of last
+      resort.</b> For a child of three or over it generally cannot fund behavioural services
+      until private insurance or Medi-Cal has been billed and has said no — <i>in writing</i>.</p>
+      <p>Families who don't know this spend a month or two bouncing between two systems, each
+      waiting for the other. Asking on the first call tells you which letter you need and who
+      has to write it.</p>
+      <div class="hear">
+        <div class="good"><span>Good sign</span><em>They explain the order without hesitating,
+        and know which form the denial has to be on.</em></div>
+        <div class="flag"><span>Ask more</span><em>&ldquo;We just take whatever the regional
+        centre sends.&rdquo; Then ask who submits to insurance first — you or them.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="q">
+    <div class="q-top">
+      <p class="q-n">Question two</p>
+      <p class="ask">&ldquo;Are you taking new clients this month? If not, when — and does your
+      waitlist actually move?&rdquo;</p>
+    </div>
+    <div class="q-why">
+      <p>Every directory, ours included, tells you an organisation exists. None of them can tell
+      you whether it has room, because that changes weekly and nobody publishes it. A federal
+      secret-shopper study of mental health directories found the large majority of listed
+      providers unreachable or not actually accepting patients.</p>
+      <p>The second half of the question matters as much as the first. A waitlist that has not
+      moved in a year is a closed door with a friendlier name.</p>
+      <div class="hear">
+        <div class="good"><span>Good sign</span><em>A specific month, or a specific number of
+        families ahead of you.</em></div>
+        <div class="flag"><span>Ask more</span><em>&ldquo;We'll put you on the list.&rdquo;
+        Ask how long the last family waited.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="q">
+    <div class="q-top">
+      <p class="q-n">Question three</p>
+      <p class="ask">&ldquo;Which plans do you take — and do you take Medi-Cal?&rdquo;</p>
+    </div>
+    <div class="q-why">
+      <p>Ask them, not the directory. Health plans are required to keep their provider lists
+      current and are routinely found not to be, so the plan's own website is the least reliable
+      place to learn this. Name your plan out loud; &ldquo;we take most insurance&rdquo; is not
+      an answer.</p>
+      <p>Ask about Medi-Cal by name even if you have private coverage. Many children qualify
+      through a route their parents never checked, and a provider who takes it is a provider who
+      can keep seeing your child if your work situation changes.</p>
+      <div class="hear">
+        <div class="good"><span>Good sign</span><em>They name your plan back to you, and say
+        whether they are in-network or out.</em></div>
+        <div class="flag"><span>Ask more</span><em>&ldquo;We can bill anything.&rdquo; Billing
+        is not the same as being covered. Ask what you would pay.</em></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="q">
+    <div class="q-top">
+      <p class="q-n">Question four</p>
+      <p class="ask">&ldquo;What ages do you serve — and is there anyone there who speaks
+      <span style="color:var(--ink-3)">[your language]</span>?&rdquo;</p>
+    </div>
+    <div class="q-why">
+      <p>Age is not the formality it sounds like. In the regional centre vendor lists we have
+      read, the organisations funded to serve children under three and those funded to serve
+      children over three are almost entirely different organisations. Confirming the age range
+      on the first call saves building a relationship you will have to leave.</p>
+      <p>On language: ask whether the <b>clinician</b> speaks it, not whether the office can find
+      an interpreter. Those are different services and only one of them helps your child.</p>
+      <div class="hear">
+        <div class="good"><span>Good sign</span><em>A clear range, and a named person for the
+        language.</em></div>
+        <div class="flag"><span>Ask more</span><em>&ldquo;We can arrange interpretation.&rdquo;
+        Ask whether the person doing the therapy speaks it.</em></div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section>
+  <h2>If your child is turning three</h2>
+  <div class="three">
+    <h3>Ask this of whoever is treating your child now — before the birthday, not after.</h3>
+    <p class="ask">&ldquo;Will you still be able to see my child after they turn three? If not,
+    who takes over, and who pays?&rdquo;</p>
+    <p>Across the fifteen California regional centre vendor lists we have been able to read, the
+    organisations funded for therapy under three and those funded for the same therapy at three
+    and over barely overlap — a few dozen out of well over a thousand. Supply does not collapse
+    at three. <b>Continuity does.</b> Most families change providers at that birthday, and the
+    ones who find out in advance are the ones who don't lose months to it.</p>
+    <p>Three things move at once in that month: the eligibility bar rises from a delay in one
+    area to substantial limitations in three, the payer shifts from the regional centre to your
+    insurer and your school district, and your provider relationship most likely ends. Ask
+    early enough that you are choosing rather than reacting.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Your calls</h2>
+  <p class="dek" style="margin-bottom:18px">One card per place you ring. Write down what you
+  heard and the date you heard it — an answer about openings is only true for about a month.</p>
+  <div class="log" id="log"></div>
+  <button class="ghost" id="add" type="button">Add another call</button>
+  <div class="savebar">
+    <button class="save" id="save" disabled>Save these notes</button>
+    <span class="savemsg" id="savemsg">Notes are saved into this page, so they are still here
+    when you come back to it.</span>
+  </div>
+</section>
+
+<footer>
+  California-specific points here follow the state's own published rules: the regional centre as
+  payer of last resort under Welfare &amp; Institutions Code section 4659; the school district's
+  15-day and 60-day assessment timelines under Education Code section 56043; Early Start intake
+  without a diagnosis or referral. The age-three pattern is our own reading of the vendor lists
+  fifteen of California's twenty-one regional centres publish. None of this is legal advice, and
+  a regional centre service coordinator or your local Family Resource Center can tell you how it
+  applies to your child.
+</footer>
+
+</div>
+
+<script>
+const PRISTINE = document.documentElement.outerHTML;
+</script>
+
+<script>
+const QS = [
+  ["rc",   "Bills regional centre direct"],
+  ["open", "Taking new clients"],
+  ["plan", "Takes our plan"],
+  ["age",  "Right age range"],
+];
+let state = JSON.parse(document.getElementById("app-state").textContent || '{"calls":[]}');
+if (!Array.isArray(state.calls)) state.calls = [];
+if (!state.calls.length) state.calls.push({});
+let dirty = false;
+
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function render(){
+  document.getElementById("log").innerHTML = state.calls.map((c, i) => `
+    <div class="entry">
+      <div class="entry-head">
+        <input type="text" data-i="${i}" data-f="who" value="${esc(c.who)}"
+               placeholder="Who you called" aria-label="Who you called">
+        <input type="date" data-i="${i}" data-f="when" value="${esc(c.when)}"
+               aria-label="Date of call">
+        ${state.calls.length > 1
+          ? `<button class="rm" type="button" data-rm="${i}">Remove</button>` : ""}
+      </div>
+      <div class="answers">
+        ${QS.map(([k, label]) => `
+          <div class="ans"><span>${label}</span>
+            <div class="ans-btns">
+              ${[["yes","Yes"],["no","No"],["","?"]].map(([v, t]) =>
+                `<button class="tri" type="button" data-i="${i}" data-k="${k}" data-v="${v}"
+                   aria-pressed="${(c[k] || "") === v}"
+                   aria-label="${label}: ${t}">${t}</button>`).join("")}
+            </div>
+          </div>`).join("")}
+      </div>
+      <textarea data-i="${i}" data-f="note"
+        placeholder="What they actually said — wait time, who to send the denial to, a name to ask for next time…">${esc(c.note)}</textarea>
+    </div>`).join("");
+}
+
+function touch(){
+  dirty = true;
+  document.getElementById("save").disabled = false;
+  document.getElementById("savemsg").textContent = "Not saved yet.";
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("button.tri");
+  if (t){
+    state.calls[+t.dataset.i][t.dataset.k] = t.dataset.v;
+    render(); touch(); return;
+  }
+  const r = e.target.closest("button[data-rm]");
+  if (r){
+    state.calls.splice(+r.dataset.rm, 1);
+    if (!state.calls.length) state.calls.push({});
+    render(); touch(); return;
+  }
+  if (e.target.id === "add"){
+    state.calls.push({});
+    render(); touch();
+    const inputs = document.querySelectorAll('input[data-f="who"]');
+    if (inputs.length) inputs[inputs.length - 1].focus();
+  }
+});
+
+document.addEventListener("input", e => {
+  const el = e.target.closest("[data-i][data-f]");
+  if (!el) return;
+  state.calls[+el.dataset.i][el.dataset.f] = el.value;
+  touch();
+});
+
+render();
+
+(async () => {
+  const btn = document.getElementById("save"), msg = document.getElementById("savemsg");
+  const artifact = window.claude && await window.claude.use("artifact");
+  if (!artifact){
+    btn.style.display = "none";
+    msg.textContent = "Notes stay in this browser tab here — saving into the page isn't available.";
+    return;
+  }
+  btn.addEventListener("click", async () => {
+    btn.disabled = true; msg.textContent = "Saving…";
+    const html = PRISTINE.replace(
+      /(<script id="app-state" type="application\/json">)[\s\S]*?(<\/script>)/,
+      (m, a, b) => a + JSON.stringify(state) + b);
+    try {
+      await artifact.publish("<!doctype html>\n" + html);
+      dirty = false;
+      msg.textContent = "Saved.";
+    } catch (err){
+      if (err && err.code === "conflict"){
+        msg.textContent = "Someone else saved first — reloading to their version.";
+      } else if (err && (err.code === "not_granted" || err.code === "not_writer")){
+        btn.style.display = "none";
+        msg.textContent = "This copy is read-only, so notes can't be saved here.";
+      } else {
+        btn.disabled = false;
+        msg.textContent = "Couldn't save. Try again.";
+      }
+    }
+  });
+})();
+
+window.addEventListener("beforeunload", e => { if (dirty) e.preventDefault(); });
+</script>

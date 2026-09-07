@@ -1,0 +1,265 @@
+<title>The Age Three Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&family=Archivo:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --paper:#EFF1F1; --card:#FFFFFF; --sunk:#E4E8E8; --rule:#D2D9D9; --rule-2:#B9C3C3;
+  --ink:#172025; --ink-2:#4A585E; --ink-3:#7A878C;
+  --accent:#1F4D57; --accent-soft:#DCE9EB;
+  --flag:#8A4B12; --flag-soft:#F4E5D5;
+  --good:#2C6349;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12181A; --card:#1A2225; --sunk:#212B2E; --rule:#2C383C; --rule-2:#3D4B50;
+    --ink:#E6EBEC; --ink-2:#AAB8BC; --ink-3:#7C8A8F;
+    --accent:#6FB3BF; --accent-soft:#12333A;
+    --flag:#D79A5C; --flag-soft:#33230F;
+    --good:#6DBF9C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12181A; --card:#1A2225; --sunk:#212B2E; --rule:#2C383C; --rule-2:#3D4B50;
+  --ink:#E6EBEC; --ink-2:#AAB8BC; --ink-3:#7C8A8F;
+  --accent:#6FB3BF; --accent-soft:#12333A;
+  --flag:#D79A5C; --flag-soft:#33230F;
+  --good:#6DBF9C;
+}
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); margin:0;
+  font:400 16.5px/1.6 Archivo, system-ui, sans-serif; -webkit-font-smoothing:antialiased}
+.sheet{max-width:820px; margin:0 auto; padding:40px 24px 80px}
+
+.head{border-bottom:2px solid var(--ink); padding-bottom:20px}
+.tag{font:600 11px/1 Archivo,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent); margin:0 0 12px}
+h1{font:400 clamp(30px,5.4vw,44px)/1.08 Spectral, Georgia, serif; margin:0 0 12px;
+  letter-spacing:-.015em; text-wrap:balance}
+.dek{margin:0; color:var(--ink-2); max-width:62ch; font-size:17px}
+
+.picker{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:26px 0 0}
+.picker label{font:600 11px/1 Archivo,sans-serif; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3)}
+select{font:500 15px/1.2 Archivo,sans-serif; background:var(--card); color:var(--ink);
+  border:1px solid var(--rule-2); border-radius:3px; padding:10px 12px; min-width:min(100%,340px)}
+
+section{margin-top:38px}
+h2{font:600 12px/1 Archivo,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 16px; padding-bottom:10px; border-bottom:1px solid var(--rule)}
+
+.headline{background:var(--card); border:1px solid var(--rule); border-radius:4px;
+  padding:26px 26px 22px; box-shadow:0 1px 2px rgba(23,32,37,.05)}
+.pair{display:grid; grid-template-columns:1fr auto 1fr; gap:20px; align-items:end}
+.side .n{font:400 clamp(38px,9vw,62px)/1 Spectral, Georgia, serif;
+  font-variant-numeric:tabular-nums; letter-spacing:-.02em}
+.side .l{font:500 12.5px/1.45 Archivo,sans-serif; color:var(--ink-2); margin-top:8px}
+.side .c{font:400 11.5px/1 "Roboto Mono",monospace; color:var(--ink-3); margin-top:5px}
+.vs{font:400 15px/1 Spectral,serif; font-style:italic; color:var(--ink-3); padding-bottom:26px}
+.side.right .n{color:var(--flag)}
+.ratio{margin-top:20px; padding-top:18px; border-top:1px solid var(--rule);
+  font-size:15.5px; color:var(--ink-2)}
+.ratio b{color:var(--ink); font-weight:600}
+
+.cont{margin-top:14px; background:var(--flag-soft); border:1px solid var(--rule);
+  border-left:3px solid var(--flag); border-radius:4px; padding:18px 22px}
+.cont .big{font:400 30px/1 Spectral,serif; font-variant-numeric:tabular-nums; color:var(--flag)}
+.cont p{margin:8px 0 0; font-size:15.5px; color:var(--ink-2)}
+.cont.ok{background:var(--accent-soft); border-left-color:var(--good)}
+.cont.ok .big{color:var(--good)}
+
+table{width:100%; border-collapse:collapse; font-size:14.5px}
+.scroll{overflow-x:auto}
+th,td{text-align:right; padding:9px 10px; border-bottom:1px solid var(--rule); white-space:nowrap}
+th:first-child,td:first-child{text-align:left; white-space:normal}
+th{font:600 11px/1.3 Archivo,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink-3); border-bottom:1px solid var(--rule-2)}
+td.num{font-family:"Roboto Mono",monospace; font-variant-numeric:tabular-nums}
+tr.me td{background:var(--accent-soft); font-weight:600}
+tr.note td{color:var(--good)}
+
+.notes p{margin:0 0 13px; color:var(--ink-2)}
+.notes p:last-child{margin-bottom:0}
+.notes b{color:var(--ink); font-weight:600}
+.method{background:var(--sunk); border:1px solid var(--rule); border-radius:4px; padding:20px 22px}
+.method h3{font:600 11px/1 Archivo,sans-serif; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 12px}
+.method dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:8px 16px; font-size:14.5px}
+.method dt{font:500 12px/1.5 "Roboto Mono",monospace; color:var(--accent); white-space:nowrap}
+.method dd{margin:0; color:var(--ink-2)}
+.limits{border-left:2px solid var(--rule-2); padding-left:16px; margin-top:18px}
+.limits p{font-size:14.5px; color:var(--ink-2); margin:0 0 10px}
+.limits p:last-child{margin:0}
+
+footer{margin-top:48px; padding-top:18px; border-top:1px solid var(--rule);
+  font-size:13px; line-height:1.6; color:var(--ink-3)}
+@media (max-width:560px){
+  .pair{grid-template-columns:1fr; gap:22px}
+  .vs{padding:0; text-align:left}
+  .method dl{grid-template-columns:1fr; gap:3px 0}
+  .method dd{margin-bottom:10px}
+}
+</style>
+
+<div class="sheet">
+
+<header class="head">
+  <p class="tag">California · regional centre vendor lists</p>
+  <h1>The Age Three Handoff</h1>
+  <p class="dek">A count your centre has not published, taken entirely from the vendor list your
+  centre publishes. It compares the organisations you fund to deliver specialised therapeutic
+  services before a child turns three against the ones you fund to deliver them afterwards.</p>
+  <div class="picker">
+    <label for="rc">Regional centre</label>
+    <select id="rc" aria-label="Choose a regional centre"></select>
+  </div>
+</header>
+
+<section>
+  <h2>What your published list shows</h2>
+  <div class="headline">
+    <div class="pair">
+      <div class="side"><div class="n" id="nEarly">—</div>
+        <div class="l">organisations funded for therapy up to age three</div>
+        <div class="c">codes 116 · 805</div></div>
+      <div class="vs">against</div>
+      <div class="side right"><div class="n" id="nPost">—</div>
+        <div class="l">organisations funded for therapy at three and over</div>
+        <div class="c">codes 117 · 515 · 612 · 613 · 615 · 616</div></div>
+    </div>
+    <p class="ratio" id="ratio"></p>
+  </div>
+  <div class="cont" id="cont">
+    <div class="big" id="nBoth">—</div>
+    <p id="contText"></p>
+  </div>
+</section>
+
+<section>
+  <h2>The same count, every centre that publishes a readable list</h2>
+  <div class="scroll">
+    <table>
+      <thead><tr>
+        <th>Regional centre</th><th>Up to 3</th><th>3 and over</th>
+        <th>Both</th><th>Continuity</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="notes" style="margin-top:18px">
+    <p><b>Two centres show this is not fixed.</b> Redwood Coast funds 42 of its 53
+    birth-to-three organisations to keep serving children afterwards, and Golden Gate
+    23 of 150. Eleven other centres are at or near zero. Same statute, same service
+    codes, an order of magnitude apart — which places the difference in local
+    vendorization practice rather than in state law.</p>
+  </div>
+</section>
+
+<section>
+  <h2>How this was counted</h2>
+  <div class="method">
+    <h3>Sources and definitions</h3>
+    <dl>
+      <dt>Source</dt><dd id="mSrc">Your centre's own published vendor list, downloaded and archived on 7 September 2026.</dd>
+      <dt>116</dt><dd>Early Start Specialized Therapeutic Services — birth to three</dd>
+      <dt>117</dt><dd>Specialized Therapeutic Services — age three and older</dd>
+      <dt>805</dt><dd>Infant Development Program — birth to three</dd>
+      <dt>515 · 612 · 613 · 615 · 616</dt>
+        <dd>Behavior Management Program, Behavior Analyst, Associate Behavior Analyst,
+            Behavior Management Assistant, Behavior Technician — no age restriction, counted
+            on the three-and-over side because that is where they are principally used</dd>
+      <dt>Code table</dt><dd>Verified against the DDS Rate Reform Service Code Crosswalk dated 5 February 2026. No code was taken from memory.</dd>
+      <dt>Unit</dt><dd>Distinct organisations, deduplicated on vendor number where your list carries one and on normalised name where it does not.</dd>
+    </dl>
+  </div>
+  <div class="limits">
+    <p><b>What this does not show.</b> It covers the regional centre funding line only. After
+    age three a great deal of therapy moves to the school district under IDEA Part B and to
+    private insurance under the SB 946 mandate, and neither appears in a vendor list. A provider
+    who keeps seeing the same child on insurance needs no code 117 vendorization and is simply
+    absent from this count.</p>
+    <p>So this is a count of how a funding pathway narrows. <b>It is not a claim that children
+    lose their therapists</b>, and it should not be read as one.</p>
+    <p>Where a centre publishes service categories in words rather than numeric codes, those
+    words were mapped onto the verified code table; phrases that were plainly relevant but whose
+    code could not be verified were left uncounted rather than guessed at.</p>
+  </div>
+</section>
+
+<footer>
+  Counted from vendor lists published by California regional centres under the transparency
+  requirement at Welfare &amp; Institutions Code section 4629.5(b)(6), retrieved and archived
+  7 September 2026. Service-code definitions from the California Department of Developmental
+  Services Rate Reform Service Code Crosswalk, 5 February 2026. Six of California's twenty-one
+  centres publish no list this count could read and are absent from the table.
+</footer>
+
+</div>
+
+<script>
+// Counted from each centre's own published vendor list. early = codes 116/805;
+// post = 117 plus the behaviour-analytic codes; both = organisations appearing on
+// both sides, which is the continuity figure and the one nobody publishes.
+const RC = [
+  {k:'sdrc',     n:'San Diego Regional Center',                  early:552, post:382, both:0},
+  {k:'rceb',     n:'Regional Center of the East Bay',            early:270, post:200, both:4},
+  {k:'westside', n:'Westside Regional Center',                   early:203, post:27,  both:5},
+  {k:'sgprc',    n:'San Gabriel/Pomona Regional Center',         early:191, post:95,  both:4},
+  {k:'elarc',    n:'Eastern Los Angeles Regional Center',        early:182, post:74,  both:0},
+  {k:'rcoc',     n:'Regional Center of Orange County',           early:175, post:162, both:0},
+  {k:'inland',   n:'Inland Regional Center',                     early:159, post:133, both:0},
+  {k:'ggrc',     n:'Golden Gate Regional Center',                early:150, post:86,  both:23},
+  {k:'nbrc',     n:'North Bay Regional Center',                  early:124, post:51,  both:0},
+  {k:'harbor',   n:'Harbor Regional Center',                     early:106, post:60,  both:0},
+  {k:'sarc',     n:'San Andreas Regional Center',                early:83,  post:60,  both:0},
+  {k:'redwood',  n:'Redwood Coast Regional Center',              early:53,  post:95,  both:42},
+  {k:'sclarc',   n:'South Central Los Angeles Regional Center',  early:43,  post:25,  both:3},
+  {k:'kern',     n:'Kern Regional Center',                       early:26,  post:41,  both:2},
+  {k:'cvrc',     n:'Central Valley Regional Center',             early:15,  post:71,  both:0},
+];
+const pct = r => r.early ? (r.both / r.early * 100) : 0;
+
+const sel = document.getElementById('rc');
+RC.forEach(r => { const o = document.createElement('option'); o.value = r.k; o.textContent = r.n; sel.appendChild(o); });
+
+function render(k){
+  const r = RC.find(x => x.k === k);
+  document.getElementById('nEarly').textContent = r.early.toLocaleString();
+  document.getElementById('nPost').textContent  = r.post.toLocaleString();
+
+  const ratioEl = document.getElementById('ratio');
+  if (r.post > r.early){
+    ratioEl.innerHTML = `Your list funds <b>more</b> organisations at three and over than before —
+      one of only three centres where that is true.`;
+  } else {
+    const x = (r.early / Math.max(1, r.post)).toFixed(1);
+    ratioEl.innerHTML = `Supply narrows by a factor of <b>${x}</b> at the third birthday.`;
+  }
+
+  const c = document.getElementById('cont');
+  const p = pct(r);
+  c.className = 'cont' + (p >= 10 ? ' ok' : '');
+  document.getElementById('nBoth').textContent =
+    `${r.both} of ${r.early.toLocaleString()}  ·  ${p.toFixed(0)}%`;
+  document.getElementById('contText').textContent = p >= 10
+    ? `Organisations you fund on both sides of the third birthday. This is the highest continuity `
+      + `in the state, and it is the figure other centres would want to understand.`
+    : `Organisations you fund on both sides of the third birthday. A family reaching that birthday `
+      + `will, on this evidence, almost always be starting again with someone new — in the same `
+      + `month that the eligibility threshold rises and the payer changes.`;
+
+  document.getElementById('tbody').innerHTML = [...RC]
+    .sort((a,b) => pct(b) - pct(a) || b.early - a.early)
+    .map(x => `<tr class="${x.k === k ? 'me' : ''}">
+        <td>${x.n}</td>
+        <td class="num">${x.early.toLocaleString()}</td>
+        <td class="num">${x.post.toLocaleString()}</td>
+        <td class="num">${x.both}</td>
+        <td class="num">${pct(x).toFixed(0)}%</td>
+      </tr>`).join('');
+}
+
+sel.addEventListener('change', () => render(sel.value));
+render(RC[0].k);
+</script>

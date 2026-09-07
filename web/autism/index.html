@@ -924,6 +924,22 @@ async function loadProviders(){
 // Los Angeles is deliberately absent from that table because DDS splits it
 // across seven centres by ZIP and health district, so a county pick there
 // cannot resolve to one centre and the city match carries it instead.
+// The fifteen centres whose published vendor lists we can actually read. The
+// other six are not gaps in the state's spending — they are gaps in what is
+// publishable, and a parent in Sacramento deserves to be told that Alta
+// California does not publish a readable list rather than shown an empty page
+// that reads as "there is nothing here".
+const RC_COVERED = new Set([
+  'Regional Center of the East Bay','Inland Regional Center',
+  'Regional Center of Orange County','San Andreas Regional Center',
+  'Harbor Regional Center','San Diego Regional Center',
+  'San Gabriel/Pomona Regional Center','Westside Regional Center',
+  'Golden Gate Regional Center','Kern Regional Center',
+  'Redwood Coast Regional Center','Central Valley Regional Center',
+  'South Central Los Angeles Regional Center',
+  'Eastern Los Angeles Regional Center','North Bay Regional Center',
+]);
+
 function centresForCounty(county){
   if (!county) return [];
   return RC.filter(r => r.counties.includes(county)).map(r => r.name);
@@ -1018,12 +1034,21 @@ function renderProviders(){
   if (!S.providers){ return; }          // loadProviders paints its own state
   const list = filteredProviders();
   if (!list.length){
+    const centres = centresForCounty(S.county);
+    const uncovered = centres.filter(n => !RC_COVERED.has(n));
+    const named = uncovered.length
+      ? `<p><b>${esc(uncovered.join(' and '))}</b> ${uncovered.length > 1 ? 'do' : 'does'} not
+           publish a service provider list we can read — the file is behind a login, a
+           bot check, or a search box with no export. That is a gap in what is published,
+           not a sign that there are no services in your area.</p>
+         <p>Call them directly and ask for their vendor list. They are required to have one.</p>`
+      : `<p>Nothing here matches those filters. Try clearing the service filter, or search by
+           postcode instead of by name.</p>`;
     el.innerHTML = `<div class="empty-state">
-        <h3>No funded services listed there yet</h3>
-        <p>Fifteen of California's twenty-one regional centres publish a vendor list we can read.
-           If yours is one of the six that does not, this will be empty even where services exist.
-           <a href="${DDS_LOOKUP}" target="_blank" rel="noopener">Find your regional centre</a>
-           and call them directly.</p>
+        <h3>${uncovered.length ? 'Your regional centre does not publish this' : 'Nothing matches that'}</h3>
+        ${named}
+        <p><a href="${DDS_LOOKUP}" target="_blank" rel="noopener">Find your regional centre</a>
+           · 15 of California's 21 centres publish a list we can read.</p>
       </div>`;
     return;
   }

@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="从零开始，跟着一个孩子走一遍加州的自闭症服务系统：每个机构在它出场时才介绍，每一步说清谁付钱、谁负责、坑在哪。中文。">
+<link rel="canonical" href="https://powerpluspartner.com/autism/guides/zh">
+<meta property="og:title" content="谁管什么，谁付钱">
+<meta property="og:description" content="从零开始，跟着一个孩子走一遍加州的自闭症服务系统：每个机构在它出场时才介绍，每一步说清谁付钱、谁负责、坑在哪。中文。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Power Plus Partner">
+<style>
+:root{color-scheme:light dark}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+.ppp-bar{max-width:820px; margin:0 auto; padding:16px 22px 0;
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+  font:600 10.5px/1 Manrope, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing:.14em; text-transform:uppercase}
+.ppp-bar a{color:inherit; opacity:.5; text-decoration:none}
+.ppp-bar a:hover{opacity:1}
+</style>
+<title>谁管什么，谁付钱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap">
+
+<style>
+:root{
+  --paper:#EFF1F0; --card:#FFFFFF; --sunk:#E3E7E5; --rule:#D3D9D6; --rule-2:#B3BDB8;
+  --ink:#17201E; --ink-2:#48524F; --ink-3:#77827E;
+  --accent:#235E5A; --accent-soft:#DCE8E6;
+  --warn:#A85D1A; --warn-soft:#F5E8DA;
+  --measure:40em;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131817; --card:#1B211F; --sunk:#222927; --rule:#2F3836; --rule-2:#44504C;
+    --ink:#E8ECEA; --ink-2:#AEB8B4; --ink-3:#7A8682;
+    --accent:#7CC2BB; --accent-soft:#162927;
+    --warn:#E0A06A; --warn-soft:#33221A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131817; --card:#1B211F; --sunk:#222927; --rule:#2F3836; --rule-2:#44504C;
+  --ink:#E8ECEA; --ink-2:#AEB8B4; --ink-3:#7A8682;
+  --accent:#7CC2BB; --accent-soft:#162927;
+  --warn:#E0A06A; --warn-soft:#33221A;
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); margin:0;
+  font:400 17px/1.85 "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:820px; margin:0 auto; padding:0 24px 100px}
+p{margin:0 0 16px} p:last-child{margin-bottom:0}
+.col{max-width:var(--measure)}
+b,strong{font-weight:700; color:var(--ink)}
+em{font-style:normal; color:var(--accent); font-weight:500}
+code{font:500 .86em/1 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-2);
+  background:var(--sunk); padding:2px 6px; border-radius:3px}
+:focus-visible{outline:2px solid var(--warn); outline-offset:3px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* masthead */
+.mast{padding:56px 0 28px; border-bottom:2px solid var(--ink); margin-bottom:36px}
+.eyebrow{font:500 12px/1 "Noto Sans SC",sans-serif; letter-spacing:.3em; color:var(--accent);
+  margin:0 0 18px}
+h1{font:700 clamp(34px,6vw,52px)/1.2 "Noto Serif SC", "Songti SC", serif; margin:0 0 20px;
+  letter-spacing:.02em}
+.thesis{font:500 21px/1.7 "Noto Serif SC", serif; max-width:var(--measure); margin:0 0 18px;
+  color:var(--ink)}
+.standfirst{color:var(--ink-2); max-width:var(--measure); margin:0; font-size:16.5px}
+
+h2{font:700 24px/1.4 "Noto Serif SC", serif; margin:64px 0 8px; letter-spacing:.02em}
+h2 + .lead{color:var(--ink-2); margin:0 0 24px; max-width:var(--measure); font-size:16.5px}
+h3{font:700 19px/1.5 "Noto Sans SC", sans-serif; margin:0 0 10px}
+.part-n{font:500 12px/1 "IBM Plex Mono",monospace; color:var(--accent); letter-spacing:.2em;
+  margin:0 0 8px}
+
+/* key callout */
+.key{background:var(--card); border:1px solid var(--rule); border-left:4px solid var(--accent);
+  padding:24px 28px; margin:0 0 20px; max-width:var(--measure)}
+.key p{color:var(--ink-2)} .key p:first-child{color:var(--ink); font-weight:500; font-size:18px}
+.key b{color:var(--ink)}
+
+/* three sources */
+.src{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin:0 0 20px}
+.s{background:var(--card); border:1px solid var(--rule); padding:20px 22px}
+.s .lbl{font:500 11px/1 "IBM Plex Mono",monospace; color:var(--ink-3); letter-spacing:.14em; margin:0 0 12px}
+.s h3{font-size:17px; margin:0 0 8px}
+.s p{font-size:15px; color:var(--ink-2); line-height:1.75}
+.s .money{display:block; margin-top:10px; font-size:14px; color:var(--accent); font-weight:500}
+
+/* the story: stations */
+.story{position:relative; max-width:var(--measure); padding-left:38px; margin-top:8px}
+.story::before{content:""; position:absolute; left:11px; top:6px; bottom:6px; width:2px; background:var(--rule-2)}
+.st{position:relative; padding:0 0 40px}
+.st::before{content:""; position:absolute; left:-33px; top:8px; width:12px; height:12px; border-radius:50%;
+  background:var(--paper); border:2px solid var(--accent)}
+.st.bad::before{background:var(--warn); border-color:var(--warn)}
+.st .age{font:500 12px/1 "IBM Plex Mono",monospace; color:var(--accent); letter-spacing:.1em; margin:0 0 8px}
+.st.bad .age{color:var(--warn)}
+.st h3{margin:0 0 12px}
+.st p{color:var(--ink-2); font-size:16.5px}
+.st p b{color:var(--ink)}
+.who{display:inline-block; font-size:13px; color:var(--accent); background:var(--accent-soft);
+  padding:3px 9px; border-radius:3px; margin:0 6px 8px 0; font-weight:500}
+.pit{background:var(--warn-soft); border-left:3px solid var(--warn); padding:14px 18px; margin:14px 0 0;
+  font-size:15.5px; color:var(--ink)}
+.pit b{color:var(--warn)}
+.fix{background:var(--accent-soft); border-left:3px solid var(--accent); padding:14px 18px; margin:10px 0 0;
+  font-size:15.5px; color:var(--ink); position:relative}
+.fix > b:first-of-type{display:block; color:var(--accent); margin:0 0 4px; font-size:14px}
+.fix b{color:var(--ink)}
+.fix > b:first-of-type{color:var(--accent)}
+.ft{position:absolute; right:14px; top:12px; font:500 11px/1 "IBM Plex Mono",monospace;
+  color:var(--accent); border:1px solid var(--accent); padding:4px 7px; border-radius:3px; letter-spacing:.08em}
+.legend{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin:0 0 26px; max-width:var(--measure)}
+.lg{background:var(--card); border:1px solid var(--rule); padding:14px 16px; font-size:14px; line-height:1.65; color:var(--ink-2)}
+.lg .ft{position:static; display:inline-block; margin:0 0 8px}
+.lg b{color:var(--ink); display:block; margin-bottom:2px}
+.money-note{background:var(--sunk); padding:12px 18px; margin:12px 0 0; font-size:15px; color:var(--ink-2)}
+.money-note b{color:var(--accent)}
+
+/* party cards */
+.card{background:var(--card); border:1px solid var(--rule); margin-bottom:18px; max-width:var(--measure)}
+.card-head{padding:20px 24px 14px; border-bottom:1px solid var(--rule)}
+.card-head h3{margin:0 0 4px; font-size:20px}
+.card-head .en{font:500 12.5px/1.5 "IBM Plex Mono",monospace; color:var(--ink-3)}
+.card-head .one{margin:10px 0 0; color:var(--ink-2); font-size:15.5px}
+.kv{display:grid; grid-template-columns:96px 1fr; gap:16px; padding:13px 24px; border-top:1px solid var(--rule);
+  font-size:15.5px; line-height:1.75}
+.kv:first-of-type{border-top:0}
+.kv dt{margin:0; color:var(--ink-3); font-weight:500; font-size:13.5px; padding-top:3px}
+.kv dd{margin:0; color:var(--ink-2)}
+.kv dd b{color:var(--ink)}
+.kv.pitrow{background:var(--warn-soft)}
+.kv.pitrow dt{color:var(--warn)} .kv.pitrow dd{color:var(--ink)}
+@media (max-width:560px){ .kv{grid-template-columns:1fr; gap:4px} }
+
+/* glossary */
+.gl{max-width:var(--measure); border:1px solid var(--rule); background:var(--card)}
+.g{display:grid; grid-template-columns:86px 1fr; gap:14px; padding:12px 20px; border-top:1px solid var(--rule);
+  font-size:15px; line-height:1.7}
+.g:first-child{border-top:0}
+.g .t{font:500 13px/1.6 "IBM Plex Mono",monospace; color:var(--accent)}
+.g .d{color:var(--ink-2)} .g .d b{color:var(--ink)}
+@media (max-width:480px){ .g{grid-template-columns:1fr; gap:2px} }
+
+/* summary */
+.sum{background:var(--accent-soft); padding:26px 30px; max-width:var(--measure)}
+.sum p{font:500 18px/1.8 "Noto Serif SC",serif; color:var(--ink); margin:0 0 14px}
+.sum p:last-child{margin:0}
+
+footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--rule); font-size:13.5px;
+  line-height:1.8; color:var(--ink-3); max-width:var(--measure)}
+</style>
+</head>
+<body>
+
+<nav class="ppp-bar" aria-label="Site">
+  <a href="/autism">Power Plus Partner</a>
+  <a href="/autism/guides">所有指南</a>
+</nav>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">加州 · 自闭症服务</p>
+  <h1>谁管什么，谁付钱</h1>
+  <p class="thesis">从零开始，跟着一个孩子走一遍。每个机构在它出场的那一刻才介绍，
+  每一步都说清楚三件事：谁出现了、谁付钱、谁负责。</p>
+  <p class="standfirst">目标只有一个：读完之后，你能用自己的话把这个系统讲给别人听。
+  所有日期和数字都是从加州自己公布的法条和报告里核过的；哪里是法律规定、哪里是实际情况，会分开写。</p>
+</header>
+
+<!-- ============================================================ -->
+<p class="part-n">第一部分</p>
+<h2>先弄清一件事：这个系统为什么长这样</h2>
+<p class="lead">如果你只记住一件事，记住这个。后面所有的乱，都是从这里来的。</p>
+
+<div class="key">
+  <p>一个自闭症孩子需要的服务，钱来自三个完全不同的口袋，各自有一部法律、一个主管部门、一套规则。这三个口袋<b>互不隶属</b>——没有任何一个机构同时管得了它们。</p>
+  <p>所以家长会遇到的最典型的一幕是：三家都说"这不归我管"，而且三家<b>依法都说得对</b>。</p>
+</div>
+
+<div class="src">
+  <div class="s">
+    <p class="lbl">口袋 1 · 州政府的钱</p>
+    <h3>区域中心 Regional Center</h3>
+    <p>依据加州的 <b>Lanterman 法案</b>。主管部门是州发育服务部 <b>DDS</b>。全州 21 个区域中心，都是非营利机构，替州政府花钱买服务。</p>
+    <span class="money">钱：州财政 → DDS → 区域中心 → 治疗机构</span>
+  </div>
+  <div class="s">
+    <p class="lbl">口袋 2 · 保险的钱</p>
+    <h3>健康保险 Health Plan</h3>
+    <p>依据加州 <b>SB 946</b> 法案：保险必须覆盖自闭症的行为治疗。主管部门是 <b>DMHC</b>（管保险公司的）。低收入家庭的保险是 <b>Medi-Cal</b>（加州的医疗补助）。</p>
+    <span class="money">钱：你或雇主的保费 → 保险公司 → 治疗机构</span>
+  </div>
+  <div class="s">
+    <p class="lbl">口袋 3 · 教育的钱</p>
+    <h3>学区 School District</h3>
+    <p>依据联邦 <b>IDEA</b> 特殊教育法。主管部门是州教育厅 <b>CDE</b>，但学区由本地选出的教委管，很独立。</p>
+    <span class="money">钱：学区预算 → 学校自己的治疗师</span>
+  </div>
+</div>
+
+<div class="key">
+  <p>三个口袋的交接是有明确年龄点的：<b>三岁之前基本只有口袋 1</b>；<b>三岁那天</b>口袋 2 和口袋 3 才真正登场，同时口袋 1 退到最后。</p>
+  <p>这就是为什么所有人都说"三岁是最难的一关"——不是孩子变了，是<b>钱换了口袋</b>。</p>
+</div>
+
+<!-- ============================================================ -->
+<p class="part-n">第二部分</p>
+<h2>跟着一个孩子走一遍</h2>
+<p class="lead">假设孩子叫小满，18 个月。你是妈妈。每一站介绍一个新出场的机构，用 <span class="who">绿标</span> 标出来。橙色的点是容易掉进去的坑。</p>
+
+<div class="story">
+
+  <div class="st">
+    <p class="age">1 岁 6 个月</p>
+    <h3>你觉得哪里不对劲</h3>
+    <p>小满不太看人、叫名字不理、不指东西。你上网查，越查越怕。儿科医生说"再观察观察"。</p>
+    <p><b>这一站没有任何机构出场。</b>法律上没有任何人有义务在这个时候找到你。儿科医生 18 个月和 24 个月做自闭症筛查，是"专业建议"，不是"必须做、不做有后果"的义务。</p>
+    <div class="pit"><b>坑：</b>研究显示家长平均 1.75 岁察觉、2.5 岁才跟人开口、4.2 岁才确诊。中间两年多，全部是等。而下一站告诉你——<b>你根本不用等任何人</b>。</div>
+  </div>
+
+  <div class="st">
+    <p class="age">1 岁 7 个月 · 你打了一个电话</p>
+    <h3>区域中心出场</h3>
+    <span class="who">区域中心 Regional Center</span>
+    <p>你查到自己家所属的区域中心，打电话说："我想给孩子做 Early Start 评估。"</p>
+    <p><b>Early Start</b> 是加州 0–3 岁的早期干预项目，由区域中心执行。法律规定：<b>任何人都可以转介</b>，包括家长自己；<b>不需要医生转介，不需要诊断</b>；从接到转介起 <b>45 个自然日内</b>必须完成评估并开第一次计划会议；评估、计划、个案协调<b>全部免费，不看收入</b>。</p>
+    <p>资格线很低：<b>任何一个发展领域延迟 25%</b> 就够（比如语言），或者有已知的高风险状况。</p>
+    <div class="money-note"><b>钱：</b>还没花。这一步是免费的。</div>
+  </div>
+
+  <div class="st">
+    <p class="age">1 岁 9 个月 · 45 天内</p>
+    <h3>评估、一份计划、一个"你的人"</h3>
+    <span class="who">个案协调员 Service Coordinator</span>
+    <span class="who">家庭资源中心 Family Resource Center</span>
+    <p>区域中心派人评估小满，然后开会写一份计划，叫 <b>IFSP</b>（Individualized Family Service Plan，个别化家庭服务计划）。上面写：小满需要哪些服务、每周几次、谁提供、目标是什么。<b>你是这份计划的法定成员，你要签字。</b></p>
+    <p>区域中心同时给你分配一个<b>个案协调员</b>——以后你在区域中心的"那个人"。法律上（<code>W&amp;I §4647</code>）他的职责是<b>"确保"</b>计划里的服务落实，并<b>"监督执行、确认目标达成"</b>。</p>
+    <p>你还会被介绍给<b>家庭资源中心</b>：由残障孩子的家长运营，免费，<b>不查资格、没确诊也接待</b>，用你的语言给你讲整个系统。全州 47 个，直接跟 DDS 签约。</p>
+    <div class="pit"><b>坑：</b>个案协调员法定平均带 <b>62 个孩子</b>（5 岁以下 1:40），最多可以 60 天内带到 <b>79 个</b>。"确保落实"这件事，一个人对 62 个孩子，你可以想象。</div>
+  </div>
+
+  <div class="st">
+    <p class="age">1 岁 10 个月 · 治疗开始</p>
+    <h3>治疗机构出场</h3>
+    <span class="who">治疗机构 / 治疗师 Provider</span>
+    <p>计划上写了"每周 10 小时行为干预"。区域中心从它<b>已经签约的机构名单</b>（叫 vendor list，供应商名单）里安排一家，或者你自己从名单里挑一家。这家机构派人来给小满做治疗。</p>
+    <p><b>这是整个系统里唯一一个真正"干活"的角色。</b>其他所有机构都是出钱的、写计划的、裁决的。</p>
+    <div class="money-note"><b>钱：</b>区域中心 → 直接付给治疗机构。<b>你不会收到账单，也不会拿到报销。</b>钱不经过你。</div>
+    <div class="pit"><b>坑：</b>治疗机构只做<b>有人同意付钱的那部分</b>。它说"我们做不了"，十有八九是在说合同，不是在说小满。</div>
+  </div>
+
+  <div class="st">
+    <p class="age">2 岁 6 个月 · 三岁前的准备</p>
+    <h3>转衔会议：学区第一次出现</h3>
+    <span class="who">学区 School District</span>
+    <p>加州规定（<code>17 CCR §52112</code>）：区域中心必须在小满 <b>两岁九个月之前</b>，通知学区、开一次"转衔会议"（transition meeting），学区必须派人参加。同时给学区发正式转介。</p>
+    <p>这是<b>整个系统里唯一一条法律要求两个机构直接对接的线</b>——区域中心 → 学区，一次通知。其他所有机构之间，都没有线。</p>
+    <div class="pit"><b>坑：</b>州政府 2025 年 2 月统计，有 <b>6,929 个孩子过了三岁生日还挂在 Early Start 账上</b>，比上年多 22.5%。美国教育部把加州的 0–3 项目评为"需要干预"，<b>转衔的两个指标都是零分——因为加州自己的数据不可靠</b>。所以：这次会议到底开没开，你自己盯。两岁六个月的时候问协调员一句：<b>"转衔会议定在什么时候？"</b></div>
+  </div>
+
+  <div class="st bad">
+    <p class="age">3 岁生日 · 那一天同时发生三件事</p>
+    <h3>三岁交接</h3>
+    <p><b>第一件：钱换口袋。</b>区域中心从"主要付款人"降为<b>"最后付款人"</b>（<code>W&amp;I §4659</code>）。法律原文：三岁以上的孩子，区域中心<b>"不得购买医疗服务，除非拿到 Medi-Cal、私人保险或健康计划的书面拒绝"</b>。也就是说，你得先去找保险。</p>
+    <p><b>第二件：资格门槛变了。</b>三岁前是"一个领域延迟 25%"。三岁后要重新评估：3–5 岁"临时资格"要求<b>两个</b>主要生活领域显著受限；正式的 Lanterman 资格要求<b>三个以上</b>领域实质性残障。有些孩子这时候就掉出去了。</p>
+    <p><b>第三件：一直帮你的人到期了。</b>家庭资源中心的服务对象是 <b>36 个月以下</b>。小满三岁那天，它也毕业了。</p>
+    <div class="pit"><b>坑：</b>这三件事<b>没有任何人会提前告诉你</b>。你在两岁六个月能做的最有用的一件事，是问家庭资源中心："<b>三岁以后你们不管了，我该找谁？</b>"</div>
+  </div>
+
+  <div class="st">
+    <p class="age">3 岁 1 个月 · 去找保险</p>
+    <h3>保险出场，还有一封信</h3>
+    <span class="who">健康保险 Health Plan</span>
+    <p>治疗机构向你的保险申请授权。加州 SB 946 要求保险覆盖自闭症的行为治疗（ABA 等）。保险可能批，也可能拒。<b>如果拒了，你会收到一封书面拒绝信。</b></p>
+    <p>然后——<b>你拿着这封信，回到区域中心。</b>区域中心看到拒绝信，并判断你去申诉也没用，才可能重新付钱。</p>
+    <p><b>为什么是你拿着信？</b>因为保险公司和区域中心之间<b>没有任何通道</b>。它们互不隶属、互不通信。你是邮差。</p>
+    <div class="money-note"><b>钱（批了的话）：</b>保险 → 直接付给治疗机构。还是不经过你。如果有自付额、共付，收入在 <b>贫困线 400% 以下</b>的家庭，区域中心<b>可以</b>替你付（三岁以下是<b>必须</b>付）。</div>
+    <div class="pit"><b>大坑：</b>如果你的雇主是<b>"自保险"</b>（self-funded：公司自己出钱赔付，保险公司只帮忙管理），<b>加州的法律管不到它</b>——这是联邦法的优先权。加州提供保险的私营雇主里 <b>41.7% 是自保险</b>，千人以上的大公司是 <b>58.2%</b>。你可以现在就问 HR 一句："我们的医保是 fully insured 还是 self-funded？"</div>
+  </div>
+
+  <div class="st">
+    <p class="age">3 岁 · 同时进行</p>
+    <h3>学区评估，一份 IEP</h3>
+    <p>你给学区写一封信（<b>一定要书面，写日期</b>）："我要求对我孩子做特殊教育评估。"时钟从这里开始：</p>
+    <p><b>15 个自然日内</b>学区必须给你一份评估方案让你签。你有 15 天决定。<b>从你签字那天起 60 个自然日内</b>，学区必须完成评估并开 IEP 会议。（学校假期超过 5 天的部分不算。）</p>
+    <p><b>IEP</b> = Individualized Education Program，个别化教育计划。学区那份书面文件，写明：孩子现在的水平、这一年的目标、<b>学校提供哪些服务、每周几次每次多久</b>、在什么环境上课、课堂上有哪些调整。<b>有法律约束力</b>。你是 IEP 团队的法定成员。每年至少复审一次，每三年重新评估一次。</p>
+    <p>注意：现在小满<b>同时有两份计划</b>——区域中心的（管家里和社区），学区的 IEP（<b>只管学校里</b>）。两份来自两个机构，互不知道对方。这是正常的。</p>
+    <div class="money-note"><b>钱：</b>学区付给<b>学校自己的</b>语言治疗师、职能治疗师、助教。不经过你，也不经过区域中心。</div>
+    <div class="pit"><b>坑一：</b>60 天是从<b>你签字</b>那天算，不是从你提要求那天。你拖着不签，时钟不走。<b>坑二：</b><b>没写进 IEP 的，学区就不欠你。</b>会上老师口头说"我们会多照顾他"，没写进去等于零。<b>坑三：</b>学区只管"上学需要的"。放学后、周末、生活技能，它可以合法地说不归它。</div>
+  </div>
+
+  <div class="st bad">
+    <p class="age">3 岁 4 个月 · 有人说了"不"</p>
+    <h3>申诉：三条路，三个日期</h3>
+    <span class="who">DDS 州发育服务部</span>
+    <span class="who">OCRA 客户权益倡导办公室</span>
+    <span class="who">DRC 加州残障权利组织</span>
+    <span class="who">DMHC 管理式医疗部</span>
+    <p>说"不"的是谁，决定你走哪条路：</p>
+    <p><b>区域中心说不</b>（比如拒绝资格、砍服务）→ 你会收到一份 Notice of Action（处分通知）。<b>60 天内</b>可以提申诉，申诉交到 <b>DDS</b>。但如果你想<b>在申诉期间保住现有服务不被停</b>，必须<b>30 天内、且在处分生效之前</b>提交。<b>第 35 天交：申诉保住了，服务先停了。</b>数据说申诉是值得的——资格类申诉约 <b>53%</b> 最后家庭拿到了被拒的东西。</p>
+    <p><b>保险说不</b> → 先走保险内部申诉；不行就向 <b>DMHC</b> 申请 <b>Independent Medical Review（独立医学审查）</b>——免费，外部医生裁决，对保险公司有约束力。2024 年约 5,200 件，<b>51% 被推翻，另有 22% 保险公司在审查开始前自己撤回</b>，也就是约四分之三的家庭拿到了服务。</p>
+    <p><b>学区说不</b> → 走 IDEA 的程序：调解、投诉到州教育厅、或正式听证（due process）。</p>
+    <p>三条路上都有免费的帮手：<b>OCRA</b>（每个区域中心配一位客户权益倡导人，免费，法律上独立于区域中心）、<b>DRC</b>（加州的残障权利法律组织，免费）。</p>
+    <div class="pit"><b>坑一：</b>各区域中心的人均申诉率<b>相差 19 倍</b>——不是有理由申诉的人差 19 倍，是<b>知道自己能申诉的人</b>差 19 倍。<b>坑二：</b>OCRA 和 DRC 自己说了：案子接不过来，大多数家庭拿到的是<b>建议</b>不是代理。<b>坑三：</b>DMHC 只管它监管的保险；另一部分保险归 CDI（保险局）管，<b>而且没有任何公开的方法能查你的保险归谁管</b>——你是交错了才知道交错了。</div>
+  </div>
+
+  <div class="st">
+    <p class="age">3 岁 6 个月 · 家里撑不住了</p>
+    <h3>县政府出场：唯一一笔付给你的钱</h3>
+    <span class="who">县社会服务 County / IHSS</span>
+    <p>小满需要有人 24 小时看着才安全——会跑出门、不知道危险。加州有个县级项目叫 <b>IHSS</b>（In-Home Supportive Services，居家支持服务），里面有一项叫 <b>Protective Supervision（保护性监护）</b>：县政府<b>付钱给你</b>，为你本来就在花的看护小时数付工资，严重残障的最高 <b>每月 283 小时</b>。家长本人可以是领工资的那个人。</p>
+    <p>你去县社会服务部门申请，一定要<b>点名说 "Protective Supervision"</b>。</p>
+    <div class="money-note"><b>钱：</b>县 → <b>直接付给你</b>。这是整张图上唯一一条箭头指向家长的钱。</div>
+    <div class="pit"><b>坑：</b>县政府按规定<b>必须在评估时主动告诉你</b>有这个项目。几乎没有家庭被告知。被拒了可以申诉：90 天内，申诉期间照发，<b>输了也不算多领、不用退</b>——最后这句几乎没人知道。</div>
+  </div>
+
+  <div class="st bad">
+    <p class="age">4 岁 · 计划上写了，没发生</p>
+    <h3>没有人负责这一格</h3>
+    <p>小满的区域中心计划上写着"每周 10 小时"，但机构一直排不出人，三个月只做了 6 次。你打给协调员，他说在跟进。</p>
+    <p>法律上，这正是协调员的职责（§4647："监督执行、确认目标达成"）。实际上，他有 62 个孩子，而且他的老板就是决定给不给钱的那个机构。</p>
+    <p>州政府自己的数字：<b>3–21 岁的区域中心客户里，24.7% 去年一分钱的服务都没拿到</b>（66,618 人）；这个年龄段<b>批下来的钱只花掉了 56.6%</b>。也就是说，"计划上有、实际没有"是<b>四分之一的人的常态</b>，不是你运气差。</p>
+    <p>更关键的是：<b>区域中心的所有考核指标里，没有一个是"服务真的到了孩子那里"</b>。它们数的是：识别了多少孩子、计划写没写、雇了几个双语员工、多少员工受了训。</p>
+    <div class="pit"><b>坑：</b>你申诉赢了，得到一纸裁决——裁决交回给<b>当初没给你服务的同一个机构</b>。之后有没有真的发生，<b>没有任何人回头查</b>。只有你自己在日历上记个日期，自己查。</div>
+  </div>
+
+  <div class="st">
+    <p class="age">22 岁</p>
+    <h3>悬崖</h3>
+    <p>学区的义务到此为止。成人服务是酌情的、按预算配给的。全国数据：自闭症青年 <b>26% 在二十出头完全没有任何服务</b>；<b>58%</b> 高中后有过带薪工作（学习障碍是 92%）；<b>37%</b> 既没工作也没继续上学。加州 80% 的自闭症服务对象在 22 岁以下——<b>悬崖不是系统的边缘，是系统的形状</b>。</p>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<p class="part-n">第三部分</p>
+<h2>每一方的档案卡</h2>
+<p class="lead">现在你已经见过他们了。这里每一方一张卡，同一个格式，方便对照。</p>
+
+<div class="card">
+  <div class="card-head">
+    <h3>区域中心</h3>
+    <p class="en">Regional Center · 全州 21 个</p>
+    <p class="one">替州政府买服务的非营利机构。你家住哪决定归哪个。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>州财政，经 DDS 拨款。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>一个电话。三岁后：保险的书面拒绝信。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>评估；一份计划（三岁前叫 IFSP，三岁后叫 IPP）；一个个案协调员；三岁前直接付钱给治疗机构。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd>45 天内评估并开会；两岁九个月前通知学区；<b>确保并监督计划落实</b>（§4647）；每年公布按族裔、语言的支出数据并开公开会议（§4519.5）。</dd></div>
+    <div class="kv"><dt>它不做</dt><dd>三岁后不先付钱；不给学校里的服务；不替你去跟保险沟通。</dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>三岁那天角色翻转，没人提前说。考核里没有任何一项是"服务真的到了"。协调员 1 个人 62 个孩子。</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>个案协调员</h3>
+    <p class="en">Service Coordinator / Case Manager</p>
+    <p class="one">区域中心分给你的那个具体的人。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>是区域中心的员工。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>你孩子的一切情况；你的电话。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>写计划、安排机构、回答问题。理论上还有：追踪服务有没有发生。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd>"实施、监督、跟进"每一份计划（§4647(b)）。</dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>平均 62 个孩子，最多 79。要他去追的，常常是他自己老板的决定。没有任何公开数据说这个岗位的流失率是多少——审计署要 DDS 修人员配置公式，<b>四年了还是"待办"</b>。</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>州发育服务部</h3>
+    <p class="en">DDS · Department of Developmental Services</p>
+    <p class="one">管 21 个区域中心的省级部门。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>州预算。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>申诉（对区域中心不满时）。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>裁决。以及全州的数据报告。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd>拨款、定规则、审计区域中心、听申诉。</dd></div>
+    <div class="kv"><dt>它不做</dt><dd><b>从不直接服务任何一个孩子。</b>那里没人知道小满的名字。</dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>州审计署要求它"2023 年 1 月前建立衡量服务可及性的标准"，<b>2026 年 6 月仍是 Pending</b>。它自己承认了：它没法衡量人到底有没有拿到服务。</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>健康保险</h3>
+    <p class="en">Health Plan · 商业保险 / Covered California / Medi-Cal</p>
+    <p class="one">三岁以后的主要付款人。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>你或雇主的保费。Medi-Cal 是州和联邦的钱。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>（通过治疗机构）一份授权申请。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>批准；或者一封拒绝信——<b>你要拿着它去区域中心</b>。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd>覆盖自闭症行为治疗（SB 946）；<b>非紧急精神健康门诊 10 个工作日内安排</b>，达标率低于 70% 强制整改，可罚款——2023 年 Kaiser 被罚 5000 万加 1.5 亿投入。</dd></div>
+    <div class="kv"><dt>它不做</dt><dd>不管学校；不跟区域中心通信；<b>自保险的雇主计划不受加州法律约束</b>。</dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>说不的时候，去申请 <b>Independent Medical Review</b>——免费，约四分之三的人最后拿到了。但要先知道你的保险归 DMHC 还是 CDI 管，而<b>没有公开的方法能查</b>。</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>学区</h3>
+    <p class="en">School District · 三岁到二十二岁</p>
+    <p class="one">负责"上学需要的"那部分。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>学区自己的预算（州教育经费 + 本地）。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>一封<b>写了日期的书面</b>评估请求；然后是你在评估方案上的签字。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>评估；一份 <b>IEP</b>；学校自己的治疗师和助教。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd>15 天内给评估方案；签字后 60 天内开 IEP 会；执行 IEP 上写的每一项；每年复审。</dd></div>
+    <div class="kv"><dt>它不做</dt><dd>放学后、周末、家里、生活技能——不是"上学需要"的，它可以说不。</dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>60 天从<b>你签字</b>算。<b>没写进 IEP 的它不欠你</b>。它缺语言治疗师缺到什么程度——<b>加州没有任何部门统计</b>。</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>治疗机构 / 治疗师</h3>
+    <p class="en">Provider · 行为分析师 BCBA、行为技术员 RBT、语言治疗师 SLP、职能治疗师 OT…</p>
+    <p class="one">唯一真正给孩子做治疗的一方。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>区域中心、保险、或学区——<b>谁批了谁付，直接付，不经过你</b>。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>时间和配合。你不付钱。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>治疗本身。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd>交付被批准、被付钱的那些小时。</dd></div>
+    <div class="kv"><dt>它不做</dt><dd>不决定谁付钱；不替你去要钱；不做没人付钱的部分。</dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>"我们排不出人"是全行业常态，而且<b>没有任何公开数据说谁有空位</b>。三岁时因为付款方换了，很多机构就此失去这个孩子——我们数过：三岁前和三岁后的供应商名单，重叠只有 4 家。</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>家庭资源中心</h3>
+    <p class="en">Family Resource Center (FRC) · 全州 47 个</p>
+    <p class="one">由残障孩子的家长运营的免费帮助。整个系统里最好用、最少人知道的一个。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>直接跟 DDS 签约（不经过区域中心）。用的是联邦 0–3 岁项目扣完法定开支的<b>余款</b>——法律说"可以拨"，不是"必须拨"。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd><b>什么都不用。</b>不查资格、不需要诊断。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>用你的语言把这一切讲明白；陪你开会；告诉你别的家长怎么走过来的。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd><b>没有。</b>没有指标、没有考核、没有评估要求。它们是自愿在帮。</dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>服务对象是 <b>36 个月以下</b>。孩子三岁那天它到期——恰好是你最难的那个月。两岁半的时候问它："之后我找谁？"</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>县社会服务 · IHSS</h3>
+    <p class="en">County · In-Home Supportive Services · Protective Supervision</p>
+    <p class="one">唯一一个把钱付给家长本人的机构。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>县 + 州 + 联邦 Medi-Cal。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>一份申请，而且要<b>点名说 "Protective Supervision"</b>。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>按小时付给你工资，为你本来就在做的看护。最高每月 283 小时。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd><b>评估时必须主动告诉你这个项目存在。</b></dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>几乎没人被告知。拒了就申诉：90 天内，期间照发，<b>输了也不用退</b>。</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>免费法律帮助</h3>
+    <p class="en">OCRA · Disability Rights California (DRC)</p>
+    <p class="one">你被拒的时候能找的人。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>OCRA 由 DDS 出资（注意：DDS 也是它要去争的那些区域中心的主管部门）；DRC 是联邦资助的独立机构。</dd></div>
+    <div class="kv"><dt>你给它</dt><dd>那封说"不"的信。</dd></div>
+    <div class="kv"><dt>它给你</dt><dd>免费法律建议；偶尔代理你申诉。</dd></div>
+    <div class="kv"><dt>法律要它</dt><dd>存在、独立。<b>不欠你个人任何东西。</b></dd></div>
+    <div class="kv pitrow"><dt>坑</dt><dd>它们自己说的：案子接不过来。大多数家庭拿到建议，不是代理。<b>但建议往往就是你缺的那一块，所以照样打。</b></dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>你</h3>
+    <p class="en">The parent</p>
+    <p class="one">唯一一条从头连到尾的线。</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>钱从哪来</dt><dd>不经过你。你既不付，也不收——除了县那一条。</dd></div>
+    <div class="kv"><dt>你给</dt><dd>第一个电话；每一份签字；<b>把保险的拒绝信搬到区域中心</b>；把每个机构的"不"搬去申诉。</dd></div>
+    <div class="kv"><dt>你得到</dt><dd>两份互不知情的计划；没有一个人对"服务真的发生了吗"负责。</dd></div>
+    <div class="kv"><dt>法律要你</dt><dd><b>什么都没有。</b></dd></div>
+    <div class="kv pitrow"><dt>实际上</dt><dd><b>全部。</b>整个系统里唯一负责"把这些连起来"的，是你。</dd></div>
+  </dl>
+</div>
+
+<!-- ============================================================ -->
+<p class="part-n">第四部分</p>
+<h2>所有缩写</h2>
+<p class="lead">按你会遇到的顺序。</p>
+
+<div class="gl">
+  <div class="g"><span class="t">Early Start</span><span class="d">加州 0–3 岁早期干预项目。区域中心执行。免费。任何人可转介。</span></div>
+  <div class="g"><span class="t">RC</span><span class="d"><b>Regional Center</b> 区域中心。21 个，非营利，替州政府买服务。</span></div>
+  <div class="g"><span class="t">DDS</span><span class="d"><b>Department of Developmental Services</b> 州发育服务部。管 21 个区域中心。不直接服务个人。</span></div>
+  <div class="g"><span class="t">IFSP</span><span class="d"><b>Individualized Family Service Plan</b> 个别化家庭服务计划。三岁前，区域中心写的那份。</span></div>
+  <div class="g"><span class="t">IPP</span><span class="d"><b>Individual Program Plan</b> 个人项目计划。三岁后，区域中心写的那份。</span></div>
+  <div class="g"><span class="t">IEP</span><span class="d"><b>Individualized Education Program</b> 个别化教育计划。学区写的，只管学校里。有法律约束力。</span></div>
+  <div class="g"><span class="t">IDEA</span><span class="d"><b>Individuals with Disabilities Education Act</b> 联邦特殊教育法。学区的义务来自这里。</span></div>
+  <div class="g"><span class="t">Lanterman</span><span class="d">加州的发育障碍服务法。区域中心的义务来自这里。</span></div>
+  <div class="g"><span class="t">SB 946</span><span class="d">加州法案：保险必须覆盖自闭症行为治疗。管不到自保险雇主计划。</span></div>
+  <div class="g"><span class="t">ABA</span><span class="d"><b>Applied Behavior Analysis</b> 应用行为分析。最常见的自闭症干预方法。</span></div>
+  <div class="g"><span class="t">BCBA</span><span class="d"><b>Board Certified Behavior Analyst</b> 有证的行为分析师。带团队、写方案的那个人。</span></div>
+  <div class="g"><span class="t">RBT</span><span class="d"><b>Registered Behavior Technician</b> 行为技术员。在 BCBA 指导下每天上门做干预的人。</span></div>
+  <div class="g"><span class="t">SLP / OT</span><span class="d">语言治疗师 / 职能治疗师。学校里最常见的两种相关服务。</span></div>
+  <div class="g"><span class="t">Medi-Cal</span><span class="d">加州的医疗补助（Medicaid）。低收入家庭的保险。自闭症行为治疗通过它的管理式医疗计划提供。</span></div>
+  <div class="g"><span class="t">DMHC</span><span class="d"><b>Department of Managed Health Care</b> 管理式医疗部。管大部分保险公司，也是免费帮你做独立医学审查的部门。</span></div>
+  <div class="g"><span class="t">IMR</span><span class="d"><b>Independent Medical Review</b> 独立医学审查。保险拒付后，外部医生免费重审。约四分之三的人拿到了服务。</span></div>
+  <div class="g"><span class="t">CDI</span><span class="d"><b>California Department of Insurance</b> 加州保险局。管另一部分保险。你的保险归 DMHC 还是 CDI，没有公开的查法。</span></div>
+  <div class="g"><span class="t">NOA</span><span class="d"><b>Notice of Action</b> 处分通知。区域中心拒绝或砍服务时给你的正式信。申诉的日期从收到它开始算。</span></div>
+  <div class="g"><span class="t">OCRA</span><span class="d"><b>Office of Clients' Rights Advocacy</b> 客户权益倡导办公室。每个区域中心配一位，免费，法律上独立。</span></div>
+  <div class="g"><span class="t">DRC</span><span class="d"><b>Disability Rights California</b> 加州残障权利组织。免费法律帮助。</span></div>
+  <div class="g"><span class="t">FRC</span><span class="d"><b>Family Resource Center</b> 家庭资源中心。家长运营，免费，0–3 岁。</span></div>
+  <div class="g"><span class="t">IHSS</span><span class="d"><b>In-Home Supportive Services</b> 居家支持服务。县级项目，可以付钱给家长。</span></div>
+  <div class="g"><span class="t">Protective Supervision</span><span class="d">IHSS 里的一项：为 24 小时看护付工资。申请时要点名说这个词。</span></div>
+  <div class="g"><span class="t">Vendor</span><span class="d">供应商。跟区域中心签了约、能收区域中心钱的治疗机构。区域中心的"vendor list"就是它能派的机构名单。</span></div>
+</div>
+
+<!-- ============================================================ -->
+
+<p class="part-n">第五部分</p>
+<h2>合上文档之后，记住这五句</h2>
+
+<div class="sum">
+  <p>一、钱来自三个口袋——州政府、保险、学区——三部法律，互不隶属，没有裁判。</p>
+  <p>二、三岁那天钱换口袋：区域中心退到最后，保险和学区登场，帮你的人到期。没人提前说。</p>
+  <p>三、机构之间没有线。保险的拒绝信是你搬去区域中心的。你是邮差。</p>
+  <p>四、钱不经过你——你不付、不收——除了县付你的那一笔，而那一笔几乎没人告诉你。</p>
+  <p>五、没有任何人的职责是事后确认"治疗真的发生了"。四分之一的孩子计划上有、实际没有。这不是你做错了。</p>
+</div>
+
+<footer>
+  <p>依据：加州福利与机构法典 §4647、§4640.6、§4659、§4659.1、§4731、§4519.5；政府法典 §95024；健康与安全法典 §1374.73、§1367.03；教育法典 §56043、§56321、§56344；17 CCR §52112；34 CFR §303.209；29 U.S.C. §1144。DDS 2024–25 年度服务购买报告、2025 年 Early Start 指令、2021–22 申诉报告、2026 年 4 月自闭症报告；美国教育部 2025 年 6 月 Part C 评定；DMHC 2023–2024 年度报告；AHRQ MEPS-IC 2020；加州审计署 2021-107、2021-120。同行评审研究在正文中注明。</p>
+  <p>两点保留：三岁前后供应商"重叠只有 4 家"来自可读取的 16 个区域中心的名单，且只覆盖区域中心这一条资金线，不包括保险和学区。没有任何加州官方文件明确说 ABA 属于 §4659 里的"医疗服务"——实际的门槛是由 (d)(1) 和 (c) 两款拼出来的。</p>
+</footer>
+
+</div>
+</body>
+</html>

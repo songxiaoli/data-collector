@@ -36,6 +36,7 @@ PAGES = {
     "who-does-what":    ("who-does-what.html",  860, ("/autism/guides", "All guides")),
     "age-three":        ("rc-brief.html",       820, ("/autism/guides", "All guides")),
     "system-gaps":      ("system-seams.html",  1000, ("/autism/guides", "All guides")),
+    "zh":               ("primer-zh.html",      820, ("/autism/guides", "所有指南")),
     # frc-call-sheet.html is deliberately not here. It is our own outreach list —
     # who to ring at six Family Resource Centers and what to open with — not
     # something a family is looking for. It stays a private artifact.
@@ -52,8 +53,16 @@ ARTIFACT_LINKS = {
 
 SPLIT = re.compile(r'^<div class="(?:wrap|sheet)">', re.M)
 
+# Pages whose source doubles as an internal document. Everything between
+# <!-- internal:start --> and <!-- internal:end --> is our own reasoning —
+# what we would build, in what order — and is stripped for the site. The
+# claude.ai artifact keeps it. One source, two audiences.
+INTERNAL = re.compile(r'\s*<!-- internal:start -->.*?<!-- internal:end -->', re.S)
+STRIP_INTERNAL = {"zh"}
+LANG = {"zh": "zh-CN"}
+
 HEAD = """<!doctype html>
-<html lang="en">
+<html lang="{lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -101,6 +110,9 @@ META = {
     "age-three": ("The Age Three Handoff",
                   "What happens to therapy funding when a California child turns three, counted "
                   "from the vendor lists the regional centres publish."),
+    "zh": ("谁管什么，谁付钱",
+           "从零开始，跟着一个孩子走一遍加州的自闭症服务系统：每个机构在它出场时才介绍，"
+           "每一步说清谁付钱、谁负责、坑在哪。中文。"),
     "system-gaps": ("The Handoffs Nobody Owns",
                     "Where California's autism system leaks: what the law assigns at each handoff, "
                     "what the state's own numbers show happens instead, and what would close it."),
@@ -198,13 +210,21 @@ def build(slug, src_name, width, back):
     if "window.claude" in raw:
         sys.exit(f"{slug}: window.claude survived the rewrite")
 
+    if slug in STRIP_INTERNAL:
+        raw, n = INTERNAL.subn("", raw)
+        if n == 0:
+            sys.exit(f"{slug}: expected internal blocks to strip, found none")
+        if "internal:" in raw:
+            sys.exit(f"{slug}: an internal marker survived")
+
     m = SPLIT.search(raw)
     if not m:
         sys.exit(f"{slug}: no top-level container found")
     head, body = raw[:m.start()], raw[m.start():]
 
     href, label = back
-    doc = (HEAD.format(desc=desc, title=title, canon="" if slug == "index" else "/" + slug, w=width)
+    doc = (HEAD.format(desc=desc, title=title, canon="" if slug == "index" else "/" + slug, w=width,
+                       lang=LANG.get(slug, "en"))
            + head.rstrip() + "\n</head>\n<body>\n"
            + BAR.format(href=href, label=label)
            + body.rstrip() + "\n</body>\n</html>\n")

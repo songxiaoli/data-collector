@@ -147,6 +147,30 @@ a:hover{color:var(--primary-h)}
 .rc-step p{margin:4px 0 0;font-size:14px;color:var(--ink-2)}
 .rc-caveat{margin-top:16px;font-size:13.5px;color:var(--note-fg);border-left:2px solid var(--wash-line);padding-left:12px}
 
+
+/* ── SERVICES NEAR YOU ────────────────────────────────────── */
+.prov-card .res-side{ align-items:flex-end; gap:8px }
+.prov-tel{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.9rem; font-weight:600; letter-spacing:.01em;
+  color:var(--ink); text-decoration:none; white-space:nowrap;
+  border:1px solid var(--border); border-radius:var(--r-sm); padding:7px 10px;
+  background:var(--wash);
+}
+.prov-tel:hover{ border-color:var(--primary); color:var(--primary) }
+/* Stated plainly rather than styled as a warning. It is the honest state of
+   every row here, not a flaw in particular ones. */
+.prov-unknown{
+  font-size:.7rem; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--note-fg); white-space:nowrap;
+}
+.prov-prov{
+  margin:8px 0 0; font-size:.82rem; line-height:1.5; color:var(--note-fg);
+}
+.prov-more{
+  margin:18px 0 0; font-size:.85rem; color:var(--note-fg); text-align:center;
+}
+
 /* ── RESULT TABS ─────────────────────────────────────────── */
 .results{margin-top:48px}
 .results-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -402,6 +426,11 @@ const TABS = [
   { id:'services',  label:'Services',            types:['organization','provider'] },
   { id:'courses',   label:'Courses',             types:['course','event'] },
   { id:'community', label:'Community',           types:['community'] },
+  // Services near you comes from a different table and a different kind of
+  // evidence: not "we read this and recommend it" but "the state pays this
+  // organisation to do autism work". It is last because it answers a later
+  // question than the rest of the library.
+  { id:'providers',  label:'Services near you',  types:[], source:'providers' },
 ];
 
 const STANCE_LABEL = {
@@ -581,7 +610,9 @@ const S = {
   query: '',
   county: null,
   tab: 'books',
-  facets: { age_band:new Set(), access:new Set(), stance:new Set() },
+  facets: { age_band:new Set(), access:new Set(), stance:new Set(), service:new Set() },
+  providers: null,        // fetched the first time the tab is opened
+  provErr: false,
 };
 
 // RLS already hides anything held back, so no publish_status filter here.
@@ -676,12 +707,18 @@ function renderChips(){
 function renderTabs(list){
   const el = document.getElementById('tabs');
   el.innerHTML = TABS.map(t => {
-    const n = inTab(list, t.id).length;
+    const n = t.source === 'providers'
+      ? (S.providers ? filteredProviders().length : '')
+      : inTab(list, t.id).length;
     return `<button class="tab${S.tab===t.id?' active':''}" data-tab="${t.id}" role="tab"
               aria-selected="${S.tab===t.id}">${esc(t.label)}<span class="tab-count">${n}</span></button>`;
   }).join('');
   el.querySelectorAll('.tab').forEach(b =>
-    b.addEventListener('click', () => { S.tab = b.dataset.tab; renderAll(); }));
+    b.addEventListener('click', async () => {
+      S.tab = b.dataset.tab;
+      renderAll();
+      if (S.tab === 'providers' && !S.providers && !S.provErr) await loadProviders();
+    }));
 }
 
 function facetBlock(key, label, order, labels, pool){
@@ -809,12 +846,199 @@ function renderActive(){
 
 function renderAll(){
   const list = scoped();
-  document.getElementById('resultsTitle').textContent =
-    (S.stage || S.needs.size || S.query.trim()) ? `${list.length} matches` : 'Start here';
+  const rt = document.getElementById('resultsTitle');
+  if (S.tab === 'providers'){
+    // The library's match count would be meaningless here — these come from a
+    // different table and are not filtered by stage or need.
+    rt.textContent = S.providers
+      ? `${filteredProviders().length} funded services`
+      : 'Services near you';
+  } else {
+    rt.textContent =
+      (S.stage || S.needs.size || S.query.trim()) ? `${list.length} matches` : 'Start here';
+  }
   renderActive();
   renderTabs(list);
-  renderFacets();
-  renderList(inTab(list, S.tab));
+  if (S.tab === 'providers'){
+    const fx = document.getElementById('facets');
+    fx.innerHTML = providerFacetsHTML();
+    const toggle = d => {
+      const v = d.dataset.val;
+      S.facets.service.has(v) ? S.facets.service.delete(v) : S.facets.service.add(v);
+      renderAll();
+    };
+    fx.querySelectorAll('.facet-opt').forEach(d => {
+      d.addEventListener('click', () => toggle(d));
+      d.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(d); }
+      });
+    });
+    renderProviders();
+  } else {
+    renderFacets();
+    renderList(inTab(list, S.tab));
+  }
+}
+
+
+// ── SERVICES NEAR YOU ─────────────────────────────────────
+// A different table and a different standard of evidence from the library
+// above. Every row here is an organisation a California regional centre pays
+// under a service code the state defines as developmental-disability work —
+// a spending record, not a recommendation and not a self-description.
+//
+// Only rows carrying that vendorization are served. The provider table also
+// holds tens of thousands of licensed clinicians whose taxonomy code merely
+// makes them plausible; publishing those would rebuild the thing that already
+// fails families, a directory of people who do not answer the phone.
+const PROV_COLS = 'name,city,zip,phone,disciplines,services,rc_names,relevance_tier,npi,sources';
+
+async function loadProviders(){
+  const el = document.getElementById('resList');
+  el.innerHTML = Array.from({length:4}, () => '<div class="skel"></div>').join('');
+  try {
+    // PostgREST caps a single response server-side — asking for 6,000 returns
+    // 2,000 and no error, which is the kind of silent truncation that would
+    // quietly hide half of California. Page until a short page comes back.
+    const PAGE = 1000, all = [];
+    for (let off = 0; off < 20000; off += PAGE){
+      const r = await fetch(
+        `${SB}/rest/v1/autism_providers?select=${PROV_COLS}&rc_vendor=is.true` +
+        `&order=name&limit=${PAGE}&offset=${off}`, { headers:H });
+      if (!r.ok) throw new Error(`Supabase ${r.status}`);
+      const batch = await r.json();
+      all.push(...batch);
+      if (batch.length < PAGE) break;
+    }
+    S.providers = all;
+  } catch (e) {
+    S.provErr = true;
+    el.innerHTML = `<div class="empty-state"><h3>Could not load services</h3>
+      <p>The provider database did not respond. Refresh in a moment.</p></div>`;
+    return;
+  }
+  renderAll();
+}
+
+// County to regional centre, using the same RC table the page already shows.
+// Los Angeles is deliberately absent from that table because DDS splits it
+// across seven centres by ZIP and health district, so a county pick there
+// cannot resolve to one centre and the city match carries it instead.
+function centresForCounty(county){
+  if (!county) return [];
+  return RC.filter(r => r.counties.includes(county)).map(r => r.name);
+}
+
+function filteredProviders(){
+  let list = S.providers || [];
+  const centres = centresForCounty(S.county);
+  const q = S.query.trim().toLowerCase();
+
+  if (centres.length){
+    list = list.filter(p => (p.rc_names||[]).some(n => centres.includes(n)));
+  }
+  if (q){
+    // Postcode and city are what these files actually carry, so a search that
+    // looks like a postcode is treated as one rather than as free text.
+    const isZip = /^\d{3,5}$/.test(q);
+    list = list.filter(p => isZip
+      ? (p.zip||'').startsWith(q)
+      : ((p.name||'').toLowerCase().includes(q) ||
+         (p.city||'').toLowerCase().includes(q) ||
+         (p.services||[]).some(sv => sv.toLowerCase().includes(q))));
+  }
+  const svc = S.facets.service;
+  if (svc && svc.size){
+    list = list.filter(p => (p.services||[]).some(sv => svc.has(sv)));
+  }
+  return list;
+}
+
+function providerFacetsHTML(){
+  if (!S.providers) return '';
+  const centres = centresForCounty(S.county);
+  const pool = centres.length
+    ? S.providers.filter(p => (p.rc_names||[]).some(n => centres.includes(n)))
+    : S.providers;
+  const counts = {};
+  pool.forEach(p => (p.services||[]).forEach(sv => counts[sv] = (counts[sv]||0)+1));
+  const order = Object.keys(counts).sort((a,b) => counts[b]-counts[a]).slice(0, 12);
+  const opts = order.map(v => {
+    const on = S.facets.service.has(v);
+    return `<div class="facet-opt${on?' on':''}" data-facet="service" data-val="${esc(v)}"
+              role="checkbox" tabindex="0" aria-checked="${on}">
+        <span class="facet-box"></span><span>${esc(v)}</span>
+        <span class="facet-n">${counts[v]}</span></div>`;
+  }).join('');
+  return `<div class="facet"><div class="facet-label">What the state funds them for</div>${opts}</div>
+    <div class="legend">
+      <div class="legend-title">${INF} Where this comes from</div>
+      <p>Each organisation below appears on a regional centre's published vendor list under
+         a service code the state defines. That tells you what they are funded to do — it does
+         not tell you whether they have an opening, take your insurance, or are the right fit.
+         Those three answers only exist on the phone.</p>
+    </div>`;
+}
+
+function provSource(p){
+  const s = (p.sources||[]).find(x => x && x.field === 'autism_relevance');
+  return s ? String(s.source) : null;
+}
+
+function providerCardHTML(p){
+  // Sources print the number every way there is; a caller wants one shape.
+  const tel = (p.phone||'').replace(/\D/g,'').replace(/^1(?=\d{10}$)/,'');
+  const shown = tel.length === 10
+    ? `(${tel.slice(0,3)}) ${tel.slice(3,6)}-${tel.slice(6)}` : p.phone;
+  const phone = tel.length === 10
+    ? `<a class="prov-tel" href="tel:${tel}">${esc(shown)}</a>` : '';
+  const where = [p.city, p.zip].filter(Boolean).join(' ');
+  const svc = (p.services||[]).slice(0,4)
+    .map(v => `<span class="tag">${esc(v)}</span>`).join('');
+  const centre = (p.rc_names||[])[0];
+  const src = provSource(p);
+  return `
+    <article class="res-card prov-card">
+      <div class="res-main">
+        ${centre ? `<div class="res-src">${esc(centre)}</div>` : ''}
+        <h3 class="res-title">${esc(p.name)}</h3>
+        ${where ? `<div class="res-by">${esc(where)}</div>` : ''}
+        ${svc ? `<div class="res-tags">${svc}</div>` : ''}
+        ${src ? `<p class="prov-prov">Listed because it appears on a ${esc(src)}.</p>` : ''}
+      </div>
+      <div class="res-side">
+        ${phone}
+        <span class="prov-unknown">Openings not confirmed</span>
+      </div>
+    </article>`;
+}
+
+function renderProviders(){
+  const el = document.getElementById('resList');
+  if (!S.providers){ return; }          // loadProviders paints its own state
+  const list = filteredProviders();
+  if (!list.length){
+    el.innerHTML = `<div class="empty-state">
+        <h3>No funded services listed there yet</h3>
+        <p>Fifteen of California's twenty-one regional centres publish a vendor list we can read.
+           If yours is one of the six that does not, this will be empty even where services exist.
+           <a href="${DDS_LOOKUP}" target="_blank" rel="noopener">Find your regional centre</a>
+           and call them directly.</p>
+      </div>`;
+    return;
+  }
+  // Early Start and the behaviour codes first: those are the services a family
+  // is usually looking for when they arrive here. Then alphabetical, so the
+  // order is explainable rather than mysterious.
+  const KEY = /Early Start|Behavior|Infant Development|Specialized Therapeutic/i;
+  const rank = p => ((p.services||[]).some(v => KEY.test(v)) ? 0 : 1);
+  el.innerHTML = [...list]
+    .sort((a,b) => rank(a)-rank(b) || String(a.name).localeCompare(String(b.name)))
+    .slice(0,80).map(providerCardHTML).join('');
+  if (list.length > 80){
+    el.innerHTML += `<p class="prov-more">Showing 80 of ${list.length}. Narrow by county,
+      postcode or service to see the rest.</p>`;
+  }
 }
 
 // ── BOOT ──────────────────────────────────────────────────

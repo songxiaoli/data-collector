@@ -54,12 +54,13 @@ ARTIFACT_LINKS = {
 
 SPLIT = re.compile(r'^<div class="(?:wrap|sheet)">', re.M)
 
-# Pages whose source doubles as an internal document. Everything between
-# <!-- internal:start --> and <!-- internal:end --> is our own reasoning —
-# what we would build, in what order — and is stripped for the site. The
-# claude.ai artifact keeps it. One source, two audiences.
+# The two primers carry <!-- internal:start --> … <!-- internal:end --> markers
+# around the sections that say what we would build at each trap and in what
+# order. They were stripped for the site at first; the decision on 7 Sept 2026
+# was to publish the roadmap too, so nothing is stripped now. The markers stay
+# so that flipping back is a one-line change: put a slug in STRIP_INTERNAL.
 INTERNAL = re.compile(r'\s*<!-- internal:start -->.*?<!-- internal:end -->', re.S)
-STRIP_INTERNAL = {"zh", "three-pockets"}
+STRIP_INTERNAL = set()
 LANG = {"zh": "zh-CN"}
 
 HEAD = """<!doctype html>
@@ -221,6 +222,8 @@ def build(slug, src_name, width, back):
             sys.exit(f"{slug}: expected internal blocks to strip, found none")
         if "internal:" in raw:
             sys.exit(f"{slug}: an internal marker survived")
+    # the bare markers never belong in served HTML, stripped or not
+    raw = raw.replace("<!-- internal:start -->", "").replace("<!-- internal:end -->", "")
 
     m = SPLIT.search(raw)
     if not m:

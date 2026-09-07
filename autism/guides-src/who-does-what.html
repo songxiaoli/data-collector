@@ -27,70 +27,109 @@
 }
 *{box-sizing:border-box}
 body{background:var(--paper); color:var(--ink); margin:0;
-  font:400 16.5px/1.62 "Work Sans", system-ui, sans-serif; -webkit-font-smoothing:antialiased}
+  font:400 17px/1.65 "Work Sans", system-ui, sans-serif; -webkit-font-smoothing:antialiased}
 .wrap{max-width:860px; margin:0 auto; padding:38px 22px 80px}
+p{margin:0 0 16px}
+p:last-child{margin-bottom:0}
+@media (prefers-reduced-motion: reduce){*{animation:none!important; transition:none!important}}
 
 .kick{font:600 11px/1 "Work Sans",sans-serif; letter-spacing:.16em; text-transform:uppercase;
   color:var(--accent); margin:0 0 14px}
-h1{font:400 clamp(32px,6vw,48px)/1.06 Fraunces, Georgia, serif; margin:0 0 14px;
-  letter-spacing:-.02em; text-wrap:balance}
-.dek{margin:0; color:var(--ink-2); max-width:62ch; font-size:17px}
+h1{font:400 clamp(32px,6vw,48px)/1.06 Fraunces, Georgia, serif; margin:0 0 16px;
+  letter-spacing:-.015em; text-wrap:balance}
+.dek{margin:0; color:var(--ink-2); max-width:60ch; font-size:18px}
 
-section{margin-top:42px}
-h2{font:600 12px/1 "Work Sans",sans-serif; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--ink-3); margin:0 0 18px; padding-bottom:10px; border-bottom:1px solid var(--rule)}
+h2{font:600 12px/1 "Work Sans",sans-serif; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--ink-3); margin:52px 0 20px; padding-bottom:10px; border-bottom:1px solid var(--rule)}
+h3{font:400 24px/1.25 Fraunces, Georgia, serif; margin:0 0 10px}
+.col{max-width:64ch}
 
+/* the four roles */
+.roles{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(176px,1fr))}
+.role{background:var(--card); border:1px solid var(--rule); border-radius:5px; padding:20px 22px}
+.role .n{font:500 11px/1 "Roboto Mono",monospace; color:var(--accent); letter-spacing:.1em;
+  margin:0 0 12px}
+.role h3{font-size:20px; margin:0 0 12px}
+.role ul{margin:0; padding:0; list-style:none}
+.role li{font-size:15px; line-height:1.5; color:var(--ink-2); padding:5px 0;
+  border-top:1px solid var(--rule)}
+.role li:first-child{border-top:0}
+
+.rule{background:var(--accent-soft); border-radius:5px; padding:20px 24px; margin-top:16px;
+  max-width:64ch}
+.rule p{font:400 19px/1.5 Fraunces,Georgia,serif; color:var(--ink); margin:0}
+.rule p + p{margin-top:10px; font-size:17px}
+
+/* a party */
+.party{background:var(--card); border:1px solid var(--rule); border-radius:5px;
+  padding:24px 26px; margin-bottom:14px; max-width:64ch}
+.party h3{margin:0 0 4px}
+.party .sub{font:400 15px/1.5 "Work Sans",sans-serif; color:var(--ink-3); margin:0 0 16px}
+.when{display:grid; grid-template-columns:118px 1fr; gap:16px; padding:12px 0;
+  border-top:1px solid var(--rule); font-size:15.5px; line-height:1.55; color:var(--ink-2)}
+.when dt{font:600 11px/1.5 "Work Sans",sans-serif; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); margin:0; padding-top:2px}
+.when dd{margin:0}
+.when.hole dt{color:var(--warn)}
+.when.hole dd{color:var(--ink)}
+.when b{color:var(--ink); font-weight:600}
+@media (max-width:560px){ .when{grid-template-columns:1fr; gap:4px} }
+
+/* callouts */
+.flag{border-left:3px solid var(--warn); background:var(--warn-soft); border-radius:0 5px 5px 0;
+  padding:20px 24px; margin:18px 0 0; max-width:64ch}
+.flag .lbl{font:600 11px/1 "Work Sans",sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--warn); margin:0 0 10px}
+.flag p{font-size:16px; line-height:1.6; color:var(--ink); margin:0 0 10px}
+.flag p:last-child{margin:0}
+.flag b{font-weight:600}
+
+.good{border-left:3px solid var(--ok); background:var(--card); border-radius:0 5px 5px 0;
+  padding:20px 24px; margin:18px 0 0; max-width:64ch}
+.good .lbl{font:600 11px/1 "Work Sans",sans-serif; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ok); margin:0 0 10px}
+.good p{font-size:16px; line-height:1.6; color:var(--ink-2); margin:0}
+.good b{color:var(--ink); font-weight:600}
+
+/* figure */
 figure{margin:0; background:var(--card); border:1px solid var(--rule); border-radius:5px;
-  padding:22px 20px 16px; overflow-x:auto}
-figure svg{max-width:100%; height:auto; display:block; margin:0 auto; color:var(--ink-2)}
-figcaption{margin-top:16px; font-size:15px; color:var(--ink-2); line-height:1.55}
+  padding:24px 20px 18px; overflow-x:auto}
+figure svg{max-width:100%; height:auto; display:block; margin:0 auto; color:var(--ink-2);
+  min-width:620px}
+figcaption{margin-top:16px; font-size:15px; color:var(--ink-2); line-height:1.55; max-width:64ch}
 figcaption b{color:var(--ink); font-weight:600}
 
-/* party picker */
-.tabs{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px}
-.tabs button{font:500 13.5px/1 "Work Sans",sans-serif; cursor:pointer; padding:10px 13px;
-  background:var(--card); color:var(--ink-2); border:1px solid var(--rule-2); border-radius:3px}
-.tabs button:hover{border-color:var(--accent); color:var(--accent)}
-.tabs button[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+/* summary */
+.sum{max-width:64ch}
+.sum .line{background:var(--card); border:1px solid var(--rule); border-radius:5px;
+  padding:20px 24px; margin-bottom:12px}
+.sum .when-lbl{font:500 12px/1 "Roboto Mono",monospace; color:var(--accent); margin:0 0 10px}
+.sum p{margin:0; font-size:16.5px; line-height:1.6; color:var(--ink-2)}
+.sum b{color:var(--ink); font-weight:600}
 
-.party{background:var(--card); border:1px solid var(--rule); border-radius:5px; overflow:hidden}
-.party-top{padding:22px 24px 18px; border-bottom:1px solid var(--rule)}
-.party-top h3{font:400 26px/1.2 Fraunces,Georgia,serif; margin:0 0 4px}
-.party-top .abbr{font:500 12px/1 "Roboto Mono",monospace; color:var(--ink-3)}
-.party-top p{margin:12px 0 0; color:var(--ink-2)}
-.rows{display:grid}
-.row{display:grid; grid-template-columns:150px 1fr; gap:18px;
-  padding:15px 24px; border-bottom:1px solid var(--rule)}
-.row:last-child{border-bottom:0}
-.row dt{font:600 11px/1.5 "Work Sans",sans-serif; letter-spacing:.1em;
-  text-transform:uppercase; color:var(--ink-3)}
-.row dd{margin:0; color:var(--ink-2); font-size:15.5px}
-.row dd b{color:var(--ink); font-weight:600}
-.row.not dt{color:var(--warn)}
-.row.not{background:var(--warn-soft)}
-.row.diverge dt{color:var(--warn)}
-
-/* seams */
-.seam{background:var(--card); border:1px solid var(--rule); border-radius:5px;
-  padding:20px 24px; margin-bottom:14px}
-.seam h3{font:400 20px/1.3 Fraunces,Georgia,serif; margin:0 0 4px}
-.seam .state{font:500 11px/1 "Work Sans",sans-serif; letter-spacing:.1em;
-  text-transform:uppercase; margin:0 0 12px}
-.seam.broken .state{color:var(--warn)}
-.seam.partial .state{color:var(--accent)}
-.seam p{margin:0 0 10px; color:var(--ink-2); font-size:15.5px}
-.seam p:last-child{margin:0}
-.seam b{color:var(--ink); font-weight:600}
-
-table{width:100%; border-collapse:collapse; font-size:15px}
-.scroll{overflow-x:auto}
-th,td{text-align:left; padding:11px 12px; border-bottom:1px solid var(--rule); vertical-align:top}
-th{font:600 11px/1.4 "Work Sans",sans-serif; letter-spacing:.08em; text-transform:uppercase;
+/* table */
+.scroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
+table{border-collapse:collapse; width:100%; font-size:15.5px; min-width:600px}
+th,td{text-align:left; padding:12px 14px; border-bottom:1px solid var(--rule); vertical-align:top}
+th{font:600 10.5px/1.4 "Work Sans",sans-serif; letter-spacing:.11em; text-transform:uppercase;
   color:var(--ink-3); border-bottom:1px solid var(--rule-2); white-space:nowrap}
-td:first-child{font-weight:500; color:var(--ink); white-space:nowrap}
+td:first-child{font-weight:500; color:var(--ink)}
+td:nth-child(2){color:var(--ink-2)}
+td:nth-child(3){color:var(--ink-3)}
+
+.nextup{background:var(--sunk); border:1px solid var(--rule); border-radius:5px;
+  padding:22px 24px; margin-top:34px; max-width:64ch}
+.nextup .lbl{font:600 10.5px/1 "Roboto Mono", ui-monospace, monospace; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 10px}
+.nextup h3{margin:0 0 8px; font-size:20px}
+.nextup h3 a{color:inherit; text-decoration:none; border-bottom:1px solid var(--rule-2)}
+.nextup h3 a:hover{border-bottom-color:currentColor}
+.nextup p{margin:0; color:var(--ink-2); font-size:15.5px; line-height:1.55}
 
 footer{margin-top:48px; padding-top:18px; border-top:1px solid var(--rule);
-  font-size:13.5px; line-height:1.6; color:var(--ink-3)}
+  font-size:13.5px; line-height:1.6; color:var(--ink-3); max-width:64ch}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
 /* diagram paint — tokens only, so both themes resolve */
 svg .af{fill:var(--accent)}
 svg .as{stroke:var(--accent)}
@@ -101,94 +140,249 @@ svg .dgink{fill:currentColor}
 svg .dginks{stroke:currentColor}
 svg .dgbox{fill:none; stroke:currentColor; stroke-width:1; opacity:.35}
 svg .mono{font-family:"Roboto Mono", ui-monospace, monospace}
-:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-.nextup{background:var(--sunk); border:1px solid var(--rule); border-radius:5px;
-  padding:22px 24px; margin-top:34px}
-.nextup .lbl{font:600 10.5px/1 "Roboto Mono", ui-monospace, monospace; letter-spacing:.14em;
-  text-transform:uppercase; color:var(--ink-3); margin:0 0 10px}
-.nextup h3{margin:0 0 8px; font-size:20px}
-.nextup h3 a{color:inherit; text-decoration:none; border-bottom:1px solid var(--rule-2)}
-.nextup h3 a:hover{border-bottom-color:currentColor}
-.nextup p{margin:0; color:var(--ink-2); font-size:15.5px; line-height:1.55}
-@media (max-width:600px){ .row{grid-template-columns:1fr; gap:5px} }
+svg text{font-family:"Work Sans", system-ui, sans-serif}
 </style>
 
 <div class="wrap">
 
 <header>
-  <p class="kick">California · autism services</p>
+  <p class="kick">California &middot; autism services</p>
   <h1>Who Does What</h1>
-  <p class="dek">Every organisation in this system is accountable for its own box and for nothing
-  between the boxes. Most of what goes wrong for a family happens in the gaps — so it is worth
-  knowing exactly where each one's job ends.</p>
+  <p class="dek">There are nine organisations in your child&rsquo;s life and it is genuinely hard
+  to tell them apart. Here is the shortcut: <b>each one does exactly one of four things.</b> Once
+  you know which, most of the confusion goes away.</p>
 </header>
 
 <section>
-  <h2>The shape of the problem</h2>
-  <figure>
-    <svg viewBox="0 0 760 400" role="img" width="760"
-         aria-label="Three funding systems — the regional centre, the health plan and the school district — have no channels between them. Every connection runs through the family, who carries the denial letter, the requests and the appeals by hand.">
-      <defs>
-        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
-        </marker>
-        <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#5B3A5E"/>
-        </marker>
-      </defs>
+  <h2>Four kinds of organisation</h2>
+  <div class="roles">
+    <div class="role">
+      <p class="n">01</p>
+      <h3>They pay</h3>
+      <ul>
+        <li>Regional centre</li>
+        <li>Your health plan</li>
+        <li>Your school district</li>
+        <li>The county</li>
+      </ul>
+    </div>
+    <div class="role">
+      <p class="n">02</p>
+      <h3>They do the work</h3>
+      <ul>
+        <li>Your provider &mdash; the therapist or agency your child actually sees</li>
+      </ul>
+    </div>
+    <div class="role">
+      <p class="n">03</p>
+      <h3>You go to them when you are told no</h3>
+      <ul>
+        <li>Your service coordinator</li>
+        <li>The state department</li>
+        <li>Free legal help</li>
+      </ul>
+    </div>
+    <div class="role">
+      <p class="n">04</p>
+      <h3>They just help you</h3>
+      <ul>
+        <li>Your Family Resource Center &mdash; free, and wants nothing from you</li>
+      </ul>
+    </div>
+  </div>
 
-      <!-- three institutions -->
-      <rect x="20"  y="30" width="200" height="76" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <text x="120" y="62"  text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">Regional Centre</text>
-      <text x="120" y="82"  text-anchor="middle" font-size="11.5" fill="currentColor">eligibility · IPP · pays last</text>
-
-      <rect x="280" y="30" width="200" height="76" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <text x="380" y="62"  text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">Health plan</text>
-      <text x="380" y="82"  text-anchor="middle" font-size="11.5" fill="currentColor">medical necessity · pays first</text>
-
-      <rect x="540" y="30" width="200" height="76" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
-      <text x="640" y="62"  text-anchor="middle" font-size="14" font-weight="600" fill="currentColor">School district</text>
-      <text x="640" y="82"  text-anchor="middle" font-size="11.5" fill="currentColor">educational benefit · own clock</text>
-
-      <!-- absent horizontal channels -->
-      <line x1="228" y1="68" x2="272" y2="68" stroke="currentColor" stroke-width="1.5"
-            stroke-dasharray="4 5" opacity="0.45"/>
-      <text x="250" y="56" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.6">no channel</text>
-      <line x1="488" y1="68" x2="532" y2="68" stroke="currentColor" stroke-width="1.5"
-            stroke-dasharray="4 5" opacity="0.45"/>
-      <text x="510" y="56" text-anchor="middle" font-size="10.5" fill="currentColor" opacity="0.6">no channel</text>
-
-      <!-- family -->
-      <rect x="250" y="300" width="260" height="70" rx="4" fill="#5B3A5E" stroke="#5B3A5E"/>
-      <text x="380" y="332" text-anchor="middle" font-size="15" font-weight="600" fill="#FFFFFF">The family</text>
-      <text x="380" y="353" text-anchor="middle" font-size="11.5" fill="#FFFFFF" opacity="0.85">the only channel that exists</text>
-
-      <!-- the three legs -->
-      <line x1="300" y1="298" x2="130" y2="112" stroke="#5B3A5E" stroke-width="1.75" marker-end="url(#arA)"/>
-      <line x1="380" y1="298" x2="380" y2="112" stroke="#5B3A5E" stroke-width="1.75" marker-end="url(#arA)"/>
-      <line x1="460" y1="298" x2="630" y2="112" stroke="#5B3A5E" stroke-width="1.75" marker-end="url(#arA)"/>
-
-      <text x="146" y="215" text-anchor="start" font-size="11.5" fill="currentColor">carries the written</text>
-      <text x="146" y="231" text-anchor="start" font-size="11.5" fill="currentColor">insurance denial</text>
-
-      <text x="392" y="205" text-anchor="start" font-size="11.5" fill="currentColor">requests coverage,</text>
-      <text x="392" y="221" text-anchor="start" font-size="11.5" fill="currentColor">appeals denials</text>
-
-      <text x="600" y="215" text-anchor="end" font-size="11.5" fill="currentColor">sends the dated</text>
-      <text x="600" y="231" text-anchor="end" font-size="11.5" fill="currentColor">assessment request</text>
-    </svg>
-    <figcaption><b>Nothing flows sideways.</b> The regional centre cannot fund most behavioural
-    services for a child of three or over until the health plan has refused in writing — and no
-    system sends that letter across. A parent collects it and delivers it. The school district and
-    the health plan have no relationship at all. Every horizontal line in this picture is dashed
-    because it does not exist.</figcaption>
-  </figure>
+  <div class="rule">
+    <p>The ones who pay never do the work. The ones you go to when you are told no cannot make
+    anything happen &mdash; they can only tell someone else to.</p>
+    <p>Almost every phone call that goes nowhere is one of those two facts arriving late.</p>
+  </div>
 </section>
 
 <section>
-  <h2>Each party, and where its job ends</h2>
+  <h2>The ones who pay</h2>
 
-  <figure style="margin-bottom:26px">
+  <div class="party">
+    <h3>The regional centre</h3>
+    <p class="sub">A non-profit that buys services with state money. California has 21. One of
+    them is yours, based on where you live.</p>
+    <dl>
+      <div class="when"><dt>Under three</dt>
+        <dd>It is <b>the</b> payer, and this is the easiest the system will ever be. Anyone can
+        refer your child &mdash; including you. No diagnosis needed. It costs nothing.</dd></div>
+      <div class="when"><dt>Three and over</dt>
+        <dd>It drops to <b>last in line</b>. Before it will pay for therapy, you have to go to your
+        health plan first, be refused, and bring back <b>the refusal in writing</b>.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>Nothing announces this change. It happens on your child&rsquo;s third birthday, in the
+        same month the eligibility rules get stricter.</dd></div>
+    </dl>
+  </div>
+
+  <div class="party">
+    <h3>Your health plan</h3>
+    <p class="sub">Whoever covers your family &mdash; through work, through Covered California, or
+    Medi-Cal.</p>
+    <dl>
+      <div class="when"><dt>What it owes</dt>
+        <dd>California law requires health plans to cover behavioural treatment for autism, and it
+        becomes <b>the main payer once your child turns three</b>.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>If your employer is <b>self-funded</b> &mdash; the company pays the claims itself and
+        the insurance company only administers them &mdash; California&rsquo;s law does not reach
+        it. That is roughly <b>four in ten</b> Californians with job-based coverage, and closer to
+        six in ten at large employers. Your HR department can tell you which you have, and it is
+        worth asking before you need to know.</dd></div>
+    </dl>
+  </div>
+
+  <div class="party">
+    <h3>Your school district</h3>
+    <p class="sub">From age three, once your child is found eligible for special education.</p>
+    <dl>
+      <div class="when"><dt>What it owes</dt>
+        <dd>Whatever your child needs <b>in order to access their education</b> &mdash; speech
+        therapy, occupational therapy, aides, and so on, written into an education plan.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>Only the school part. After school, at weekends, at home, and life skills that
+        aren&rsquo;t about learning &mdash; none of that is the district&rsquo;s job, and it is
+        allowed to say so.</dd></div>
+    </dl>
+  </div>
+
+  <div class="party">
+    <h3>The county</h3>
+    <p class="sub">County social services, through a programme called IHSS.</p>
+    <dl>
+      <div class="when"><dt>What it owes</dt>
+        <dd>If your child needs watching around the clock to stay safe, the county can <b>pay you
+        &mdash; the parent &mdash; to do it</b>, up to 283 hours a month. It is the largest paid
+        help a California family can get.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>The county is <b>required</b> to tell you this exists when it assesses your child.
+        Most families are never told. You have to ask for it by name: <b>Protective
+        Supervision</b>.</dd></div>
+    </dl>
+  </div>
+
+  <div class="flag">
+    <p class="lbl">The single most important thing on this page</p>
+    <p>After your child turns three, <b>three different organisations could be the one that pays,
+    and each of them can point at the other two &mdash; correctly, under its own law.</b> The
+    health plan says it is educational. The district says it is medical. The regional centre says
+    go and be refused by the other two first.</p>
+    <p><b>There is no referee.</b> No organisation in California has authority over all three. The
+    only person who can make them line up is you.</p>
+  </div>
+
+  <div class="good">
+    <p class="lbl">But one of these fights is winnable, and free</p>
+    <p>If the party saying no is your <b>health plan</b>, California will send the decision to
+    outside doctors for you, at no cost. In 2024, of the roughly 5,200 families and patients who
+    asked, <b>about three in four ended up getting the treatment</b> &mdash; and in one case out of
+    five the plan simply reversed itself as soon as an outside reviewer was assigned. Ask for an
+    <b>Independent Medical Review</b>. It is the one part of this system with a good record.</p>
+  </div>
+</section>
+
+<section>
+  <h2>The one that does the work</h2>
+  <div class="party">
+    <h3>Your provider</h3>
+    <p class="sub">The therapist, agency or clinic your child actually sees.</p>
+    <dl>
+      <div class="when"><dt>What they do</dt>
+        <dd>The therapy. That is the whole of it.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>They deliver <b>only what somebody has agreed to pay for</b>. They do not decide who
+        pays, and it is not their job to go and get the funding for you. A provider telling you
+        &ldquo;we can&rsquo;t do that&rdquo; is usually telling you about the funding, not about
+        your child.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section>
+  <h2>The ones you go to when you are told no</h2>
+
+  <div class="party">
+    <h3>Your service coordinator</h3>
+    <p class="sub">The specific person at the regional centre assigned to your family. Also called
+    a case manager.</p>
+    <dl>
+      <div class="when"><dt>On paper</dt>
+        <dd>California law makes this person responsible for <b>getting the services in your
+        child&rsquo;s plan to actually happen</b>, and for checking that they did.</dd></div>
+      <div class="when hole"><dt>In practice</dt>
+        <dd>They carry <b>62 children on average</b>, and they work for the regional centre. When
+        the reason a service didn&rsquo;t happen is the regional centre&rsquo;s own decision, this
+        asks them to push against their own employer.</dd></div>
+    </dl>
+  </div>
+
+  <div class="party">
+    <h3>The state department</h3>
+    <p class="sub">The Department of Developmental Services, which oversees all 21 regional
+    centres.</p>
+    <dl>
+      <div class="when"><dt>What it does</dt>
+        <dd>Sets the rules, funds the centres, and hears appeals when you disagree with one.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>It <b>never serves a child directly</b>. Nobody there knows your child&rsquo;s
+        name.</dd></div>
+    </dl>
+  </div>
+
+  <div class="party">
+    <h3>Free legal help</h3>
+    <p class="sub">Disability Rights California, and the clients&rsquo; rights advocate attached to
+    every regional centre.</p>
+    <dl>
+      <div class="when"><dt>What they do</dt>
+        <dd>Free advice about your rights, and sometimes they will represent you in an
+        appeal.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>They say so themselves: they can only take a limited number of cases. <b>Most families
+        get advice rather than representation.</b> Call anyway &mdash; the advice is often the
+        thing that was missing.</dd></div>
+    </dl>
+  </div>
+
+  <div class="flag">
+    <p class="lbl">Worth knowing before you need it</p>
+    <p><b>Appeals work more often than families expect</b> &mdash; when the argument is about
+    whether your child is eligible, about half end with the family getting what was refused.</p>
+    <p>But there are two deadlines and they are not the same one. You have <b>60 days</b> to appeal
+    at all. You have <b>30 days &mdash; and before the change takes effect &mdash; to keep the
+    services running while you appeal.</b> A family that files on day 35 keeps its appeal and loses
+    its services in the meantime.</p>
+    <p>And the honest limit: winning gets you <b>a decision</b>. That decision goes back to the same
+    organisation that didn&rsquo;t deliver in the first place. <b>Nobody checks afterwards whether
+    it happened.</b> Put a date in your calendar and check yourself.</p>
+  </div>
+</section>
+
+<section>
+  <h2>The one that just helps you</h2>
+  <div class="party">
+    <h3>Your Family Resource Center</h3>
+    <p class="sub">A small organisation staffed by parents of children with disabilities. There is
+    one for your area.</p>
+    <dl>
+      <div class="when"><dt>What it does</dt>
+        <dd>Explains all of the above, in your language, from people who have been through it.
+        <b>Free. No diagnosis needed. They will talk to you even if your child turns out not to
+        qualify for anything.</b> It is the most useful and least known thing in this list.</dd></div>
+      <div class="when hole"><dt>The catch</dt>
+        <dd>It serves families of children <b>under three</b>. On your child&rsquo;s third birthday
+        the one organisation that has been helping you ages out &mdash; the same month everything
+        else gets harder. Ask them, before then, who they would send you to next.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section>
+  <h2>All of them, drawn against your child&rsquo;s age</h2>
+  <figure>
     <svg viewBox="0 0 900 470" role="img"
       aria-label="Each party's responsibility drawn against the child's age: the Family Resource Center ends at 36 months, the regional centre pays directly only until three and afterwards only after a denial, the health plan becomes primary at three, the school district runs from three to twenty-two, the county acts only if asked, and the family's line runs the whole width.">
       <defs>
@@ -284,13 +478,29 @@ svg .mono{font-family:"Roboto Mono", ui-monospace, monospace}
     parties along the bottom have no end date but no delivery either. Not one of them is
     responsible for the service actually arriving.</figcaption>
   </figure>
-  <div class="tabs" id="tabs" role="group" aria-label="Choose a party"></div>
-  <div id="panel"></div>
 </section>
 
 <section>
-  <h2>The three seams</h2>
-  <div id="seams"></div>
+  <h2>The whole thing in two sentences</h2>
+  <div class="sum">
+    <div class="line">
+      <p class="when-lbl">BEFORE THREE</p>
+      <p>One organisation pays, one does the work, and one free parent-run group helps you
+      understand it. <b>It is confusing but it is not contested.</b></p>
+    </div>
+    <div class="line">
+      <p class="when-lbl">FROM THE THIRD BIRTHDAY</p>
+      <p>Three organisations might pay and each can point at the others; the rules for qualifying
+      get stricter; the group that was helping you ages out; and the one person legally responsible
+      for checking your child&rsquo;s services actually happened is carrying sixty-two children.</p>
+    </div>
+    <p style="margin-top:18px; color:var(--ink-2); font-size:16px">You can see the result in
+    California&rsquo;s own figures. Among regional centre clients aged 3 to 21, <b>about a quarter
+    received no purchased services at all last year</b>, and barely more than half of the money
+    that was approved was actually spent. <b>A plan that lists a service your child never got is
+    not unusual. It is normal.</b> That is worth knowing, because it means when it happens to you,
+    it is not because you did something wrong.</p>
+  </div>
 </section>
 
 <section>
@@ -299,13 +509,14 @@ svg .mono{font-family:"Roboto Mono", ui-monospace, monospace}
     <table>
       <thead><tr><th>You want</th><th>Call</th><th>Not</th></tr></thead>
       <tbody>
-        <tr><td>An evaluation, child under 3</td><td>Regional centre — ask for Early Start intake</td><td>Your paediatrician first; no referral is needed</td></tr>
+        <tr><td>An evaluation, child under 3</td><td>Regional centre &mdash; ask for Early Start intake</td><td>Your paediatrician first; no referral is needed</td></tr>
         <tr><td>An evaluation, child 3 or over</td><td>Both: regional centre intake, and a dated written request to the school district</td><td>One and then the other; they run independently</td></tr>
-        <tr><td>Therapy paid for</td><td>Your health plan first, then the regional centre with the written denial</td><td>The regional centre first — it pays last by law</td></tr>
-        <tr><td>Speech or OT at school</td><td>The school district, through the IEP</td><td>The regional centre; school services are the district's job</td></tr>
-        <tr><td>Someone denied you something</td><td>Appeal within 30 days to keep services running</td><td>Waiting for the 60-day outside limit</td></tr>
-        <tr><td>Help understanding any of it</td><td>Your Family Resource Center — free, staffed by parents</td><td>Paying an advocate before you have tried them</td></tr>
-        <tr><td>Paid help caring for your child at home</td><td>County social services — ask for IHSS and say "Protective Supervision"</td><td>The regional centre; IHSS is a county programme</td></tr>
+        <tr><td>Therapy paid for</td><td>Your health plan first, then the regional centre with the written refusal</td><td>The regional centre first &mdash; it pays last by law</td></tr>
+        <tr><td>Speech or OT at school</td><td>The school district, through the education plan</td><td>The regional centre; school services are the district&rsquo;s job</td></tr>
+        <tr><td>Your health plan said no</td><td>Ask California for an Independent Medical Review &mdash; free, and outside doctors decide</td><td>Giving up after the plan&rsquo;s own internal appeal</td></tr>
+        <tr><td>Someone else denied you something</td><td>Appeal within 30 days to keep services running</td><td>Waiting for the 60-day outside limit</td></tr>
+        <tr><td>Help understanding any of it</td><td>Your Family Resource Center &mdash; free, staffed by parents</td><td>Paying an advocate before you have tried them</td></tr>
+        <tr><td>Paid help caring for your child at home</td><td>County social services &mdash; ask for IHSS and say &ldquo;Protective Supervision&rdquo;</td><td>The regional centre; IHSS is a county programme</td></tr>
         <tr><td>Free legal advice about your rights</td><td>Disability Rights California</td><td>Assuming you need a private attorney to start</td></tr>
       </tbody>
     </table>
@@ -321,182 +532,14 @@ svg .mono{font-family:"Roboto Mono", ui-monospace, monospace}
 </section>
 
 <footer>
-  Roles and duties here follow California's published rules: the Lanterman Act and Welfare &amp;
-  Institutions Code section 4659 for the regional centre's position as payer of last resort;
-  Education Code section 56043 for school assessment timelines; the DDS Early Start Program FAQ
-  of December 2025 for referral, cost and the 45-day timeline; the DDS Lanterman Act Appeals
-  Information Packet for appeal deadlines. Information, not legal advice.
+  Roles and duties here follow California&rsquo;s published rules: the Lanterman Act and Welfare
+  &amp; Institutions Code sections 4647, 4659 and 4640.6; Education Code section 56043 for school
+  timelines; the Department of Developmental Services Early Start FAQ of December 2025 for
+  referral, cost and the 45-day timeline, and its Lanterman Act Appeals Information Packet for
+  appeal deadlines; the Department of Managed Health Care 2024 Annual Report for the review
+  figures; the Department of Social Services manual for Protective Supervision. Information, not
+  legal advice &mdash; your Family Resource Center and Disability Rights California can tell you
+  how any of it applies to your child.
 </footer>
 
 </div>
-
-<script>
-const P = [
- { id:'you', tab:'You', name:'You, the family', abbr:'no formal role',
-   lead:'You are not a part of this system. You are what it processes — and, in practice, the only thing connecting its parts.',
-   does:'Notice, refer, request, chase, carry documents between institutions, keep the record, decide.',
-   must:'Nothing. No duty is placed on you at all, which is why nothing arrives automatically.',
-   not:'You are <b>not</b> required to have a diagnosis, a doctor\'s referral, a lawyer, or English to start any of this.',
-   paid:'Nobody. Research puts coordination at ten or more hours a week, and mothers of autistic children earn measurably less than mothers of children with other health conditions.',
-   measured:'Nothing measures you. No agency reports on whether your child got what they were entitled to.',
-   diverge:'—' },
-
- { id:'rc', tab:'Regional Centre', name:'Regional Centre', abbr:'21 statewide · non-profit under state contract',
-   lead:'The gatekeeper and the payer. Which one serves you is fixed by where you live; you cannot choose one.',
-   does:'Decides eligibility. Writes the Individual Program Plan. Assigns you a service coordinator. Authorises and pays for services.',
-   must:'Complete Early Start evaluation and the plan within <b>45 calendar days</b> of a referral. Create a transition plan <b>90 days before</b> a child turns three. Publish a list of its vendored providers.',
-   not:'It does <b>not</b> provide therapy. It does <b>not</b> talk to your school district. It does <b>not</b> pay before your insurance has refused in writing.',
-   paid:'The state, through the Department of Developmental Services.',
-   measured:'Caseload, audits, and — published annually with its name attached — how its spending differs by ethnicity and language.',
-   diverge:'On <b>spending</b>, its interest and yours part company: last year a quarter of its school-aged clients received no purchased services at all, and only 57 cents of every authorised dollar was actually spent. Unspent money is a budget cushion. On <b>equity</b> you are aligned, because the state publishes that gap under its name.' },
-
- { id:'sc', tab:'Service coordinator', name:'Your service coordinator', abbr:'a person, not an office',
-   lead:'The individual inside the regional centre assigned to your case. Everything you get, you get through this person.',
-   does:'Runs your meetings, writes what goes on the plan, finds and authorises providers, is your route to everything else.',
-   must:'Meet the regional centre\'s own caseload and contact requirements.',
-   not:'They are <b>not</b> obliged to tell you about a service you did not ask for. Many good ones do. Assume you must name what you want.',
-   paid:'The regional centre.',
-   measured:'Caseload size and paperwork timeliness — not your child\'s outcome.',
-   diverge:'They are usually on your side and structurally overloaded. Treat a slow response as capacity, not indifference, and put requests in writing so they survive a change of coordinator.' },
-
- { id:'dds', tab:'DDS', name:'Department of Developmental Services', abbr:'DDS · state agency',
-   lead:'Runs the whole system: funds the 21 centres, sets the service codes and the rates, and publishes the data.',
-   does:'Contracts with and oversees the regional centres. Defines every service code. Publishes annual spending-disparity data and an annual autism report.',
-   must:'Report to the legislature. Meet federal requirements for the birth-to-three programme.',
-   not:'It does <b>not</b> serve families directly. Its own statewide provider directory is, in its published words, not available to families.',
-   paid:'The state budget, with roughly a third coming from federal Medicaid.',
-   measured:'Federal determinations, legislative oversight, and its own published equity data.',
-   diverge:'Largely aligned with families on equity — it named the gap itself and funds work to close it. Less aligned on utilisation, which is cost.' },
-
- { id:'prov', tab:'Provider', name:'Service provider (vendor)', abbr:'the people who actually do the work',
-   lead:'The organisation or individual delivering therapy, respite, a day programme, or an infant development programme.',
-   does:'Delivers the service. Bills the regional centre, or your health plan, or both.',
-   must:'Hold vendorization to bill the regional centre; hold the relevant licence or certification for its discipline.',
-   not:'A provider is <b>not</b> obliged to publish whether it has room, and no system asks it. Vendored means approved and paid — not available.',
-   paid:'Regional centre, health plan, school district, or you.',
-   measured:'Audits and contract compliance. Nothing measures whether families can reach them.',
-   diverge:'It splits by capacity. A provider with a full caseload has no reason to tell anyone so, and no place to do it. A provider with an <b>empty slot</b> is losing money daily and wants to be found — those two are opposite parties wearing the same name.' },
-
- { id:'plan', tab:'Health plan', name:'Health plan or insurer', abbr:'commercial, or Medi-Cal',
-   lead:'Pays first for medically necessary treatment, and by law must keep a current, accurate directory of who is in its network.',
-   does:'Covers behavioural health treatment for autism under California\'s insurance mandate. Runs prior authorisation. Publishes a provider directory.',
-   must:'Update its online directory <b>at least weekly</b>, mark who is not accepting new patients, and list the languages a provider speaks. Since January 2026 it may not force a child who already has a diagnosis to be re-diagnosed to keep coverage.',
-   not:'It does <b>not</b> coordinate with your regional centre or your school district, and its directory being wrong is not something it will discover on its own.',
-   paid:'Premiums; for Medi-Cal, the state and federal governments.',
-   measured:'Regulatory audits and, from plan year 2028 for some plans, publicly reported directory accuracy.',
-   diverge:'Sharply. Secret-shopper studies repeatedly find most listed mental-health providers unreachable or not accepting patients — in one state settlement, every provider called was. Its interest is in the network appearing adequate; yours is in finding out whether it is.' },
-
- { id:'district', tab:'School district', name:'School district', abbr:'and your SELPA',
-   lead:'Responsible for special education from three to twenty-two, under federal law — an entirely separate system from the regional centre.',
-   does:'Assesses, decides eligibility for special education, writes and delivers the IEP, provides speech, occupational therapy and classroom support at school.',
-   must:'Send an assessment plan within <b>15 calendar days</b> of your written request; give you at least <b>15 days</b> to decide; complete the assessment and hold the IEP meeting within <b>60 calendar days of your signature</b>. Federal guidance states that trying classroom interventions first cannot be used to delay or deny a full evaluation.',
-   not:'It is <b>not</b> connected to your regional centre, does <b>not</b> inherit your child\'s early-intervention plan, and does <b>not</b> owe the best possible programme — the legal standard is educational benefit, not optimal.',
-   paid:'State and federal education funding.',
-   measured:'Compliance timelines and state monitoring.',
-   diverge:'Its budget and your request are the same money. It also controls both the assessment and the decision that follows it, which is why the dated written request matters so much.' },
-
- { id:'frc', tab:'Family Resource Center', name:'Family Resource Center', abbr:'FRC · 47 in California',
-   lead:'A local organisation staffed by parents of children with disabilities. Free, no referral, no eligibility test.',
-   does:'Parent-to-parent support, help with the age-three transition, translation and multilingual support, information and referral.',
-   must:'Deliver on its contract with the state; several are funded specifically to reduce service disparities.',
-   not:'It cannot authorise a service or overrule anyone. Its power is knowledge and relationships, not authority.',
-   paid:'State contracts through the developmental services system, plus grants.',
-   measured:'Families reached, and increasingly on equity outcomes.',
-   diverge:'None worth naming. They are parents of disabled children doing this as a job, and they have nothing to sell you.' },
-
- { id:'county', tab:'County (IHSS)', name:'County social services', abbr:'IHSS · a separate system again',
-   lead:'Runs In-Home Supportive Services, which pays someone to help care for your child at home. Not part of the regional centre.',
-   does:'Assesses need and authorises paid hours, including <b>Protective Supervision</b> for a child who must be watched for safety.',
-   must:'Assess when asked, and reassess on schedule.',
-   not:'It will <b>not</b> generally offer Protective Supervision unless you name it. It is assessed separately from the rest of IHSS.',
-   paid:'State, federal and county funds.',
-   measured:'Caseload and assessment timeliness.',
-   diverge:'Protective Supervision can run to 283 hours a month, and since February 2024 a parent may be paid as their own child\'s provider. Almost no family is told this by anyone.' },
-
- { id:'drc', tab:'Legal help', name:'Disability Rights California', abbr:'the state\'s protection and advocacy agency',
-   lead:'The federally designated organisation that defends the rights of people with disabilities in California. Free.',
-   does:'Publishes plain-language guides to the whole system, advises, and in some cases represents.',
-   must:'Operate under the federal protection-and-advocacy mandate.',
-   not:'It cannot take every case. Its written guides are, in practice, the most useful free thing it offers most families.',
-   paid:'Federal and state funding.',
-   measured:'Its own programme goals.',
-   diverge:'None. Worth reading before you pay anyone.' },
-];
-
-const SEAMS = [
- { cls:'partial', state:'Exists in law · you are the wire', h:'Regional centre ↔ health plan',
-   body:`<p>The connection is real and written down: the regional centre is the
-     <b>payer of last resort</b>, and for a child of three or over it generally cannot fund
-     behavioural services until your insurance has been billed and has refused
-     <b>in writing</b>.</p>
-     <p>But no system carries that letter. <b>You obtain it and you deliver it.</b> Families who
-     don't know this lose a month or two while each side waits for the other. Ask on your first
-     call to any provider: who has to get the denial — you or them?</p>` },
-
- { cls:'broken', state:'Measurably failing', h:'Regional centre ↔ school district, at age three',
-   body:`<p>At three, responsibility moves from the regional centre\'s birth-to-three programme
-     to the school district under a different federal law. They are legally independent
-     systems.</p>
-     <p>The state issued a directive in April 2025 because <b>6,929 children were still waiting
-     past their third birthday</b>, up 22.5% in a year. And the federal education department rated
-     California\'s birth-to-three programme <b>"Needs Intervention"</b>, scoring it <b>zero on both
-     transition indicators — because the data were unreliable.</b></p>
-     <p>California cannot currently measure whether this handoff happens. Which means nobody will
-     notice if yours does not. <b>Start the school request yourself, in writing, before the
-     birthday.</b></p>` },
-
- { cls:'broken', state:'Does not exist', h:'Health plan ↔ school district',
-   body:`<p>No connection at all — different statutes, different purposes. One asks whether
-     treatment is medically necessary; the other whether a service is needed for educational
-     benefit.</p>
-     <p>A child can be denied by one on grounds the other would not recognise. Neither will tell
-     the other, and neither decision binds the other. <b>A denial from one is not a denial from
-     both</b>, and it is worth pursuing them in parallel rather than in sequence.</p>` },
-];
-
-const tabs = document.getElementById('tabs');
-P.forEach((p, i) => {
-  const b = document.createElement('button');
-  b.textContent = p.tab; b.dataset.id = p.id;
-  b.setAttribute('aria-pressed', String(i === 0));
-  b.addEventListener('click', () => {
-    tabs.querySelectorAll('button').forEach(x =>
-      x.setAttribute('aria-pressed', String(x === b)));
-    show(p.id);
-  });
-  tabs.appendChild(b);
-});
-
-function row(cls, label, val){
-  return `<div class="row ${cls}"><dt>${label}</dt><dd>${val}</dd></div>`;
-}
-
-function show(id){
-  const p = P.find(x => x.id === id);
-  document.getElementById('panel').innerHTML = `
-    <article class="party">
-      <div class="party-top">
-        <h3>${p.name}</h3>
-        <div class="abbr">${p.abbr}</div>
-        <p>${p.lead}</p>
-      </div>
-      <dl class="rows">
-        ${row('', 'What it does', p.does)}
-        ${row('', 'Must, by law', p.must)}
-        ${row('not', 'Does not do', p.not)}
-        ${row('', 'Paid by', p.paid)}
-        ${row('', 'Measured on', p.measured)}
-        ${p.diverge !== '—' ? row('diverge', 'Where it parts from you', p.diverge) : ''}
-      </dl>
-    </article>`;
-}
-
-document.getElementById('seams').innerHTML = SEAMS.map(s => `
-  <div class="seam ${s.cls}">
-    <p class="state">${s.state}</p>
-    <h3>${s.h}</h3>
-    ${s.body}
-  </div>`).join('');
-
-show(P[0].id);
-</script>

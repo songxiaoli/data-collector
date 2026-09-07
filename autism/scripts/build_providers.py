@@ -454,7 +454,11 @@ def norm_name(s): return re.sub(r"[^a-z ]", "", (s or "").lower()).strip()
 # both actually print: phone number, then name plus postcode, then name plus
 # city. Phone first because a ten-digit number is the only field in either
 # source that is close to unique and hard to typo into another real value.
-RC_FILE = WORK / "rc_vendors.json"
+# Two shapes of source. Five centres publish a numeric DDS service code per
+# row; four publish the service as a phrase, mapped to codes by
+# rc_category_map.py. Both land here, because the matching logic only cares
+# that a vendor bills something we have judged autism-relevant.
+RC_FILES = [WORK / "rc_vendors.json", WORK / "rc_vendors_wordlayout.json"]
 
 def norm_phone(s):
     d = re.sub(r"\D", "", s or "")
@@ -475,10 +479,15 @@ def norm_org(s):
 def load_rc():
     """Index the regional centre vendors three ways, and collapse to one entry
     per organisation carrying every service code it bills."""
-    if not RC_FILE.exists():
-        print("  no rc_vendors.json — run parse_rc_vendors.py --parse first")
+    rows = []
+    for f in RC_FILES:
+        if f.exists():
+            rows += json.loads(f.read_text())
+        else:
+            print(f"  {f.name} missing — that source is not contributing")
+    if not rows:
+        print("  no regional centre vendor data at all — run parse_rc_vendors.py --parse")
         return {}, {}, {}, []
-    rows = json.loads(RC_FILE.read_text())
     # Only vendors billing a service code we have verified as autism-relevant.
     # A regional centre vendors everything it buys — care homes, transport,
     # funeral services — so "is an RC vendor" on its own is not an autism
@@ -494,9 +503,12 @@ def load_rc():
             "codes": set(), "services": set(),
             "autism_direct": False, "autism_support": False,
         })
-        o["codes"].add(r["service_code"])
-        if r["service_name"]:
+        if r.get("service_code"):
+            o["codes"].add(r["service_code"])
+        if r.get("service_name"):
             o["services"].add(r["service_name"])
+        if r.get("email") and not o.get("email"):
+            o["email"] = r["email"]
         o["autism_direct"] |= r["autism_direct"]
         o["autism_support"] |= r["autism_support"]
 
@@ -654,6 +666,33 @@ def join():
                          "detail": sorted(v["codes"])}],
         })
         rc_only += 1
+
+    # Two rows can normalise to one slug — Westside prints "BEHAVIOR FRONTIERS
+    # SERVICES, INC." and "BEHAVIOR FRONTIERS SERVICES INC." as separate lines,
+    # and they are one organisation. Merging is the honest fix: renaming one of
+    # them would put the same provider in the directory twice. Postgres also
+    # rejects a batch containing the same conflict key twice, so an unmerged
+    # duplicate fails the whole upsert rather than just itself.
+    merged = {}
+    for r in out:
+        cur = merged.get(r["slug"])
+        if cur is None:
+            merged[r["slug"]] = r
+            continue
+        for f in ("services", "rc_names", "taxonomies", "disciplines"):
+            cur[f] = sorted(set(cur.get(f) or []) | set(r.get(f) or []))
+        cur["relevance_tier"] = min(cur["relevance_tier"], r["relevance_tier"])
+        cur["rc_vendor"] = cur.get("rc_vendor") or r.get("rc_vendor")
+        if cur["relevance_tier"] <= 2:
+            cur["publish_status"] = None
+        for f in ("address", "city", "zip", "phone", "county", "license_no",
+                  "npi", "rc_vendor_no", "credentials", "organization"):
+            if not cur.get(f) and r.get(f):
+                cur[f] = r[f]
+        cur["sources"] = (cur.get("sources") or []) + (r.get("sources") or [])
+    if len(merged) != len(out):
+        print(f"  merged {len(out)-len(merged)} duplicate slug(s) into their twin")
+    out = list(merged.values())
 
     # Written only now, after the RC-only vendors are appended. Writing before
     # the append silently produced a file 850 rows short of what the summary

@@ -37,6 +37,7 @@ PAGES = {
     "age-three":        ("rc-brief.html",       820, ("/autism/guides", "All guides")),
     "system-gaps":      ("system-seams.html",  1000, ("/autism/guides", "All guides")),
     "zh":               ("primer-zh.html",      820, ("/autism/guides", "所有指南")),
+    "three-pockets":    ("primer-en.html",      820, ("/autism/guides", "All guides")),
     # frc-call-sheet.html is deliberately not here. It is our own outreach list —
     # who to ring at six Family Resource Centers and what to open with — not
     # something a family is looking for. It stays a private artifact.
@@ -58,7 +59,7 @@ SPLIT = re.compile(r'^<div class="(?:wrap|sheet)">', re.M)
 # what we would build, in what order — and is stripped for the site. The
 # claude.ai artifact keeps it. One source, two audiences.
 INTERNAL = re.compile(r'\s*<!-- internal:start -->.*?<!-- internal:end -->', re.S)
-STRIP_INTERNAL = {"zh"}
+STRIP_INTERNAL = {"zh", "three-pockets"}
 LANG = {"zh": "zh-CN"}
 
 HEAD = """<!doctype html>
@@ -113,6 +114,10 @@ META = {
     "zh": ("谁管什么，谁付钱",
            "从零开始，跟着一个孩子走一遍加州的自闭症服务系统：每个机构在它出场时才介绍，"
            "每一步说清谁付钱、谁负责、坑在哪。中文。"),
+    "three-pockets": ("Three Pockets",
+                      "Who handles what and who pays, explained from zero by following one child "
+                      "through California's autism system: each organisation introduced as it appears, "
+                      "and at every step who pays, who is responsible, and where the trap is."),
     "system-gaps": ("The Handoffs Nobody Owns",
                     "Where California's autism system leaks: what the law assigns at each handoff, "
                     "what the state's own numbers show happens instead, and what would close it."),

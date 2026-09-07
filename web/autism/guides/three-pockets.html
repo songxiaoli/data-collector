@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Who handles what and who pays, explained from zero by following one child through California's autism system: each organisation introduced as it appears, and at every step who pays, who is responsible, and where the trap is.">
+<link rel="canonical" href="https://powerpluspartner.com/autism/guides/three-pockets">
+<meta property="og:title" content="Three Pockets">
+<meta property="og:description" content="Who handles what and who pays, explained from zero by following one child through California's autism system: each organisation introduced as it appears, and at every step who pays, who is responsible, and where the trap is.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Power Plus Partner">
+<style>
+:root{color-scheme:light dark}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+.ppp-bar{max-width:820px; margin:0 auto; padding:16px 22px 0;
+  display:flex; justify-content:space-between; align-items:center; gap:16px;
+  font:600 10.5px/1 Manrope, ui-sans-serif, system-ui, sans-serif;
+  letter-spacing:.14em; text-transform:uppercase}
+.ppp-bar a{color:inherit; opacity:.5; text-decoration:none}
+.ppp-bar a:hover{opacity:1}
+</style>
+<title>Three Pockets</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+
+<style>
+:root{
+  --paper:#EFF1F0; --card:#FFFFFF; --sunk:#E3E7E5; --rule:#D3D9D6; --rule-2:#B3BDB8;
+  --ink:#17201E; --ink-2:#48524F; --ink-3:#77827E;
+  --accent:#235E5A; --accent-soft:#DCE8E6;
+  --warn:#A85D1A; --warn-soft:#F5E8DA;
+  --measure:66ch;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131817; --card:#1B211F; --sunk:#222927; --rule:#2F3836; --rule-2:#44504C;
+    --ink:#E8ECEA; --ink-2:#AEB8B4; --ink-3:#7A8682;
+    --accent:#7CC2BB; --accent-soft:#162927;
+    --warn:#E0A06A; --warn-soft:#33221A;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131817; --card:#1B211F; --sunk:#222927; --rule:#2F3836; --rule-2:#44504C;
+  --ink:#E8ECEA; --ink-2:#AEB8B4; --ink-3:#7A8682;
+  --accent:#7CC2BB; --accent-soft:#162927;
+  --warn:#E0A06A; --warn-soft:#33221A;
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper); color:var(--ink); margin:0;
+  font:400 17px/1.7 "Source Sans 3", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing:antialiased}
+.wrap{max-width:820px; margin:0 auto; padding:0 24px 100px}
+p{margin:0 0 16px} p:last-child{margin-bottom:0}
+b,strong{font-weight:600; color:var(--ink)}
+code{font:500 .86em/1 "IBM Plex Mono", ui-monospace, monospace; color:var(--ink-2);
+  background:var(--sunk); padding:2px 6px; border-radius:3px}
+:focus-visible{outline:2px solid var(--warn); outline-offset:3px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+.mast{padding:56px 0 28px; border-bottom:2px solid var(--ink); margin-bottom:36px}
+.eyebrow{font:600 11px/1 "Source Sans 3",sans-serif; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--accent); margin:0 0 18px}
+h1{font:600 clamp(36px,6vw,54px)/1.08 "Source Serif 4", Georgia, serif; margin:0 0 20px;
+  letter-spacing:-.015em; text-wrap:balance}
+.thesis{font:500 21px/1.5 "Source Serif 4", serif; max-width:var(--measure); margin:0 0 18px; color:var(--ink)}
+.standfirst{color:var(--ink-2); max-width:var(--measure); margin:0; font-size:16.5px}
+
+h2{font:600 26px/1.3 "Source Serif 4", serif; margin:64px 0 8px; letter-spacing:-.01em}
+h2 + .lead{color:var(--ink-2); margin:0 0 24px; max-width:var(--measure); font-size:16.5px}
+h3{font:600 19px/1.4 "Source Sans 3", sans-serif; margin:0 0 10px}
+.part-n{font:500 11px/1 "IBM Plex Mono",monospace; color:var(--accent); letter-spacing:.2em;
+  text-transform:uppercase; margin:0 0 8px}
+
+.key{background:var(--card); border:1px solid var(--rule); border-left:4px solid var(--accent);
+  padding:24px 28px; margin:0 0 20px; max-width:var(--measure)}
+.key p{color:var(--ink-2)} .key p:first-child{color:var(--ink); font-weight:500; font-size:18px}
+.key b{color:var(--ink)}
+
+.src{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin:0 0 20px}
+.s{background:var(--card); border:1px solid var(--rule); padding:20px 22px}
+.s .lbl{font:500 10.5px/1 "IBM Plex Mono",monospace; color:var(--ink-3); letter-spacing:.14em;
+  text-transform:uppercase; margin:0 0 12px}
+.s h3{font-size:17px; margin:0 0 8px}
+.s p{font-size:15px; color:var(--ink-2); line-height:1.6}
+.s .money{display:block; margin-top:10px; font-size:14px; color:var(--accent); font-weight:600}
+
+.story{position:relative; max-width:var(--measure); padding-left:38px; margin-top:8px}
+.story::before{content:""; position:absolute; left:11px; top:6px; bottom:6px; width:2px; background:var(--rule-2)}
+.st{position:relative; padding:0 0 40px}
+.st::before{content:""; position:absolute; left:-33px; top:8px; width:12px; height:12px; border-radius:50%;
+  background:var(--paper); border:2px solid var(--accent)}
+.st.bad::before{background:var(--warn); border-color:var(--warn)}
+.st .age{font:500 11.5px/1 "IBM Plex Mono",monospace; color:var(--accent); letter-spacing:.1em;
+  text-transform:uppercase; margin:0 0 8px}
+.st.bad .age{color:var(--warn)}
+.st h3{margin:0 0 12px}
+.st p{color:var(--ink-2); font-size:16.5px}
+.st p b{color:var(--ink)}
+.who{display:inline-block; font-size:13px; color:var(--accent); background:var(--accent-soft);
+  padding:3px 9px; border-radius:3px; margin:0 6px 8px 0; font-weight:600}
+.pit{background:var(--warn-soft); border-left:3px solid var(--warn); padding:14px 18px; margin:14px 0 0;
+  font-size:15.5px; color:var(--ink); line-height:1.6}
+.pit b{color:var(--warn)}
+.fix{background:var(--accent-soft); border-left:3px solid var(--accent); padding:14px 18px; margin:10px 0 0;
+  font-size:15.5px; color:var(--ink); position:relative; line-height:1.6}
+.fix > b:first-of-type{display:block; color:var(--accent); margin:0 0 4px; font-size:14px}
+.ft{position:absolute; right:14px; top:12px; font:500 11px/1 "IBM Plex Mono",monospace;
+  color:var(--accent); border:1px solid var(--accent); padding:4px 7px; border-radius:3px; letter-spacing:.08em}
+.legend{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); margin:0 0 26px; max-width:var(--measure)}
+.lg{background:var(--card); border:1px solid var(--rule); padding:14px 16px; font-size:14px; line-height:1.55; color:var(--ink-2)}
+.lg .ft{position:static; display:inline-block; margin:0 0 8px}
+.lg b{color:var(--ink); display:block; margin-bottom:2px}
+.money-note{background:var(--sunk); padding:12px 18px; margin:12px 0 0; font-size:15px; color:var(--ink-2)}
+.money-note b{color:var(--accent)}
+
+.card{background:var(--card); border:1px solid var(--rule); margin-bottom:18px; max-width:var(--measure)}
+.card-head{padding:20px 24px 14px; border-bottom:1px solid var(--rule)}
+.card-head h3{margin:0 0 4px; font-size:20px}
+.card-head .en{font:500 12.5px/1.5 "IBM Plex Mono",monospace; color:var(--ink-3)}
+.card-head .one{margin:10px 0 0; color:var(--ink-2); font-size:15.5px}
+.kv{display:grid; grid-template-columns:118px 1fr; gap:16px; padding:13px 24px; border-top:1px solid var(--rule);
+  font-size:15.5px; line-height:1.6}
+.kv:first-of-type{border-top:0}
+.kv dt{margin:0; color:var(--ink-3); font-weight:600; font-size:12px; letter-spacing:.08em;
+  text-transform:uppercase; padding-top:4px}
+.kv dd{margin:0; color:var(--ink-2)}
+.kv dd b{color:var(--ink)}
+.kv.pitrow{background:var(--warn-soft)}
+.kv.pitrow dt{color:var(--warn)} .kv.pitrow dd{color:var(--ink)}
+@media (max-width:560px){ .kv{grid-template-columns:1fr; gap:4px} }
+
+.gl{max-width:var(--measure); border:1px solid var(--rule); background:var(--card)}
+.g{display:grid; grid-template-columns:120px 1fr; gap:14px; padding:12px 20px; border-top:1px solid var(--rule);
+  font-size:15px; line-height:1.6}
+.g:first-child{border-top:0}
+.g .t{font:500 13px/1.6 "IBM Plex Mono",monospace; color:var(--accent)}
+.g .d{color:var(--ink-2)} .g .d b{color:var(--ink)}
+@media (max-width:480px){ .g{grid-template-columns:1fr; gap:2px} }
+
+.sum{background:var(--accent-soft); padding:26px 30px; max-width:var(--measure)}
+.sum p{font:500 18px/1.6 "Source Serif 4",serif; color:var(--ink); margin:0 0 14px}
+.sum p:last-child{margin:0}
+
+footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--rule); font-size:13.5px;
+  line-height:1.65; color:var(--ink-3); max-width:var(--measure)}
+</style>
+</head>
+<body>
+
+<nav class="ppp-bar" aria-label="Site">
+  <a href="/autism">Power Plus Partner</a>
+  <a href="/autism/guides">All guides</a>
+</nav>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">California &middot; autism services</p>
+  <h1>Three Pockets</h1>
+  <p class="thesis">Who handles what, and who pays &mdash; explained from zero, by following one child
+  through the system. Each organisation is introduced the moment it appears, and every step says three
+  things: who just showed up, who is paying, and who is responsible.</p>
+  <p class="standfirst">It has one goal: that when you finish, you can explain this system to someone
+  else in your own words. Every date and number here was checked against California&rsquo;s own
+  statutes and reports; where something is the law and where it is merely what happens are kept
+  apart.</p>
+</header>
+
+<!-- ============================================================ -->
+<p class="part-n">Part one</p>
+<h2>First, why the system is shaped like this</h2>
+<p class="lead">If you remember one thing, remember this. Everything confusing that follows comes from
+it.</p>
+
+<div class="key">
+  <p>The services an autistic child needs are paid for out of three completely separate pockets, each
+  with its own law, its own government department, and its own rules. <b>None of the three answers to
+  the others.</b> No organisation in California has authority over all three.</p>
+  <p>So the most familiar scene a parent will meet is three organisations each saying &ldquo;that is
+  not ours&rdquo; &mdash; and <b>all three being legally correct</b>.</p>
+</div>
+
+<div class="src">
+  <div class="s">
+    <p class="lbl">Pocket 1 &middot; the state</p>
+    <h3>The regional centre</h3>
+    <p>Under California&rsquo;s <b>Lanterman Act</b>. Overseen by the Department of Developmental
+    Services, <b>DDS</b>. Twenty-one regional centres statewide, all non-profits, spending state money
+    to buy services.</p>
+    <span class="money">Money: state budget &rarr; DDS &rarr; regional centre &rarr; provider</span>
+  </div>
+  <div class="s">
+    <p class="lbl">Pocket 2 &middot; insurance</p>
+    <h3>Your health plan</h3>
+    <p>Under California&rsquo;s <b>SB 946</b>: plans must cover behavioural treatment for autism.
+    Regulated by <b>DMHC</b>. For lower-income families the plan is <b>Medi-Cal</b>, California&rsquo;s
+    Medicaid.</p>
+    <span class="money">Money: your or your employer&rsquo;s premiums &rarr; plan &rarr; provider</span>
+  </div>
+  <div class="s">
+    <p class="lbl">Pocket 3 &middot; education</p>
+    <h3>Your school district</h3>
+    <p>Under the federal special-education law, <b>IDEA</b>. Overseen by the state education
+    department, <b>CDE</b>, but districts are run by locally elected boards and are very
+    independent.</p>
+    <span class="money">Money: district budget &rarr; the school&rsquo;s own therapists</span>
+  </div>
+</div>
+
+<div class="key">
+  <p>The handover between pockets happens at a specific age. <b>Before three there is essentially only
+  Pocket 1.</b> <b>On the third birthday</b> Pockets 2 and 3 arrive, and Pocket 1 drops to the back of
+  the line.</p>
+  <p>That is why everyone tells you three is the hardest year. Your child did not change. <b>The money
+  changed pockets.</b></p>
+</div>
+
+<!-- ============================================================ -->
+<p class="part-n">Part two</p>
+<h2>Follow one child through</h2>
+<p class="lead">Say the child is Sam, eighteen months old. You are Sam&rsquo;s mother. Each stop
+introduces whoever newly appears, marked in <span class="who">green</span>. Orange dots are the traps.</p>
+
+<div class="story">
+
+  <div class="st">
+    <p class="age">18 months</p>
+    <h3>Something feels off</h3>
+    <p>Sam doesn&rsquo;t look at people much, doesn&rsquo;t turn when called, doesn&rsquo;t point. You
+    search online and the more you read the more frightened you get. The paediatrician says &ldquo;let&rsquo;s
+    keep an eye on it.&rdquo;</p>
+    <p><b>No organisation appears at this stop.</b> Nobody has a legal duty to find you here. Autism
+    screening at 18 and 24 months is a professional recommendation, not a duty with a consequence
+    attached.</p>
+    <div class="pit"><b>Trap:</b> parents notice at 1.75 years on average, first raise it at 2.5, and reach
+    a diagnosis at 4.2. Two years and more of waiting in between &mdash; and the next stop tells you
+    <b>you were never waiting on anyone</b>.</div>
+  </div>
+
+  <div class="st">
+    <p class="age">19 months &middot; you make one call</p>
+    <h3>The regional centre appears</h3>
+    <span class="who">Regional Center</span>
+    <p>You look up which regional centre covers your address and phone it: &ldquo;I&rsquo;d like an
+    Early Start evaluation for my child.&rdquo;</p>
+    <p><b>Early Start</b> is California&rsquo;s early-intervention programme for children under three,
+    run by the regional centres. The law says: <b>anyone may refer</b>, including the parent; <b>no
+    doctor&rsquo;s referral and no diagnosis are needed</b>; from the day they receive the referral they
+    have <b>45 calendar days</b> to complete the evaluation and hold the first planning meeting; and the
+    evaluation, the plan and the coordination are <b>free at every income</b>.</p>
+    <p>The bar is low: a <b>25% delay in any one area</b> of development (language, for instance), or a
+    known high-risk condition.</p>
+    <div class="money-note"><b>Money:</b> none yet. This step is free.</div>
+  </div>
+
+  <div class="st">
+    <p class="age">21 months &middot; within the 45 days</p>
+    <h3>An evaluation, a plan, and &ldquo;your person&rdquo;</h3>
+    <span class="who">Service coordinator</span>
+    <span class="who">Family Resource Center</span>
+    <p>The regional centre evaluates Sam, then holds a meeting and writes a plan called an <b>IFSP</b>
+    (Individualized Family Service Plan). It says which services Sam gets, how often, from whom, and to
+    what goal. <b>You are a legal member of that meeting and you sign the plan.</b></p>
+    <p>The regional centre also assigns you a <b>service coordinator</b> &mdash; from now on, your person
+    there. In law (<code>W&amp;I &sect;4647</code>) they are responsible for <b>&ldquo;securing&rdquo;</b>
+    the services in the plan and for <b>&ldquo;monitoring implementation &hellip; to ascertain that
+    objectives have been fulfilled.&rdquo;</b></p>
+    <p>You are also pointed to a <b>Family Resource Center</b>: run by parents of children with
+    disabilities, free, <b>no eligibility check and no diagnosis needed</b>, and they will explain all of
+    this in your language. Forty-seven of them statewide, contracted directly with DDS.</p>
+    <div class="pit"><b>Trap:</b> the law sets a coordinator&rsquo;s caseload at an average of <b>62
+    children</b> (1:40 for under-fives), with up to <b>79</b> allowed for stretches of 60 days.
+    &ldquo;Securing the services&rdquo; &mdash; one person, sixty-two children. You can picture it.</div>
+  </div>
+
+  <div class="st">
+    <p class="age">22 months &middot; therapy starts</p>
+    <h3>The provider appears</h3>
+    <span class="who">Provider / therapist</span>
+    <p>The plan says &ldquo;ten hours a week of behavioural intervention.&rdquo; The regional centre
+    assigns an agency from its <b>list of contracted providers</b> (the vendor list), or you pick one
+    from that list. That agency sends someone to work with Sam.</p>
+    <p><b>This is the only party in the whole system that actually does the work.</b> Everyone else pays,
+    plans, or adjudicates.</p>
+    <div class="money-note"><b>Money:</b> regional centre &rarr; paid directly to the provider. <b>You
+    are not billed and you are not reimbursed.</b> It does not pass through you.</div>
+    <div class="pit"><b>Trap:</b> a provider delivers <b>only what someone has agreed to pay for</b>.
+    &ldquo;We can&rsquo;t do that&rdquo; is, nine times out of ten, about their contract, not about
+    Sam.</div>
+  </div>
+
+  <div class="st">
+    <p class="age">2 years 6 months &middot; preparing for three</p>
+    <h3>The transition meeting: the school district appears</h3>
+    <span class="who">School district</span>
+    <p>California requires (<code>17 CCR &sect;52112</code>) that <b>before Sam is two years and nine
+    months</b>, the regional centre notify the school district and hold a transition meeting with a
+    district representative present, and send the district a formal referral.</p>
+    <p>This is <b>the only place in the entire system where the law requires two organisations to
+    talk to each other directly</b> &mdash; regional centre to district, one notice. Between every other
+    pair of organisations, there is no line at all.</p>
+    <div class="pit"><b>Trap:</b> as of February 2025 the state counted <b>6,929 children past their
+    third birthday still on the Early Start books</b>, up 22.5% in a year. The US Department of
+    Education rated California&rsquo;s under-three programme &ldquo;Needs Intervention&rdquo;, <b>scoring
+    zero on both transition measures because California&rsquo;s own data were unreliable</b>. So: whether
+    this meeting actually happens, you watch. At two and a half, ask the coordinator one thing:
+    <b>&ldquo;When is the transition meeting scheduled?&rdquo;</b></div>
+  </div>
+
+  <div class="st bad">
+    <p class="age">The third birthday &middot; three things happen the same day</p>
+    <h3>The age-three handoff</h3>
+    <p><b>First: the money changes pockets.</b> The regional centre drops from &ldquo;the payer&rdquo; to
+    <b>&ldquo;payer of last resort&rdquo;</b> (<code>W&amp;I &sect;4659</code>). The statute&rsquo;s own words:
+    for a child three or older, a regional centre <b>&ldquo;shall not purchase medical or dental services
+    &hellip; unless the regional center is provided with documentation of a Medi-Cal, private insurance,
+    or a health care service plan denial.&rdquo;</b> In other words, you go to your insurance first.</p>
+    <p><b>Second: the eligibility test changes.</b> Before three it was a 25% delay in one area. At three
+    Sam is re-evaluated: provisional eligibility for ages 3&ndash;5 needs significant limitations in
+    <b>two</b> major life areas; full Lanterman eligibility needs substantial disability in <b>three or
+    more</b>. Some children fall out here.</p>
+    <p><b>Third: the people who have been helping you age out.</b> The Family Resource Center serves
+    families of children <b>under 36 months</b>. On Sam&rsquo;s third birthday, it graduates too.</p>
+    <div class="pit"><b>Trap:</b> <b>nobody tells you any of these three in advance.</b> The single
+    most useful thing you can do at two and a half is ask the Family Resource Center:
+    <b>&ldquo;After three you can&rsquo;t help me &mdash; who should I go to next?&rdquo;</b></div>
+  </div>
+
+  <div class="st">
+    <p class="age">3 years 1 month &middot; going to the insurer</p>
+    <h3>The health plan appears, and a letter</h3>
+    <span class="who">Health plan</span>
+    <p>The provider asks your plan to authorise treatment. California&rsquo;s SB 946 requires plans to
+    cover behavioural treatment for autism (ABA and similar). The plan may approve. It may refuse. <b>If
+    it refuses, you receive a refusal in writing.</b></p>
+    <p>Then &mdash; <b>you take that letter back to the regional centre.</b> Only when the regional centre
+    sees the written denial, and judges that an appeal would not succeed, can it start paying again.</p>
+    <p><b>Why are you carrying the letter?</b> Because the plan and the regional centre have <b>no channel
+    between them</b>. They do not report to each other and they do not communicate. You are the
+    courier.</p>
+    <div class="money-note"><b>Money (if approved):</b> plan &rarr; paid directly to the provider. Still
+    not through you. If there are copays or a deductible, a family under <b>400% of the poverty
+    line</b> <b>may</b> have the regional centre cover them (under three it <b>must</b>).</div>
+    <div class="pit"><b>Big trap:</b> if your employer is <b>self-funded</b> &mdash; the company pays
+    claims itself and the insurance company only administers them &mdash; <b>California&rsquo;s law does
+    not reach it</b>; federal law takes precedence. About <b>41.7%</b> of California private-sector
+    employees with job-based coverage are in self-funded plans; at companies of a thousand or more it is
+    <b>58.2%</b>. You can ask HR one question today: &ldquo;Is our plan fully insured or
+    self-funded?&rdquo;</div>
+  </div>
+
+  <div class="st">
+    <p class="age">3 years &middot; in parallel</p>
+    <h3>The district evaluation, and an IEP</h3>
+    <p>You write the district a letter (<b>in writing, dated</b>): &ldquo;I am requesting a special
+    education assessment for my child.&rdquo; The clock starts here:</p>
+    <p>Within <b>15 calendar days</b> the district must give you an assessment plan to sign. You have 15
+    days to decide. <b>From the day you sign, the district has 60 calendar days</b> to finish the
+    assessment and hold the IEP meeting. (School breaks longer than five days do not count.)</p>
+    <p><b>IEP</b> = Individualized Education Program. The district&rsquo;s written document setting out
+    where Sam is now, this year&rsquo;s goals, <b>which services the school provides and how many
+    minutes a week</b>, what setting, and what classroom accommodations. <b>It is legally binding.</b>
+    You are a legal member of the IEP team. It is reviewed at least yearly and fully re-evaluated every
+    three years.</p>
+    <p>Note that Sam now has <b>two plans at once</b> &mdash; the regional centre&rsquo;s (home and
+    community) and the district&rsquo;s IEP (<b>school only</b>). Two documents, two organisations,
+    neither aware of the other. That is normal.</p>
+    <div class="money-note"><b>Money:</b> the district pays <b>its own</b> speech therapists,
+    occupational therapists and aides. Not through you; not through the regional centre either.</div>
+    <div class="pit"><b>Trap one:</b> the 60 days run from <b>the day you sign</b>, not from the day you
+    asked. If you sit on the form, the clock sits too. <b>Trap two:</b> <b>if it is not written in the
+    IEP, the district does not owe it.</b> A teacher saying &ldquo;we&rsquo;ll keep an extra eye on
+    him&rdquo; at the meeting is worth nothing unless it is on the page. <b>Trap three:</b> the district
+    owes only what school requires. After school, weekends, life skills &mdash; it may lawfully say
+    those are not its job.</div>
+  </div>
+
+  <div class="st bad">
+    <p class="age">3 years 4 months &middot; somebody said no</p>
+    <h3>Appeals: three routes, three deadlines</h3>
+    <span class="who">DDS</span>
+    <span class="who">OCRA</span>
+    <span class="who">Disability Rights California</span>
+    <span class="who">DMHC</span>
+    <p>Who said no decides which route you take:</p>
+    <p><b>The regional centre said no</b> (denied eligibility, cut a service) &rarr; you receive a Notice
+    of Action. You have <b>60 days</b> to appeal, and the appeal goes to <b>DDS</b>. But if you want
+    <b>your current services to continue while you appeal</b>, you must file within <b>30 days, and
+    before the change takes effect</b>. <b>File on day 35: the appeal survives, the services stop
+    first.</b> The numbers say appealing is worth it &mdash; in eligibility disputes, roughly <b>53%</b>
+    end with the family getting what was refused.</p>
+    <p><b>The health plan said no</b> &rarr; first the plan&rsquo;s internal appeal; then ask <b>DMHC</b>
+    for an <b>Independent Medical Review</b> &mdash; free, decided by outside doctors, binding on the plan.
+    Around 5,200 in 2024; <b>51% overturned, and in another 22% the plan reversed itself before the
+    review even started</b>. About three families in four got the treatment.</p>
+    <p><b>The district said no</b> &rarr; the IDEA process: mediation, a complaint to the state education
+    department, or a formal hearing (&ldquo;due process&rdquo;).</p>
+    <p>On all three routes there is free help: <b>OCRA</b> (a clients&rsquo; rights advocate attached to
+    every regional centre &mdash; free, legally independent of it) and <b>Disability Rights California</b>
+    (the state&rsquo;s disability-rights legal organisation, free).</p>
+    <div class="pit"><b>Trap one:</b> appeal rates per capita vary <b>19-fold between regional
+    centres</b> &mdash; not because families have 19&times; more cause, but because <b>19&times; more of
+    them know they can</b>. <b>Trap two:</b> OCRA and DRC say so themselves: they cannot take every case.
+    Most families get <b>advice</b>, not representation. <b>Trap three:</b> DMHC only covers the plans it
+    regulates; the rest belong to CDI, the insurance department &mdash; <b>and there is no published way
+    to check which yours is</b>. You find out you filed with the wrong one by filing with the wrong
+    one.</div>
+  </div>
+
+  <div class="st">
+    <p class="age">3 years 6 months &middot; you cannot keep this up</p>
+    <h3>The county appears: the only money paid to you</h3>
+    <span class="who">County / IHSS</span>
+    <p>Sam needs someone watching around the clock to stay safe &mdash; runs out the door, has no sense
+    of danger. California has a county-run programme called <b>IHSS</b> (In-Home Supportive Services)
+    with a component called <b>Protective Supervision</b>: the county <b>pays you</b>, hourly, for the
+    supervision you are already doing &mdash; up to <b>283 hours a month</b> for the most severely
+    affected. The parent can be the paid provider.</p>
+    <p>You apply through county social services, and you must <b>ask for &ldquo;Protective
+    Supervision&rdquo; by name</b>.</p>
+    <div class="money-note"><b>Money:</b> county &rarr; <b>paid directly to you</b>. The only arrow in
+    this whole picture that ends at the parent.</div>
+    <div class="pit"><b>Trap:</b> the county is <b>required to tell you this exists</b> at assessment.
+    Almost no family is told. If refused, appeal: 90 days, benefits continue during the appeal, and
+    <b>if you lose you do not have to pay anything back</b> &mdash; that last sentence is the one nobody
+    knows.</div>
+  </div>
+
+  <div class="st bad">
+    <p class="age">Age 4 &middot; it is in the plan, and it didn&rsquo;t happen</p>
+    <h3>Nobody owns this square</h3>
+    <p>Sam&rsquo;s regional centre plan says &ldquo;ten hours a week,&rdquo; but the agency keeps failing
+    to staff it &mdash; six sessions in three months. You call the coordinator. They say they are
+    following up.</p>
+    <p>In law this is exactly the coordinator&rsquo;s job (&sect;4647: &ldquo;monitoring implementation
+    &hellip; to ascertain that objectives have been fulfilled&rdquo;). In practice they have sixty-two
+    children, and their employer is the organisation that decides whether to pay.</p>
+    <p>California&rsquo;s own figures: <b>among regional centre clients aged 3 to 21, 24.7% received no
+    purchased services at all last year</b> &mdash; 66,618 people; and for that age group <b>only 56.6%
+    of the money that was approved was actually spent</b>. &ldquo;In the plan, not in real life&rdquo;
+    is <b>the normal condition for one family in four</b>, not your bad luck.</p>
+    <p>And the deeper point: <b>of everything a regional centre is measured on, not one measure is
+    &ldquo;the service reached the child.&rdquo;</b> They count children identified, plans written,
+    bilingual staff hired, staff trained.</p>
+    <div class="pit"><b>Trap:</b> win your appeal and you get a decision on paper &mdash; which goes back
+    to <b>the same organisation that didn&rsquo;t deliver the first time</b>. Whether it then happens,
+    <b>nobody looks back to check</b>. Only you, with a date in your own calendar.</div>
+  </div>
+
+  <div class="st">
+    <p class="age">Age 22</p>
+    <h3>The cliff</h3>
+    <p>The district&rsquo;s obligation ends. Adult services are discretionary and rationed. National data:
+    <b>26% of autistic young adults received no services at all</b> in their early twenties; <b>58%</b>
+    had ever worked for pay after high school (92% for learning disability); <b>37%</b> were neither
+    working nor in education. About 80% of California&rsquo;s autism caseload is under 22 &mdash; <b>the
+    cliff is not the edge of the system; it is the system&rsquo;s shape</b>.</p>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<p class="part-n">Part three</p>
+<h2>A card for each party</h2>
+<p class="lead">You have met all of them now. Here is one card each, in the same format, for comparing.</p>
+
+<div class="card">
+  <div class="card-head">
+    <h3>The regional centre</h3>
+    <p class="en">Regional Center &middot; 21 statewide</p>
+    <p class="one">A non-profit that buys services with state money. Where you live decides which one is yours.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>The state budget, via DDS.</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>A phone call. After three: the plan&rsquo;s written denial.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>An evaluation; a plan (IFSP under three, IPP after); a service coordinator; under three, direct payment to the provider.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd>Evaluate and meet within 45 days; notify the district before 2y9m; <b>secure and monitor the plan</b> (&sect;4647); publish spending by ethnicity and language yearly and hold a public meeting on it (&sect;4519.5).</dd></div>
+    <div class="kv"><dt>It does not</dt><dd>Pay first after three; provide school-based services; talk to your insurer for you.</dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>The role flips on the third birthday and nobody says so. Not one performance measure is &ldquo;the service arrived.&rdquo; One coordinator, 62 children.</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>The service coordinator</h3>
+    <p class="en">Service Coordinator / Case Manager</p>
+    <p class="one">The specific person the regional centre assigns to you.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>Employed by the regional centre.</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>Everything about your child; your phone calls.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>Writes the plan, arranges the agency, answers questions. In theory: tracks whether services happened.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd>&ldquo;Implementing, overseeing, and monitoring&rdquo; every plan (&sect;4647(b)).</dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>62 children on average, up to 79. What they are asked to chase is often their own employer&rsquo;s decision. No public data on this job&rsquo;s turnover exists &mdash; the State Auditor told DDS to fix the staffing formula and <b>four years on it is still &ldquo;pending&rdquo;</b>.</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>The state department</h3>
+    <p class="en">DDS &middot; Department of Developmental Services</p>
+    <p class="one">The state agency that oversees all 21 regional centres.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>The state budget.</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>An appeal, when you disagree with a regional centre.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>A ruling. And statewide data reports.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd>Fund, set rules for, audit the centres; hear appeals.</dd></div>
+    <div class="kv"><dt>It does not</dt><dd><b>Ever serve a child directly.</b> Nobody there knows Sam&rsquo;s name.</dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>The State Auditor told it to &ldquo;establish standards for measuring consumers&rsquo; access to services by January 2023.&rdquo; <b>As of June 2026 that is still pending.</b> It has admitted, in effect, that it cannot measure whether people are being served.</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>Your health plan</h3>
+    <p class="en">Health Plan &middot; employer coverage / Covered California / Medi-Cal</p>
+    <p class="one">The main payer after three.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>Your or your employer&rsquo;s premiums. Medi-Cal is state and federal money.</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>(Through the provider) an authorisation request.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>An approval; or a refusal letter &mdash; <b>which you carry to the regional centre</b>.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd>Cover behavioural treatment for autism (SB 946); <b>offer a non-urgent mental-health appointment within 10 business days</b> &mdash; below 70% compliance means a mandatory corrective plan and possible fines (Kaiser, 2023: $50m fine plus $150m required investment).</dd></div>
+    <div class="kv"><dt>It does not</dt><dd>Cover school; communicate with the regional centre; <b>and a self-funded employer plan is outside California&rsquo;s law entirely</b>.</dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>When it says no, ask for an <b>Independent Medical Review</b> &mdash; free, and about three in four get the treatment. But you first need to know whether your plan is under DMHC or CDI, and <b>there is no published way to check</b>.</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>Your school district</h3>
+    <p class="en">School District &middot; ages three to twenty-two</p>
+    <p class="one">Responsible for the &ldquo;needed for school&rdquo; part.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>The district&rsquo;s own budget (state education funding plus local).</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>A <b>dated, written</b> request for assessment; then your signature on the assessment plan.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>An assessment; an <b>IEP</b>; the school&rsquo;s own therapists and aides.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd>An assessment plan within 15 days; an IEP meeting within 60 days of your signature; delivery of every line in the IEP; annual review.</dd></div>
+    <div class="kv"><dt>It does not</dt><dd>After school, weekends, at home, life skills &mdash; anything not &ldquo;needed for school,&rdquo; it may decline.</dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>The 60 days run from <b>your signature</b>. <b>What is not in the IEP is not owed.</b> How short it is of speech therapists &mdash; <b>no California agency measures it</b>.</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>The provider</h3>
+    <p class="en">Provider &middot; BCBA, RBT, SLP, OT &hellip;</p>
+    <p class="one">The only party that actually treats your child.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>The regional centre, the plan, or the district &mdash; <b>whichever approved it pays, directly, never through you</b>.</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>Time and cooperation. Not money.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>The therapy itself.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd>Deliver the hours that were approved and paid for.</dd></div>
+    <div class="kv"><dt>It does not</dt><dd>Decide who pays; get the funding for you; do anything nobody is paying for.</dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>&ldquo;We can&rsquo;t staff it&rdquo; is the industry norm, and <b>no public data says who has an opening</b>. At three, when the payer changes, many agencies simply lose the child &mdash; we counted: the under-three and over-three provider lists overlap by only four organisations.</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>The Family Resource Center</h3>
+    <p class="en">FRC &middot; 47 statewide</p>
+    <p class="one">Free help run by parents of children with disabilities. The most useful and least known thing in this list.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>A direct contract with DDS (not through the regional centre), out of what is <b>left over</b> from the federal under-three programme after the mandatory parts are paid &mdash; the law says &ldquo;may,&rdquo; not &ldquo;shall.&rdquo;</dd></div>
+    <div class="kv"><dt>You give it</dt><dd><b>Nothing.</b> No eligibility check, no diagnosis needed.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>All of this explained in your language; someone to sit with you at meetings; what other parents did.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd><b>Nothing.</b> No metrics, no evaluation, no reporting requirement. They help because they choose to.</dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>It serves families of children <b>under 36 months</b>. It ages out on your child&rsquo;s third birthday &mdash; the month you need it most. At two and a half, ask: &ldquo;Who should I go to next?&rdquo;</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>The county</h3>
+    <p class="en">County social services &middot; IHSS &middot; Protective Supervision</p>
+    <p class="one">The only organisation that pays the parent.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>County, state and federal Medi-Cal funds.</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>An application &mdash; and you must <b>ask for &ldquo;Protective Supervision&rdquo; by name</b>.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>Hourly pay for the supervision you are already providing. Up to 283 hours a month.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd><b>Telling you, at assessment, that this exists.</b></dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>Almost nobody is told. If refused, appeal: 90 days, benefits continue, <b>and if you lose you owe nothing back</b>.</dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>Free legal help</h3>
+    <p class="en">OCRA &middot; Disability Rights California (DRC)</p>
+    <p class="one">Who you can turn to when you are told no.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money from</dt><dd>OCRA is funded by DDS (note: the same department that oversees the centres it argues against); DRC is a federally funded independent organisation.</dd></div>
+    <div class="kv"><dt>You give it</dt><dd>The letter that said no.</dd></div>
+    <div class="kv"><dt>It gives you</dt><dd>Free legal advice; occasionally representation in an appeal.</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd>To exist, and to be independent. <b>It owes you personally nothing.</b></dd></div>
+    <div class="kv pitrow"><dt>Trap</dt><dd>They say so themselves: they cannot take every case. Most families get advice, not representation. <b>Advice is often exactly the missing piece, so call anyway.</b></dd></div>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>You</h3>
+    <p class="en">The parent</p>
+    <p class="one">The only line that runs from beginning to end.</p>
+  </div>
+  <dl>
+    <div class="kv"><dt>Money</dt><dd>Does not pass through you. You neither pay nor receive &mdash; except the county&rsquo;s one line.</dd></div>
+    <div class="kv"><dt>You give</dt><dd>The first phone call; every signature; <b>the plan&rsquo;s refusal letter, carried to the regional centre</b>; every organisation&rsquo;s &ldquo;no,&rdquo; carried to an appeal.</dd></div>
+    <div class="kv"><dt>You get</dt><dd>Two plans that do not know about each other; no single person responsible for &ldquo;did the service actually happen.&rdquo;</dd></div>
+    <div class="kv"><dt>Law requires</dt><dd><b>Nothing at all.</b></dd></div>
+    <div class="kv pitrow"><dt>In practice</dt><dd><b>All of it.</b> The only party in the system whose job is to join these up is you.</dd></div>
+  </dl>
+</div>
+
+<!-- ============================================================ -->
+<p class="part-n">Part four</p>
+<h2>Every abbreviation</h2>
+<p class="lead">In the order you will meet them.</p>
+
+<div class="gl">
+  <div class="g"><span class="t">Early Start</span><span class="d">California&rsquo;s early-intervention programme for children under three. Run by the regional centres. Free. Anyone may refer.</span></div>
+  <div class="g"><span class="t">RC</span><span class="d"><b>Regional Center.</b> Twenty-one non-profits that buy services with state money.</span></div>
+  <div class="g"><span class="t">DDS</span><span class="d"><b>Department of Developmental Services.</b> The state department over the 21 regional centres. Never serves a child directly.</span></div>
+  <div class="g"><span class="t">IFSP</span><span class="d"><b>Individualized Family Service Plan.</b> The regional centre&rsquo;s plan, under three.</span></div>
+  <div class="g"><span class="t">IPP</span><span class="d"><b>Individual Program Plan.</b> The regional centre&rsquo;s plan, three and over.</span></div>
+  <div class="g"><span class="t">IEP</span><span class="d"><b>Individualized Education Program.</b> The school district&rsquo;s plan; school only; legally binding.</span></div>
+  <div class="g"><span class="t">IDEA</span><span class="d"><b>Individuals with Disabilities Education Act.</b> The federal special-education law the district&rsquo;s duties come from.</span></div>
+  <div class="g"><span class="t">Lanterman</span><span class="d">California&rsquo;s developmental-services law. The regional centre&rsquo;s duties come from here.</span></div>
+  <div class="g"><span class="t">SB 946</span><span class="d">California law: plans must cover behavioural treatment for autism. Does not reach self-funded employer plans.</span></div>
+  <div class="g"><span class="t">ABA</span><span class="d"><b>Applied Behavior Analysis.</b> The most common autism intervention.</span></div>
+  <div class="g"><span class="t">BCBA</span><span class="d"><b>Board Certified Behavior Analyst.</b> The credentialed analyst who leads the team and writes the programme.</span></div>
+  <div class="g"><span class="t">RBT</span><span class="d"><b>Registered Behavior Technician.</b> The person who delivers daily sessions under a BCBA.</span></div>
+  <div class="g"><span class="t">SLP / OT</span><span class="d">Speech-language pathologist / occupational therapist. The two most common school-based services.</span></div>
+  <div class="g"><span class="t">Medi-Cal</span><span class="d">California&rsquo;s Medicaid. Lower-income families&rsquo; health plan. Autism treatment comes through its managed-care plans.</span></div>
+  <div class="g"><span class="t">DMHC</span><span class="d"><b>Department of Managed Health Care.</b> Regulates most health plans; also the department that runs free Independent Medical Reviews.</span></div>
+  <div class="g"><span class="t">IMR</span><span class="d"><b>Independent Medical Review.</b> After a plan refuses, outside doctors review it free. About three in four get the service.</span></div>
+  <div class="g"><span class="t">CDI</span><span class="d"><b>California Department of Insurance.</b> Regulates the other plans. No published way to tell whether yours is DMHC or CDI.</span></div>
+  <div class="g"><span class="t">NOA</span><span class="d"><b>Notice of Action.</b> The formal letter a regional centre sends when it refuses or cuts a service. Appeal deadlines run from it.</span></div>
+  <div class="g"><span class="t">OCRA</span><span class="d"><b>Office of Clients&rsquo; Rights Advocacy.</b> One advocate attached to each regional centre; free; legally independent.</span></div>
+  <div class="g"><span class="t">DRC</span><span class="d"><b>Disability Rights California.</b> Free legal help.</span></div>
+  <div class="g"><span class="t">FRC</span><span class="d"><b>Family Resource Center.</b> Parent-run, free, under three.</span></div>
+  <div class="g"><span class="t">IHSS</span><span class="d"><b>In-Home Supportive Services.</b> County programme that can pay the parent.</span></div>
+  <div class="g"><span class="t">Protective Supervision</span><span class="d">The IHSS component that pays for round-the-clock supervision. Ask for it by name.</span></div>
+  <div class="g"><span class="t">Vendor</span><span class="d">A provider contracted with a regional centre and able to bill it. The centre&rsquo;s &ldquo;vendor list&rdquo; is who it can send you to.</span></div>
+</div>
+
+<p class="part-n">Part five</p>
+<h2>Five things to keep after you close this</h2>
+
+<div class="sum">
+  <p>One. The money comes from three pockets &mdash; the state, insurance, the school district &mdash; three laws, none answering to the others, and no referee.</p>
+  <p>Two. On the third birthday the money changes pockets: the regional centre drops to last, the plan and the district arrive, the people helping you age out. Nobody says so in advance.</p>
+  <p>Three. There are no lines between the organisations. The plan&rsquo;s refusal letter reaches the regional centre because you carried it. You are the post office.</p>
+  <p>Four. The money does not pass through you &mdash; you neither pay nor receive &mdash; except the county&rsquo;s one payment, which almost nobody is told about.</p>
+  <p>Five. Nobody&rsquo;s job is to check afterwards that the therapy happened. One child in four has a plan that says one thing and a life that shows another. That is not something you did wrong.</p>
+</div>
+
+<footer>
+  <p>Sources: California Welfare &amp; Institutions Code &sect;&sect;4647, 4640.6, 4659, 4659.1, 4731, 4519.5; Government Code &sect;95024; Health &amp; Safety Code &sect;&sect;1374.73, 1367.03; Education Code &sect;&sect;56043, 56321, 56344; 17 CCR &sect;52112; 34 CFR &sect;303.209; 29 U.S.C. &sect;1144. DDS Annual Purchase of Service Report FY2024&ndash;25, Early Start Directive 2025, Appeals Report FY2021&ndash;22, Autism Report April 2026; US Department of Education Part C determination June 2025; DMHC Annual Reports 2023&ndash;2024; AHRQ MEPS-IC 2020; California State Auditor 2021-107 and 2021-120. Peer-reviewed studies cited inline.</p>
+  <p>Two caveats. &ldquo;Only four organisations overlap&rdquo; across the under-three and over-three provider lists comes from the sixteen regional centres whose lists could be read, and covers only the regional-centre funding line, not insurance or the district. And no California document states outright that ABA counts as a &ldquo;medical service&rdquo; under &sect;4659; the practical barrier is assembled from subdivisions (d)(1) and (c) together. Information, not legal advice.</p>
+</footer>
+
+</div>
+</body>
+</html>

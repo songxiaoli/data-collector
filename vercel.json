@@ -3,5 +3,12 @@
   "buildCommand": "",
   "installCommand": "",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/autism/guides/three-pockets",
+      "destination": "/autism/guides/en",
+      "permanent": true
+    }
+  ]
 }

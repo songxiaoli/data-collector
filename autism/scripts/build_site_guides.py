@@ -37,7 +37,7 @@ PAGES = {
     "age-three":        ("rc-brief.html",       820, ("/autism/guides", "All guides")),
     "system-gaps":      ("system-seams.html",  1000, ("/autism/guides", "All guides")),
     "zh":               ("primer-zh.html",      820, ("/autism/guides", "所有指南")),
-    "three-pockets":    ("primer-en.html",      820, ("/autism/guides", "All guides")),
+    "en":               ("primer-en.html",      820, ("/autism/guides", "All guides")),
     # frc-call-sheet.html is deliberately not here. It is our own outreach list —
     # who to ring at six Family Resource Centers and what to open with — not
     # something a family is looking for. It stays a private artifact.
@@ -115,7 +115,7 @@ META = {
     "zh": ("谁管什么，谁付钱",
            "从零开始，跟着一个孩子走一遍加州的自闭症服务系统：每个机构在它出场时才介绍，"
            "每一步说清谁付钱、谁负责、坑在哪。中文。"),
-    "three-pockets": ("Three Pockets",
+    "en": ("Three Pockets",
                       "Who handles what and who pays, explained from zero by following one child "
                       "through California's autism system: each organisation introduced as it appears, "
                       "and at every step who pays, who is responsible, and where the trap is."),

@@ -136,6 +136,19 @@ h3{font:600 19px/1.4 "Source Sans 3", sans-serif; margin:0 0 10px}
 .qa .aa{margin:0; color:var(--ink-2); font-size:15.5px; line-height:1.65}
 .qa .aa b{color:var(--ink)}
 .qa.warn .qq{color:var(--warn)}
+.form{max-width:var(--measure); margin:0 0 24px}
+.form figure{margin:0; background:var(--card); border:1px solid var(--rule); padding:18px 18px 12px}
+.form svg{display:block; width:100%; height:auto; max-width:100%; font-family:"IBM Plex Mono",ui-monospace,monospace}
+.form figcaption{margin:12px 0 0; font-size:14px; color:var(--ink-3); line-height:1.7}
+.dg-box{fill:var(--paper); stroke:var(--rule-2); stroke-width:1.2}
+.dg-out{fill:none; stroke:var(--rule-2); stroke-width:1.2; stroke-dasharray:4 3}
+.dg-hi{fill:var(--accent-soft); stroke:var(--accent); stroke-width:1.6}
+.dg-t{fill:var(--ink); font-size:13px; font-weight:600}
+.dg-s{fill:var(--ink-3); font-size:11px}
+.dg-l{fill:var(--ink-2); font-size:11px}
+.dg-a{fill:none; stroke:var(--ink-2); stroke-width:1.4}
+.dg-ah{fill:var(--ink-2)}
+.dg-msg{fill:var(--accent-soft); stroke:var(--accent); stroke-width:1.2}
 .sum{background:var(--accent-soft); padding:26px 30px; max-width:var(--measure)}
 .sum p{font:500 18px/1.6 "Source Serif 4",serif; color:var(--ink); margin:0 0 14px}
 .sum p:last-child{margin:0}
@@ -765,7 +778,73 @@ introduces whoever newly appears, marked in <span class="who">green</span>. Oran
 <!-- internal:start -->
 <p class="part-n">Part five</p>
 <h2>So what we intend to build: five things, each one questioned</h2>
-<p class="lead">The fix boxes above keep saying &ldquo;the calendar,&rdquo; &ldquo;that page,&rdquo; &ldquo;the lookup.&rdquo; They are only five things. Each is questioned below the way you would question it: what is it, is it an app, who fills it in, who sends it, what does the parent see, does it cost anything, does it exist, how would it fail.</p>
+<p class="lead">The fix boxes above keep saying &ldquo;the calendar,&rdquo; &ldquo;that page,&rdquo; &ldquo;the lookup.&rdquo; They are only five things, and together they are <b>one website</b>. First a figure and a set of questions on the final shape; then each thing questioned the way you would question it: what is it, is it an app, who fills it in, who sends it, what does the parent see, does it cost anything, does it exist, how would it fail.</p>
+
+<div class="form">
+<figure><svg viewBox="0 0 940 380" role="img" aria-label="The final shape: card, phone, four website pages, and our database and sender">
+<defs><marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="dg-ah"/></marker></defs>
+<rect x="20" y="150" width="100" height="70" class="dg-box"/>
+<text x="70" y="180" text-anchor="middle" class="dg-t">A card</text>
+<text x="70" y="200" text-anchor="middle" class="dg-s">paper + QR code</text>
+<line x1="120" y1="185" x2="166" y2="185" class="dg-a" marker-end="url(#fa)"/>
+<text x="143" y="176" text-anchor="middle" class="dg-l">scan</text>
+<rect x="170" y="120" width="130" height="130" rx="10" class="dg-box"/>
+<text x="235" y="164" text-anchor="middle" class="dg-t">Her phone</text>
+<text x="235" y="186" text-anchor="middle" class="dg-s">in a browser</text>
+<text x="235" y="204" text-anchor="middle" class="dg-s">no download</text>
+<line x1="300" y1="185" x2="396" y2="185" class="dg-a" marker-end="url(#fa)"/>
+<text x="348" y="170" text-anchor="middle" class="dg-l">open it</text>
+<text x="348" y="212" text-anchor="middle" class="dg-l">four fields</text>
+<rect x="400" y="40" width="210" height="270" class="dg-out"/>
+<text x="505" y="64" text-anchor="middle" class="dg-t">Website (what she sees)</text>
+<text x="505" y="81" text-anchor="middle" class="dg-s">powerpluspartner.com/autism</text>
+<rect x="412" y="95" width="186" height="38" class="dg-box"/>
+<text x="505" y="119" text-anchor="middle" class="dg-t">The First Ninety Days</text>
+<rect x="412" y="145" width="186" height="38" class="dg-hi"/>
+<text x="505" y="169" text-anchor="middle" class="dg-t">Calendar sign-up</text>
+<rect x="412" y="195" width="186" height="38" class="dg-box"/>
+<text x="505" y="219" text-anchor="middle" class="dg-t">Four Questions</text>
+<rect x="412" y="245" width="186" height="38" class="dg-box"/>
+<text x="505" y="269" text-anchor="middle" class="dg-t">Who regulates my plan</text>
+<line x1="598" y1="164" x2="656" y2="164" class="dg-a" marker-end="url(#fa)"/>
+<text x="628" y="155" text-anchor="middle" class="dg-l">save</text>
+<rect x="660" y="40" width="270" height="280" class="dg-out"/>
+<text x="795" y="64" text-anchor="middle" class="dg-t">Our side (what she never sees)</text>
+<text x="795" y="81" text-anchor="middle" class="dg-s">three things on a server</text>
+<rect x="672" y="95" width="246" height="56" class="dg-box"/>
+<text x="795" y="114" text-anchor="middle" class="dg-t">A database</text>
+<text x="795" y="130" text-anchor="middle" class="dg-s">birthday · county</text>
+<text x="795" y="143" text-anchor="middle" class="dg-s">plan type · phone</text>
+<rect x="672" y="175" width="246" height="56" class="dg-box"/>
+<text x="795" y="197" text-anchor="middle" class="dg-t">A job, every morning</text>
+<text x="795" y="216" text-anchor="middle" class="dg-s">who reached which day</text>
+<rect x="672" y="255" width="246" height="56" class="dg-box"/>
+<text x="795" y="274" text-anchor="middle" class="dg-t">A sending service</text>
+<text x="795" y="290" text-anchor="middle" class="dg-s">texts cost cents</text>
+<text x="795" y="303" text-anchor="middle" class="dg-s">email is free</text>
+<line x1="795" y1="151" x2="795" y2="171" class="dg-a" marker-end="url(#fa)"/>
+<line x1="795" y1="231" x2="795" y2="251" class="dg-a" marker-end="url(#fa)"/>
+<path d="M672 283 H636 V355 H235 V256" class="dg-a" marker-end="url(#fa)"/>
+<text x="433" y="347" text-anchor="middle" class="dg-l">on the right day, one message to the phone</text>
+</svg>
+<figcaption>The final shape: a piece of paper brings the parent to one website; the website has four pages, and the calendar sign-up page saves four fields to our side; our side checks every morning who has reached which day and sends that one message to the phone. Nothing is downloaded at any point.</figcaption></figure>
+</div>
+
+<div class="prod">
+  <div class="prod-head">
+    <h3>First, the final shape: one website</h3>
+    <p class="st-tag">What the five things add up to</p>
+    <p class="one">Not five products, and not an app. One website, plus a piece of paper that brings people to it.</p>
+  </div>
+  <div class="qa"><p class="qq">What do the five things add up to, in the end?</p><p class="aa"><b>One website.</b> The address is powerpluspartner.com/autism. Three of the five are pages on it (<em>The First Ninety Days</em>, <em>Four Questions</em>, the &ldquo;who regulates my plan&rdquo; lookup); one is a page plus a series of text messages (the calendar); one is a single message the calendar sends (the monthly question). The card is paper, and its only job is to bring people to the website. From start to finish the parent has one address to remember.</p></div>
+  <div class="qa"><p class="qq">Is it an app? Does she go to the App Store?</p><p class="aa"><b>No, and no.</b> Three reasons. <b>One: every extra step loses people.</b> All she has to do is fill in four fields, which takes a minute on a web page; an app means download, then open, then fill in &mdash; and a parent who has just been handed a card by her coordinator, with a child on her hip, is lost at every extra step. <b>Two: whatever an app could do, a web page plus text messages can do.</b> The heart of the calendar is one right sentence on the right day; text and email do that without an app&rsquo;s push notifications, which get switched off or buried. Texts don&rsquo;t. <b>Three: it isn&rsquo;t worth it.</b> An app means an iOS version and an Android version, one to two weeks of Apple review each time, a re-submission for every changed sentence, and a $99-a-year developer account. For fifteen text messages, that is the wrong price.</p></div>
+  <div class="qa"><p class="qq">Can there be an icon on her phone anyway?</p><p class="aa">Yes. A web page can be &ldquo;added to the home screen,&rdquo; and from then on it looks like an app: an icon, tap to open. But she doesn&rsquo;t actually need to open it again &mdash; the messages come to her.</p></div>
+  <div class="qa"><p class="qq">How many halves does the website have?</p><p class="aa"><b>Two.</b> The half the parent sees: four pages. The half she never sees, on our server: a database (the four fields she filled in), a job that runs every morning (who has reached which day today), and a sending service (a text-message company, paid by the message, under a cent each). The figure above is those two halves.</p></div>
+  <div class="qa"><p class="qq">Walk through what the parent experiences, start to finish.</p><p class="aa">One day she picks a card up off the table at the paediatrician&rsquo;s. She scans it and lands on <em>The First Ninety Days</em>, and learns she can make the call herself, today. At the bottom of that page, one line: &ldquo;Want a reminder on each date that matters?&rdquo; She taps through, fills in four fields, sixty seconds, closes it. A confirmation arrives that day. Then nothing for months. On the morning Sam turns two years six months, a text: the transition meeting has to happen within three months; ask the coordinator today which day. At two years nine months, another. On the third birthday, one more. One day the plan says no; she opens the calendar page and presses &ldquo;the plan said no,&rdquo; and a message arrives at once with the regulator lookup linked inside it. Before she rings providers, she opens <em>Four Questions</em> and asks down the list. <b>At no point has she downloaded anything, or said a word to us.</b></p></div>
+  <div class="qa"><p class="qq">Will it become an app later?</p><p class="aa">Maybe. Once a few hundred families are using it and someone says plainly &ldquo;I want an app,&rdquo; we will know which messages matter most and where parents get stuck, and an app will have something to be. Building one now would be a guess.</p></div>
+  <div class="qa"><p class="qq">Which half comes first?</p><p class="aa">The <b>calendar sign-up page</b>, in the half she sees: fill in four fields and the page immediately lists &ldquo;you will receive these messages on these days.&rdquo; Once it can be clicked and the wording reads right, the invisible half gets wired in behind it.</p></div>
+</div>
+
 
 <div class="prod">
   <div class="prod-head">
@@ -804,7 +883,7 @@ introduces whoever newly appears, marked in <span class="who">green</span>. Oran
   <div class="qa"><p class="qq">Does it cost anything? Who pays?</p><p class="aa">Free to the parent. Our cost is message fees plus hosting &mdash; a few dollars per family per year.</p></div>
   <div class="qa"><p class="qq">What does the coordinator have to do?</p><p class="aa">Hand over a card. On it, a QR code and one sentence: &ldquo;Scan this; it reminds you on every important date what to do.&rdquo;</p></div>
   <div class="qa"><p class="qq">How does the parent find out it exists?</p><p class="aa">The biggest problem. Three routes: the coordinator hands over the card (he has a reason &mdash; her calls get shorter); the Family Resource Center hands it over (they are with the family the whole under-three period); our page.</p></div>
-  <div class="qa"><p class="qq">Does it exist? How long?</p><p class="aa">No. Most of the message content already sits in the guide pages. To build: the sign-up page, the sending back end, the buttons, and final wording for the fifteen messages. Two to three weeks.</p></div>
+  <div class="qa"><p class="qq">Does it exist? How long?</p><p class="aa">No. Most of the message content already sits in the guide pages. To build: the sign-up page, the sending back end, the buttons, and final wording for the fifteen messages. Two to three weeks. <b>In this order:</b> the sign-up page first (four fields, and the page immediately lists which messages will come &mdash; clickable), then, once the wording reads right, the back end and the sending service.</p></div>
   <div class="qa warn"><p class="qq">How would it fail?</p><p class="aa">Nobody knows it exists (distribution); a date or statute in one message is wrong &mdash; a day off is wrong, so every message needs a second pair of eyes; she changes her phone number; the messages get treated as spam.</p></div>
 </div>
 
@@ -864,7 +943,7 @@ introduces whoever newly appears, marked in <span class="who">green</span>. Oran
 </div>
 
 <div class="key">
-  <p><b>Order:</b> the card and the four-questions page can go out now; the calendar in two to three weeks; the lookup in a week; the monthly question after the ten conversations.</p>
+  <p><b>Order:</b> the card and the four-questions page can go out now; the calendar in two to three weeks, sign-up page first and sending second; the lookup in a week; the monthly question after the ten conversations.</p>
   <p><b>Who &ldquo;we&rdquo; are:</b> Power Plus Partner, a small team in California building a free autism resource library. The above is a plan and also a promise &mdash; what gets built and what does not will be updated on this page. If you work inside any of these organisations and think one of these is wrong, tell us; that matters more than the rest of the page being right.</p>
 </div>
 

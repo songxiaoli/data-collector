@@ -170,6 +170,19 @@ h3{font:700 19px/1.5 "Noto Sans SC", sans-serif; margin:0 0 10px}
 .qa .aa{margin:0; color:var(--ink-2); font-size:15.5px; line-height:1.8}
 .qa .aa b{color:var(--ink)}
 .qa.warn .qq{color:var(--warn)}
+.form{max-width:var(--measure); margin:0 0 24px}
+.form figure{margin:0; background:var(--card); border:1px solid var(--rule); padding:18px 18px 12px}
+.form svg{display:block; width:100%; height:auto; max-width:100%; font-family:"IBM Plex Mono",ui-monospace,monospace}
+.form figcaption{margin:12px 0 0; font-size:14px; color:var(--ink-3); line-height:1.7}
+.dg-box{fill:var(--paper); stroke:var(--rule-2); stroke-width:1.2}
+.dg-out{fill:none; stroke:var(--rule-2); stroke-width:1.2; stroke-dasharray:4 3}
+.dg-hi{fill:var(--accent-soft); stroke:var(--accent); stroke-width:1.6}
+.dg-t{fill:var(--ink); font-size:14px; font-weight:600}
+.dg-s{fill:var(--ink-3); font-size:12px}
+.dg-l{fill:var(--ink-2); font-size:12px}
+.dg-a{fill:none; stroke:var(--ink-2); stroke-width:1.4}
+.dg-ah{fill:var(--ink-2)}
+.dg-msg{fill:var(--accent-soft); stroke:var(--accent); stroke-width:1.2}
 
 /* summary */
 .sum{background:var(--accent-soft); padding:26px 30px; max-width:var(--measure)}
@@ -674,7 +687,72 @@ footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--rule); font
 
 <p class="part-n">第五部分</p>
 <h2>所以，我们打算做什么：五样东西，一样一样问清楚</h2>
-<p class="lead">上面十几个解法框里反复出现"日历""那一页""查询工具"。它们其实只是五样东西。下面每一样都用你会问的问题来问：这是什么、是 app 吗、谁填、谁发、家长看到什么、花钱吗、现在有吗、会怎么失败。</p>
+<p class="lead">上面十几个解法框里反复出现"日历""那一页""查询工具"。它们其实只是五样东西，加起来是<b>一个网站</b>。先用一张图和一组问题说清最终的形式，再一样一样问：这是什么、是 app 吗、谁填、谁发、家长看到什么、花钱吗、现在有吗、会怎么失败。</p>
+
+<div class="form">
+<figure><svg viewBox="0 0 940 380" role="img" aria-label="最终的形式：卡、手机、网站的四个页面、我们这边的数据库和发消息程序">
+<defs><marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="dg-ah"/></marker></defs>
+<rect x="20" y="150" width="100" height="70" class="dg-box"/>
+<text x="70" y="180" text-anchor="middle" class="dg-t">一张卡</text>
+<text x="70" y="200" text-anchor="middle" class="dg-s">纸，有二维码</text>
+<line x1="120" y1="185" x2="166" y2="185" class="dg-a" marker-end="url(#fa)"/>
+<text x="143" y="176" text-anchor="middle" class="dg-l">扫码</text>
+<rect x="170" y="120" width="130" height="130" rx="10" class="dg-box"/>
+<text x="235" y="164" text-anchor="middle" class="dg-t">家长的手机</text>
+<text x="235" y="186" text-anchor="middle" class="dg-s">用浏览器打开</text>
+<text x="235" y="204" text-anchor="middle" class="dg-s">不用装任何东西</text>
+<line x1="300" y1="185" x2="396" y2="185" class="dg-a" marker-end="url(#fa)"/>
+<text x="348" y="170" text-anchor="middle" class="dg-l">打开</text>
+<text x="348" y="212" text-anchor="middle" class="dg-l">填四格</text>
+<rect x="400" y="40" width="210" height="270" class="dg-out"/>
+<text x="505" y="64" text-anchor="middle" class="dg-t">网站（家长看得见的一半）</text>
+<text x="505" y="81" text-anchor="middle" class="dg-s">powerpluspartner.com/autism</text>
+<rect x="412" y="95" width="186" height="38" class="dg-box"/>
+<text x="505" y="119" text-anchor="middle" class="dg-t">前九十天</text>
+<rect x="412" y="145" width="186" height="38" class="dg-hi"/>
+<text x="505" y="169" text-anchor="middle" class="dg-t">日历订阅页</text>
+<rect x="412" y="195" width="186" height="38" class="dg-box"/>
+<text x="505" y="219" text-anchor="middle" class="dg-t">四句话那一页</text>
+<rect x="412" y="245" width="186" height="38" class="dg-box"/>
+<text x="505" y="269" text-anchor="middle" class="dg-t">保险归谁管查询</text>
+<line x1="598" y1="164" x2="656" y2="164" class="dg-a" marker-end="url(#fa)"/>
+<text x="628" y="155" text-anchor="middle" class="dg-l">存</text>
+<rect x="660" y="40" width="270" height="280" class="dg-out"/>
+<text x="795" y="64" text-anchor="middle" class="dg-t">我们这边（家长看不见的一半）</text>
+<text x="795" y="81" text-anchor="middle" class="dg-s">三个东西，都在服务器上</text>
+<rect x="672" y="95" width="246" height="56" class="dg-box"/>
+<text x="795" y="117" text-anchor="middle" class="dg-t">数据库</text>
+<text x="795" y="136" text-anchor="middle" class="dg-s">生日 · 县 · 保险类型 · 手机号</text>
+<rect x="672" y="175" width="246" height="56" class="dg-box"/>
+<text x="795" y="197" text-anchor="middle" class="dg-t">每天早上跑一次的程序</text>
+<text x="795" y="216" text-anchor="middle" class="dg-s">看今天谁到了哪一天</text>
+<rect x="672" y="255" width="246" height="56" class="dg-box"/>
+<text x="795" y="277" text-anchor="middle" class="dg-t">发消息的服务</text>
+<text x="795" y="296" text-anchor="middle" class="dg-s">短信按条付费，邮件几乎免费</text>
+<line x1="795" y1="151" x2="795" y2="171" class="dg-a" marker-end="url(#fa)"/>
+<line x1="795" y1="231" x2="795" y2="251" class="dg-a" marker-end="url(#fa)"/>
+<path d="M672 283 H636 V355 H235 V256" class="dg-a" marker-end="url(#fa)"/>
+<text x="433" y="347" text-anchor="middle" class="dg-l">在对的日子，发一条到手机上</text>
+</svg>
+<figcaption>最终的形式：一张纸把人带到一个网站；网站有四个页面，其中日历订阅页把四格信息存到我们这边；我们这边每天早上看一遍谁到了哪一天，该发的那条发到手机上。家长全程没有下载任何东西。</figcaption></figure>
+</div>
+
+<!-- ================= 零、最终的形式 ================= -->
+<div class="prod">
+  <div class="prod-head">
+    <h3>先说最终的形式：一个网站</h3>
+    <p class="st-tag">下面五样东西加起来是什么</p>
+    <p class="one">不是五个产品，不是一个 app。是一个网站，加一张把人带到网站的纸。</p>
+  </div>
+  <div class="qa"><p class="qq">五样东西加起来，最终是个什么？</p><p class="aa"><b>一个网站。</b>地址是 powerpluspartner.com/autism。五样里有三样是这个网站上的三个页面（"前九十天"、"四句话"、"保险归谁管"查询），一样是网站上的一个页面加一串短信（日历），一样是日历发的其中一条短信（每月一问）。剩下那张卡是纸，作用只有一个：把人带到这个网站。家长从头到尾只需要记住一个网址。</p></div>
+  <div class="qa"><p class="qq">是 app 吗？要去 App Store 下载吗？</p><p class="aa"><b>不是。不用。</b>三个理由。<b>一、多一步就掉一批人。</b>家长要做的只有填四个格子，网页上一分钟做完；app 要先下载、再打开、再填——从协调员手里刚接过一张卡、正抱着孩子的家长，每多一步就少一批。<b>二、app 能做的，网页加短信都能做。</b>日历的核心是"在对的日子发一条对的话"，短信和邮件就够了，不需要 app 的推送通知；app 的推送很容易被关掉、被淹没，短信不会。<b>三、不值。</b>app 要做 iOS 和 Android 两个版本，苹果审核一次一到两周，改一句文案要重新上架，一年 99 美元的开发者账号。对十五条短信来说，这个代价不值。</p></div>
+  <div class="qa"><p class="qq">那手机桌面上能有个图标吗？</p><p class="aa">能。网页可以"添加到主屏幕"，之后看起来和 app 一样：有图标，点开就是。但她其实不需要再点开——消息会来找她。</p></div>
+  <div class="qa"><p class="qq">这个网站分几半？</p><p class="aa"><b>两半。</b>家长看得见的一半：四个页面。家长看不见的一半，在我们的服务器上：一个数据库（存她填的四格）、一个每天早上跑一次的程序（看今天谁到了哪一天）、一个发消息的服务（接一家短信公司，按条付费，一条不到一美分）。上面那张图就是这两半。</p></div>
+  <div class="qa"><p class="qq">家长从头到尾经历的是什么？把它讲一遍。</p><p class="aa">某天在儿科诊所的桌上拿到一张卡，扫码，打开"前九十天"那一页，知道自己今天就能打电话。页面底下一句："想在每个关键日期收到一条提醒吗？"她点进去，填四格，六十秒，关掉。当天收到一条确认。之后几个月什么都没有。孩子两岁六个月那天早上，一条短信：转衔会议必须在三个月内开，今天问协调员定在哪天。两岁九个月，又一条。三岁生日，一条。某天保险拒了，她打开日历页按"保险拒了"，立刻一条，里面带着"归谁管"查询的链接。打电话找机构前，她打开"四句话"那一页照着问。<b>全程没有下载任何东西，也没有跟我们说过一句话。</b></p></div>
+  <div class="qa"><p class="qq">以后会做成 app 吗？</p><p class="aa">可能。等有几百个家庭真在用、有人明确说"我想要个 app"，那时候已经知道哪几条短信最有用、家长在哪一步卡住，app 才有东西可做。现在做是猜。</p></div>
+  <div class="qa"><p class="qq">先做哪一半？</p><p class="aa">先做家长看得见的那一半里的<b>日历订阅页</b>：填四格，页面立刻列出"你会在这几天收到这几条"。能点了、文案看着对了，再接看不见的那一半。</p></div>
+</div>
+
 
 <!-- ================= 一、卡 ================= -->
 <div class="prod">
@@ -715,7 +793,7 @@ footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--rule); font
   <div class="qa"><p class="qq">花钱吗？谁付？</p><p class="aa">家长免费。我们的成本是短信费加服务器，一个家庭一年几块钱。</p></div>
   <div class="qa"><p class="qq">协调员要做什么？</p><p class="aa">递一张卡。卡上是二维码和一句话："扫这个，它会在每个关键日期提醒你该做什么。"</p></div>
   <div class="qa"><p class="qq">家长怎么知道有这个东西？</p><p class="aa">这是最大的问题。三条路：协调员递卡（他有理由，因为家长的电话会变短）；家庭资源中心递卡（他们 0–3 岁一直陪着家长）；我们的网页。</p></div>
-  <div class="qa"><p class="qq">现在有吗？要多久？</p><p class="aa">没有。消息的内容大部分已经在各个页面里了。要做的是：订阅页、发消息的后台、那几个按钮、15 条消息的文案定稿。两到三周。</p></div>
+  <div class="qa"><p class="qq">现在有吗？要多久？</p><p class="aa">没有。消息的内容大部分已经在各个页面里了。要做的是：订阅页、发消息的后台、那几个按钮、15 条消息的文案定稿。两到三周。<b>顺序：</b>先做订阅页（填四格，页面立刻列出会收到哪几条，能点的），文案看着对了，再接后台和短信服务。</p></div>
   <div class="qa warn"><p class="qq">会怎么失败？</p><p class="aa">没人知道它存在（分发）；某条消息里的日期或法条写错了——错一天就是错，所以每条都要有人核过；家长换了手机号；消息被当成垃圾短信。</p></div>
 </div>
 
@@ -779,7 +857,7 @@ footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--rule); font
 </div>
 
 <div class="key">
-  <p><b>顺序：</b>卡和四句页现在就能发；日历两到三周；查询一周；每月一问排在十次对话之后。</p>
+  <p><b>顺序：</b>卡和四句页现在就能发；日历先做订阅页，再接发送，两到三周；查询一周；每月一问排在十次对话之后。</p>
   <p><b>"我们"是谁：</b>Power Plus Partner，一个在加州做免费自闭症资源库的小团队。上面这些是计划，也是承诺——哪一条做到了、哪一条没做到，会在这一页上更新。如果你在这些机构里工作、觉得哪一条想错了，告诉我们，那比这一页其它地方写对了更重要。</p>
 </div>
 

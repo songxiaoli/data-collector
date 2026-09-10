@@ -33,11 +33,12 @@ PAGES = {
     "index":            ("start-here.html",     720, ("/autism", "Provider library")),
     "first-90-days":    ("first-steps.html",    750, ("/autism/guides", "All guides")),
     "four-questions":   ("four-questions.html", 720, ("/autism/guides", "All guides")),
-    "who-does-what":    ("who-does-what.html",  860, ("/autism/guides", "All guides")),
     "age-three":        ("rc-brief.html",       820, ("/autism/guides", "All guides")),
     "system-gaps":      ("system-seams.html",  1000, ("/autism/guides", "All guides")),
     "zh":               ("primer-zh.html",      820, ("/autism/guides", "所有指南")),
     "en":               ("primer-en.html",      820, ("/autism/guides", "All guides")),
+    # who-does-what.html is no longer built: its three figures now live inside the two
+    # primers (zh, en) and /autism/guides/who-does-what redirects to /en (vercel.json).
     # frc-call-sheet.html is deliberately not here. It is our own outreach list —
     # who to ring at six Family Resource Centers and what to open with — not
     # something a family is looking for. It stays a private artifact.
@@ -47,7 +48,7 @@ PAGES = {
 ARTIFACT_LINKS = {
     "fc235e8e-e647-4c18-8c98-3abc00869a02": "/autism/guides/first-90-days",
     "3ab89f0f-81c0-4030-b662-50fb33c14206": "/autism/guides/four-questions",
-    "62cb6a84-44d4-4415-8cbe-9f3ec0be357d": "/autism/guides/who-does-what",
+    "62cb6a84-44d4-4415-8cbe-9f3ec0be357d": "/autism/guides/en",
     "61df2ea5-2cb2-4fba-9be0-f39dea4af947": "/autism/guides/system-gaps",
     "4e4dee9c-422c-4468-af04-0c619d1be435": "/autism/guides/age-three",
 }
@@ -98,7 +99,7 @@ BAR = """
 
 META = {
     "index": ("Autism in California: Start Here",
-              "Four short guides for California families and two for people who work inside the "
+              "Four guides for California families (one also in Chinese) and two for people who work inside the "
               "system \u2014 what to do first, what to ask, who is responsible, and where it leaks."),
     "first-90-days": ("The First Ninety Days",
                       "What to do from the day you first wonder, in order, with the words to say "
@@ -106,9 +107,6 @@ META = {
     "four-questions": ("Four Questions First",
                        "The four questions to ask a California autism provider, in the order that "
                        "saves the most time, with a place to log what each one said."),
-    "who-does-what": ("Who Does What",
-                      "Every party in California's autism system, what each must do by law, what "
-                      "it does not do, and where two systems hand your child to each other."),
     "age-three": ("The Age Three Handoff",
                   "What happens to therapy funding when a California child turns three, counted "
                   "from the vendor lists the regional centres publish."),

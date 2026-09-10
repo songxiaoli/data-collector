@@ -8,7 +8,7 @@
   --paper:#EFF1F0; --card:#FFFFFF; --sunk:#E3E7E5; --rule:#D3D9D6; --rule-2:#B3BDB8;
   --ink:#17201E; --ink-2:#48524F; --ink-3:#77827E;
   --accent:#235E5A; --accent-soft:#DCE8E6;
-  --warn:#A85D1A; --warn-soft:#F5E8DA;
+  --warn:#A85D1A; --warn-soft:#F5E8DA; --ok:#2F6350;
   --measure:40em;
 }
 @media (prefers-color-scheme: dark){
@@ -16,14 +16,14 @@
     --paper:#131817; --card:#1B211F; --sunk:#222927; --rule:#2F3836; --rule-2:#44504C;
     --ink:#E8ECEA; --ink-2:#AEB8B4; --ink-3:#7A8682;
     --accent:#7CC2BB; --accent-soft:#162927;
-    --warn:#E0A06A; --warn-soft:#33221A;
+    --warn:#E0A06A; --warn-soft:#33221A; --ok:#6FBF9E;
   }
 }
 :root[data-theme="dark"]{
   --paper:#131817; --card:#1B211F; --sunk:#222927; --rule:#2F3836; --rule-2:#44504C;
   --ink:#E8ECEA; --ink-2:#AEB8B4; --ink-3:#7A8682;
   --accent:#7CC2BB; --accent-soft:#162927;
-  --warn:#E0A06A; --warn-soft:#33221A;
+  --warn:#E0A06A; --warn-soft:#33221A; --ok:#6FBF9E;
 }
 
 *{box-sizing:border-box}
@@ -146,6 +146,20 @@ h3{font:700 19px/1.5 "Noto Sans SC", sans-serif; margin:0 0 10px}
 .qa .aa{margin:0; color:var(--ink-2); font-size:15.5px; line-height:1.8}
 .qa .aa b{color:var(--ink)}
 .qa.warn .qq{color:var(--warn)}
+
+/* the three pictures from Who Does What */
+.wd{max-width:var(--measure); display:grid; gap:22px; margin:0 0 34px}
+.wd figure{margin:0; background:var(--card); border:1px solid var(--rule); padding:22px 18px 16px; overflow-x:auto}
+.wd figure svg{max-width:100%; height:auto; display:block; margin:0 auto; color:var(--ink-2); min-width:620px}
+.wd figcaption{margin-top:14px; font-size:15px; color:var(--ink-2); line-height:1.7; max-width:64ch}
+.wd figcaption b{color:var(--ink); font-weight:600}
+.wd svg .af{fill:var(--accent)} .wd svg .as{stroke:var(--accent)}
+.wd svg .wf{fill:var(--warn)} .wd svg .ws{stroke:var(--warn)}
+.wd svg .on{fill:var(--card)} .wd svg .dgink{fill:currentColor} .wd svg .dginks{stroke:currentColor}
+.wd svg .dgbox{fill:none; stroke:currentColor; stroke-width:1; opacity:.35}
+.wd svg .okf{fill:var(--ok)} .wd svg .oks{stroke:var(--ok)}
+.wd svg .mono{font-family:"IBM Plex Mono", ui-monospace, monospace}
+.wd svg text{font-family:"Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif}
 .form{max-width:var(--measure); margin:0 0 24px}
 .form figure{margin:0; background:var(--card); border:1px solid var(--rule); padding:18px 18px 12px}
 .form svg{display:block; width:100%; height:auto; max-width:100%; font-family:"IBM Plex Mono",ui-monospace,monospace}
@@ -457,6 +471,277 @@ footer{margin-top:64px; padding-top:20px; border-top:1px solid var(--rule); font
 
 <!-- ============================================================ -->
 <p class="part-n">第三部分</p>
+<h2>先画三张图，再看每一方的档案卡</h2>
+<p class="lead">第一张：每一方你要给它什么、它给你什么、它的职责是什么。第二张：钱怎么走。第三张：把所有人按孩子的年龄画在一起。</p>
+<div class="wd">
+<figure>
+    <svg viewBox="0 0 1000 750" role="img"
+      aria-label="每个机构一个框，三行：你要给它什么、它给你什么、它的职责是什么。每个框只和中间的家庭相连。">
+      <defs>
+        <marker id="rm-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dgink"/></marker>
+        <marker id="rm-w" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="wf"/></marker>
+      </defs>
+
+      <path d="M145,56 C145,20 340,14 500,14 C660,14 855,20 855,56"
+            class="dginks" stroke-width="1.3" fill="none" stroke-dasharray="6 4" opacity=".65"
+            marker-end="url(#rm-a)"/>
+      <text x="500" y="9" text-anchor="middle" class="dgink" font-size="11" opacity=".75">一份通知，2岁9个月前——这是图上唯一一条机构之间的线</text>
+
+      <g class="dgink">
+        <rect x="20" y="56" width="250" height="112" rx="3" class="dgbox"/>
+        <text x="34" y="80" font-size="14.5" font-weight="600">区域中心</text>
+        <text x="34" y="104" class="mono" font-size="9.5" opacity=".55">你给</text>
+        <text x="76" y="104" font-size="10.5">你的一个电话——就这些</text>
+        <text x="34" y="126" class="mono" font-size="9.5" opacity=".55">它给</text>
+        <text x="76" y="126" font-size="10.5">一份列出治疗项目的计划</text>
+        <text x="34" y="148" class="mono" font-size="9.5" opacity=".55">它的职责</text>
+        <text x="76" y="148" font-size="10.5" font-weight="600">买下这些服务，并确认落实</text>
+
+        <rect x="375" y="56" width="250" height="112" rx="3" class="dgbox"/>
+        <text x="389" y="80" font-size="14.5" font-weight="600">你的健康保险</text>
+        <text x="389" y="104" class="mono" font-size="9.5" opacity=".55">你给</text>
+        <text x="431" y="104" font-size="10.5">治疗机构替你提的申请</text>
+        <text x="389" y="126" class="mono" font-size="9.5" opacity=".55">它给</text>
+        <text x="431" y="126" font-size="10.5">一个"批"，或一封拒绝信</text>
+        <text x="389" y="148" class="mono" font-size="9.5" opacity=".55">它的职责</text>
+        <text x="431" y="148" font-size="10.5" font-weight="600">10 个工作日内安排上</text>
+
+        <rect x="730" y="56" width="250" height="112" rx="3" class="dgbox"/>
+        <text x="744" y="80" font-size="14.5" font-weight="600">学区</text>
+        <text x="744" y="104" class="mono" font-size="9.5" opacity=".55">你给</text>
+        <text x="786" y="104" font-size="10.5">你的书面请求，然后你的签字</text>
+        <text x="744" y="126" class="mono" font-size="9.5" opacity=".55">它给</text>
+        <text x="786" y="126" font-size="10.5">一份学校的计划，叫 IEP</text>
+        <text x="744" y="148" class="mono" font-size="9.5" opacity=".55">它的职责</text>
+        <text x="786" y="148" font-size="10.5" font-weight="600">只管上学需要的</text>
+      </g>
+
+      <line x1="276" y1="112" x2="369" y2="112" class="ws" stroke-width="1.4" stroke-dasharray="5 5" opacity=".85"/>
+      <g class="ws" stroke-width="2.2">
+        <line x1="315" y1="104" x2="331" y2="120"/><line x1="331" y1="104" x2="315" y2="120"/>
+      </g>
+      <text x="323" y="140" text-anchor="middle" class="wf" font-size="11" font-weight="600">没有线</text>
+      <text x="323" y="156" text-anchor="middle" class="wf" font-size="10" opacity=".85">拒绝信</text>
+      <text x="323" y="169" text-anchor="middle" class="wf" font-size="10" opacity=".85">由你自己搬过去</text>
+
+      <g class="dgink">
+        <rect x="20" y="300" width="250" height="112" rx="3" class="dgbox"/>
+        <text x="34" y="324" font-size="14.5" font-weight="600">家庭资源中心</text>
+        <text x="34" y="348" class="mono" font-size="9.5" opacity=".55">你给</text>
+        <text x="76" y="348" font-size="10.5">什么都不用。不需要诊断。</text>
+        <text x="34" y="370" class="mono" font-size="9.5" opacity=".55">它给</text>
+        <text x="76" y="370" font-size="10.5">把这一切讲给你听</text>
+        <text x="34" y="392" class="mono" font-size="9.5" opacity=".55">它的职责</text>
+        <text x="76" y="392" font-size="10.5" font-weight="600">没有——但它照样帮</text>
+
+        <rect x="730" y="300" width="250" height="112" rx="3" class="dgbox"/>
+        <text x="744" y="324" font-size="14.5" font-weight="600">免费法律援助</text>
+        <text x="744" y="348" class="mono" font-size="9.5" opacity=".55">你给</text>
+        <text x="786" y="348" font-size="10.5">那封说"不"的信</text>
+        <text x="744" y="370" class="mono" font-size="9.5" opacity=".55">它给</text>
+        <text x="786" y="370" font-size="10.5">建议；很少代理</text>
+        <text x="744" y="392" class="mono" font-size="9.5" opacity=".55">它的职责</text>
+        <text x="786" y="392" font-size="10.5" font-weight="600">对你没有法定义务</text>
+
+        <rect x="730" y="470" width="250" height="112" rx="3" class="dgbox"/>
+        <text x="744" y="494" font-size="14.5" font-weight="600">县政府</text>
+        <text x="744" y="518" class="mono" font-size="9.5" opacity=".55">你给</text>
+        <text x="786" y="518" font-size="10.5">你点名去要</text>
+        <text x="744" y="540" class="mono" font-size="9.5" opacity=".55">它给</text>
+        <text x="786" y="540" font-size="10.5">钱，付给你</text>
+        <text x="744" y="562" class="mono" font-size="9.5" opacity=".55">它的职责</text>
+        <text x="786" y="562" font-size="10.5" font-weight="600">告诉你有这回事</text>
+      </g>
+
+      <g class="dginks" stroke-width="1.5" fill="none" opacity=".7">
+        <path d="M145,168 C145,230 250,272 334,300" marker-end="url(#rm-a)"/>
+        <path d="M500,168 L500,288" marker-end="url(#rm-a)"/>
+        <path d="M855,168 C855,230 750,272 666,300" marker-end="url(#rm-a)"/>
+        <path d="M270,356 L334,356" marker-end="url(#rm-a)"/>
+        <path d="M730,356 L666,356" marker-end="url(#rm-a)"/>
+        <path d="M730,500 C700,470 690,440 666,412" marker-end="url(#rm-a)"/>
+      </g>
+
+      <rect x="340" y="294" width="320" height="124" rx="3" class="wf"/>
+      <text x="356" y="324" class="on" font-size="19" font-weight="700">你</text>
+      <text x="356" y="352" class="on mono" font-size="9.5" opacity=".72">你给</text>
+      <text x="404" y="352" class="on" font-size="11">上面所有的，分别给</text>
+      <text x="356" y="376" class="on mono" font-size="9.5" opacity=".72">它给</text>
+      <text x="404" y="376" class="on" font-size="11">你在它们之间搬运</text>
+      <text x="356" y="400" class="on mono" font-size="9.5" opacity=".72">它的职责</text>
+      <text x="404" y="400" class="on" font-size="11" font-weight="700">法律上没有。实际上全是。</text>
+
+      <path d="M500,418 L500,464" class="ws" stroke-width="2" fill="none" marker-end="url(#rm-w)"/>
+      <text x="512" y="446" class="wf" font-size="10.5" font-weight="600">你找到它们，你打电话</text>
+
+      <g class="dgink">
+        <rect x="340" y="470" width="320" height="112" rx="3" class="dgbox"/>
+        <text x="356" y="494" font-size="14.5" font-weight="600">治疗机构</text>
+        <text x="356" y="518" class="mono" font-size="9.5" opacity=".55">你给</text>
+        <text x="404" y="518" font-size="10.5">付钱方的批准</text>
+        <text x="356" y="540" class="mono" font-size="9.5" opacity=".55">它给</text>
+        <text x="404" y="540" font-size="10.5">治疗本身</text>
+        <text x="356" y="562" class="mono" font-size="9.5" opacity=".55">它的职责</text>
+        <text x="404" y="562" font-size="10.5" font-weight="600">做完付了钱的那些</text>
+      </g>
+
+      <path d="M500,582 L500,630" class="dginks" stroke-width="1.5" fill="none" marker-end="url(#rm-a)"/>
+      <rect x="420" y="636" width="160" height="50" rx="3" class="af"/>
+      <text x="500" y="666" text-anchor="middle" class="on" font-size="15" font-weight="600">你的孩子</text>
+
+      <text x="500" y="722" text-anchor="middle" class="dgink" font-size="11.5" opacity=".7">上面每个框都有职责。没有一个职责是事后确认"治疗真的发生了"。</text>
+    </svg>
+    <figcaption><b>每个框的读法一样。"你给"是开始之前你要交给它的；"它给"是它给回来的；"它的职责"是它法律上真正要负责的。</b>两份计划是两个机构的两份文件：区域中心的计划管家里和社区里的治疗，学区的计划——IEP——只管学校里发生的事。可以同时有两份，多数家庭都是。<b>把"它的职责"这一行从上往下读完，就是整篇的论点</b>：只有你的那一行写着"全部"。</figcaption>
+  </figure>
+<figure>
+    <svg viewBox="0 0 1000 340" role="img"
+      aria-label="钱的流向图：区域中心、健康保险、学区都直接付给做治疗的一方。钱不经过家庭——除了县政府那一笔，付给家长的看护时数。">
+      <defs>
+        <marker id="mn-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="okf"/></marker>
+        <marker id="mn-b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="dgink"/></marker>
+      </defs>
+
+      <g class="dgink">
+        <rect x="20" y="24" width="200" height="56" rx="3" class="dgbox"/>
+        <text x="120" y="49" text-anchor="middle" font-size="13.5" font-weight="600">区域中心</text>
+        <text x="120" y="67" text-anchor="middle" font-size="10.5" opacity=".7">州政府的钱</text>
+
+        <rect x="270" y="24" width="200" height="56" rx="3" class="dgbox"/>
+        <text x="370" y="49" text-anchor="middle" font-size="13.5" font-weight="600">你的健康保险</text>
+        <text x="370" y="67" text-anchor="middle" font-size="10.5" opacity=".7">你的保费</text>
+
+        <rect x="520" y="24" width="200" height="56" rx="3" class="dgbox"/>
+        <text x="620" y="49" text-anchor="middle" font-size="13.5" font-weight="600">学区</text>
+        <text x="620" y="67" text-anchor="middle" font-size="10.5" opacity=".7">学区预算</text>
+
+        <rect x="775" y="24" width="200" height="56" rx="3" class="dgbox"/>
+        <text x="875" y="49" text-anchor="middle" font-size="13.5" font-weight="600">县政府</text>
+        <text x="875" y="67" text-anchor="middle" font-size="10.5" opacity=".7">IHSS 项目</text>
+      </g>
+
+      <g class="oks" stroke-width="2.4" fill="none">
+        <path d="M120,80 C120,140 220,160 322,178" marker-end="url(#mn-a)"/>
+        <path d="M370,80 L370,172" marker-end="url(#mn-a)"/>
+        <path d="M620,80 C620,140 540,160 438,178" marker-end="url(#mn-a)"/>
+        <path d="M875,80 L875,172" marker-end="url(#mn-a)"/>
+      </g>
+      <text x="384" y="118" class="okf" font-size="11" font-weight="600">直接付</text>
+      <text x="889" y="130" class="okf" font-size="11" font-weight="600">付给你</text>
+      <text x="30" y="262" class="okf" font-size="11" opacity=".9">账单永远到不了你手里</text>
+
+      <rect x="180" y="178" width="400" height="58" rx="3" class="dgbox"/>
+      <text x="380" y="202" text-anchor="middle" class="dgink" font-size="13.5" font-weight="600">做治疗的那一方</text>
+      <text x="380" y="222" text-anchor="middle" class="dgink" font-size="10.5" opacity=".7">诊所、机构，或学校自己的人</text>
+
+      <rect x="775" y="178" width="200" height="58" rx="3" class="wf"/>
+      <text x="875" y="202" text-anchor="middle" class="on" font-size="14" font-weight="700">你</text>
+      <text x="875" y="222" text-anchor="middle" class="on" font-size="10.5" opacity=".9">为你本来就在花的小时数</text>
+
+      <path d="M380,236 L380,282" class="dginks" stroke-width="1.5" fill="none" marker-end="url(#mn-b)"/>
+      <rect x="300" y="288" width="160" height="44" rx="3" class="af"/>
+      <text x="380" y="316" text-anchor="middle" class="on" font-size="13.5" font-weight="600">你的孩子</text>
+
+      <text x="740" y="312" text-anchor="middle" class="dgink" font-size="11.5" opacity=".72">你从不付钱，也从不收钱——除了那一个箭头。</text>
+    </svg>
+    <figcaption><b>换成跟着钱走，你几乎从自己的图里消失了。</b>每个付钱方都直接付给治疗师或机构；你不会收到账单，也不会拿到报销——所以机构说"我们做不了"，通常说的是它的合同，不是你的孩子。<b>唯一的例外在右边</b>：如果孩子需要 24 小时看着才安全，县政府可以为你本来就在花的小时数付钱给<em>你</em>。这是这个系统里多数家庭能拿到的最大一笔钱，也是几乎没人告诉你的那一笔。</figcaption>
+  </figure>
+<figure>
+    <svg viewBox="0 0 900 470" role="img"
+      aria-label="每一方的责任按孩子年龄画出来：家庭资源中心到 36 个月结束，区域中心三岁前直接付、三岁后只在拒绝之后付，健康保险三岁起成为主要付款人，学区从三岁到二十二岁，县政府只在被要求时出现，家庭那条线贯穿全程。">
+      <defs>
+        <marker id="wdw-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="wf"/>
+        </marker>
+        <pattern id="wdw-hatch" width="7" height="7" patternUnits="userSpaceOnUse"
+                 patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="7" stroke="currentColor" stroke-width="1.4" opacity=".3"/>
+        </pattern>
+      </defs>
+
+      <g class="ws" stroke-width="1.2" stroke-dasharray="3 4" opacity=".8">
+        <line x1="326" y1="66" x2="326" y2="344"/>
+      </g>
+      <text x="334" y="58" class="wf" font-size="11.5" font-weight="600"
+            letter-spacing=".08em">三岁生日</text>
+
+      <g class="dgink" font-size="12.5">
+        <text x="176" y="103" text-anchor="end">家庭资源中心</text>
+        <text x="176" y="147" text-anchor="end">区域中心</text>
+        <text x="176" y="191" text-anchor="end">健康保险</text>
+        <text x="176" y="235" text-anchor="end">学区</text>
+        <text x="176" y="279" text-anchor="end">县政府（IHSS）</text>
+        <text x="176" y="333" text-anchor="end" font-weight="700" class="wf">你</text>
+      </g>
+
+      <rect x="190" y="88" width="136" height="20" class="af" opacity=".92"/>
+      <text x="258" y="102" text-anchor="middle" class="on" font-size="10.5" font-weight="600">免费，家长运营</text>
+      <text x="336" y="102" class="dgink" font-size="11" opacity=".8">它的职责到 36 个月结束——正是你最难的那个月</text>
+
+      <rect x="190" y="132" width="136" height="20" class="af" opacity=".92"/>
+      <text x="258" y="146" text-anchor="middle" class="on" font-size="10.5" font-weight="600">Early Start</text>
+      <rect x="326" y="132" width="504" height="20" fill="url(#wdw-hatch)" class="as"
+            stroke-width="1" stroke-dasharray="4 3" opacity=".75"/>
+      <text x="578" y="146" text-anchor="middle" class="dgink" font-size="11">最后付款人——要先拿到书面拒绝</text>
+
+      <rect x="190" y="176" width="136" height="20" fill="url(#wdw-hatch)" class="as"
+            stroke-width="1" stroke-dasharray="4 3" opacity=".7"/>
+      <rect x="326" y="176" width="504" height="20" class="af" opacity=".92"/>
+      <text x="578" y="190" text-anchor="middle" class="on" font-size="10.5" font-weight="600">主要付款人——除非是自保险</text>
+
+      <rect x="326" y="220" width="496" height="20" class="af" opacity=".92"/>
+      <text x="574" y="234" text-anchor="middle" class="on" font-size="10.5" font-weight="600">上学时间、上学需要——别的不管</text>
+
+      <line x1="190" y1="274" x2="830" y2="274" class="dginks" stroke-width="2"
+            stroke-dasharray="2 6" opacity=".55"/>
+      <text x="510" y="269" text-anchor="middle" class="dgink" font-size="11" opacity=".75">只有你知道去要才有</text>
+
+      <rect x="190" y="316" width="676" height="24" class="wf"/>
+      <text x="528" y="333" text-anchor="middle" class="on" font-size="12" font-weight="700">唯一没有截止日期的一方</text>
+      <path d="M866,328 L886,328" class="ws" stroke-width="3" marker-end="url(#wdw-ar)"/>
+
+      <line x1="190" y1="356" x2="866" y2="356" class="dginks" stroke-width="1" opacity=".45"/>
+      <g class="dginks" stroke-width="1" opacity=".45">
+        <line x1="190" y1="356" x2="190" y2="362"/>
+        <line x1="292" y1="356" x2="292" y2="362"/>
+        <line x1="326" y1="356" x2="326" y2="362"/>
+        <line x1="830" y1="356" x2="830" y2="362"/>
+      </g>
+      <g class="dgink mono" font-size="11" opacity=".8">
+        <text x="190" y="378" text-anchor="middle">出生</text>
+        <text x="292" y="378" text-anchor="middle">2岁9个月</text>
+        <text x="334" y="378" text-anchor="start">3 岁</text>
+        <text x="830" y="378" text-anchor="middle">22 岁</text>
+      </g>
+
+      <text x="176" y="424" text-anchor="end" class="dgink" font-size="12.5">没有年龄限制</text>
+      <g class="dgink" opacity=".85">
+        <rect x="190" y="400" width="158" height="50" class="dgbox"/>
+        <rect x="360" y="400" width="158" height="50" class="dgbox"/>
+        <rect x="530" y="400" width="158" height="50" class="dgbox"/>
+        <rect x="700" y="400" width="158" height="50" class="dgbox"/>
+      </g>
+      <g class="dgink" font-size="11.5" font-weight="600">
+        <text x="269" y="419" text-anchor="middle">个案协调员</text>
+        <text x="439" y="419" text-anchor="middle">DDS</text>
+        <text x="609" y="419" text-anchor="middle">治疗机构</text>
+        <text x="779" y="419" text-anchor="middle">法律援助</text>
+      </g>
+      <g class="dgink" font-size="10.5" opacity=".72">
+        <text x="269" y="436" text-anchor="middle">带 62 个孩子</text>
+        <text x="439" y="436" text-anchor="middle">监管，不服务</text>
+        <text x="609" y="436" text-anchor="middle">做付了钱的那些</text>
+        <text x="779" y="436" text-anchor="middle">给建议，人手有限</text>
+      </g>
+    </svg>
+    <figcaption><b>实线表示这一方付钱并负责。斜线表示它可能付，但要等另一方书面拒绝之后。</b>横轴不按比例。两件事值得盯着看：家庭资源中心——免费、家长运营、一直在帮你的那一个——在孩子三岁生日那天到期；底下四方没有截止日期，但也不交付任何东西。没有一方负责让服务真的到达。</figcaption>
+  </figure>
+</div>
+
 <h2>每一方的档案卡</h2>
 <p class="lead">现在你已经见过他们了。这里每一方一张卡，同一个格式，方便对照。</p>
 

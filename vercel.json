@@ -9,6 +9,11 @@
       "source": "/autism/guides/three-pockets",
       "destination": "/autism/guides/en",
       "permanent": true
+    },
+    {
+      "source": "/autism/guides/who-does-what",
+      "destination": "/autism/guides/en",
+      "permanent": true
     }
   ]
 }
